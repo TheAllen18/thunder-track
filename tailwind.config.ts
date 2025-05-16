@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Custom EV charger colors based on the provided image
+				evgreen: {
+					light: '#7FC69C',
+					DEFAULT: '#4CAF74',
+					dark: '#2E7B51',
+				},
+				evgold: {
+					light: '#C9C278',
+					DEFAULT: '#A8A048',
+					dark: '#716C2A',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -89,6 +101,9 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out'
+			},
+			backgroundImage: {
+				'ev-gradient': 'linear-gradient(135deg, #4CAF74 0%, #A8A048 100%)',
 			}
 		}
 	},
