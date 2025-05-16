@@ -1,4 +1,3 @@
-
 export type ChargerType = {
   id: string;
   name: string;
@@ -31,6 +30,21 @@ export const chargerTypes: ChargerType[] = [
   }
 ];
 
+export type CalculationInput = {
+  charger: ChargerType;
+  chargerCount: number;
+  civilWorkCost: number;
+  dailyKilometers: number;
+  carEfficiency: number;
+  batterySize?: number;
+  chargingFrequency: number;
+  electricityCost: number;
+  isCommercialProperty: boolean;
+  fuelCost: number;
+  fuelEfficiency: number;
+  timeHorizon: number;
+};
+
 export type CalculationResult = {
   dailyConsumption: number[];
   monthlyConsumption: number[];
@@ -41,6 +55,26 @@ export type CalculationResult = {
   netRevenue: number[];
   roiMonths: number[];
   roiYears: number[];
+  // Additional fields for enhanced calculations
+  dailyEnergyRequirement: number;
+  monthlyUnitsConsumed: number;
+  monthlyChargingCost: number;
+  dailyFuelNeeded: number;
+  monthlyFuelCost: number;
+  monthlySavings: number;
+  yearlySavings: number;
+  totalSavingsOverTime: number;
+  totalEnergyConsumed: number;
+  costPerKm: number;
+  fuelCostPerKm: number;
+  breakEvenMonths: number;
+  comparisons: {
+    months: string[];
+    chargingCosts: number[];
+    fuelCosts: number[];
+    savingsPerMonth: number[];
+    cumulativeSavings: number[];
+  };
 };
 
 export const calculateROI = (
@@ -85,6 +119,122 @@ export const calculateROI = (
     netRevenue,
     roiMonths,
     roiYears
+  };
+};
+
+// Enhanced ROI calculation with all required inputs
+export const calculateEnhancedROI = (input: CalculationInput): CalculationResult => {
+  const { 
+    charger, 
+    chargerCount, 
+    civilWorkCost, 
+    dailyKilometers, 
+    carEfficiency, 
+    electricityCost, 
+    fuelCost, 
+    fuelEfficiency,
+    chargingFrequency,
+    timeHorizon
+  } = input;
+
+  const daysPerMonth = 30;
+  const monthsInYear = 12;
+  const totalInvestment = charger.price * chargerCount + civilWorkCost;
+  
+  // Calculate daily energy requirement
+  const dailyEnergyRequirement = dailyKilometers / carEfficiency; // kWh
+  
+  // Monthly energy consumption based on charging frequency (days per week)
+  const daysPerWeek = Math.min(chargingFrequency, 7);
+  const effectiveMonthlyDays = (daysPerWeek / 7) * daysPerMonth;
+  const monthlyUnitsConsumed = dailyEnergyRequirement * effectiveMonthlyDays;
+  
+  // Cost calculations
+  const monthlyChargingCost = monthlyUnitsConsumed * electricityCost;
+  const dailyFuelNeeded = dailyKilometers / fuelEfficiency; // liters
+  const monthlyFuelCost = dailyFuelNeeded * fuelCost * daysPerMonth;
+  
+  // Savings
+  const monthlySavings = monthlyFuelCost - monthlyChargingCost;
+  const yearlySavings = monthlySavings * monthsInYear;
+  
+  // ROI
+  const breakEvenMonths = monthlySavings > 0 ? totalInvestment / monthlySavings : Infinity;
+  const roiYears = breakEvenMonths / monthsInYear;
+  
+  // Additional calculations
+  const totalEnergyConsumed = monthlyUnitsConsumed * timeHorizon * monthsInYear;
+  const totalSavingsOverTime = monthlySavings * timeHorizon * monthsInYear;
+  const costPerKm = monthlyChargingCost / (dailyKilometers * daysPerMonth);
+  const fuelCostPerKm = monthlyFuelCost / (dailyKilometers * daysPerMonth);
+  
+  // Generate comparison data for charts
+  const months: string[] = [];
+  const chargingCosts: number[] = [];
+  const fuelCosts: number[] = [];
+  const savingsPerMonth: number[] = [];
+  const cumulativeSavings: number[] = [];
+  
+  let totalSavingsSoFar = -totalInvestment;
+  
+  for (let i = 1; i <= timeHorizon * monthsInYear; i++) {
+    months.push(`Month ${i}`);
+    chargingCosts.push(monthlyChargingCost);
+    fuelCosts.push(monthlyFuelCost);
+    savingsPerMonth.push(monthlySavings);
+    
+    totalSavingsSoFar += monthlySavings;
+    cumulativeSavings.push(totalSavingsSoFar);
+  }
+
+  // Compatibility with existing code
+  const hourlyUsageLevels = [1, 2, 3, 4, 5];
+  const dailyConsumption = hourlyUsageLevels.map(hours => hours * charger.power);
+  const monthlyConsumption = dailyConsumption.map(daily => daily * daysPerMonth);
+  
+  const revenue = monthlyConsumption.map(consumption => consumption * 18); // Default value
+  const expenditure = monthlyConsumption.map(consumption => consumption * electricityCost);
+  const operationalCost = monthlyConsumption.map(consumption => consumption * 1); // Default value
+  const miscellaneousCost = monthlyConsumption.map(consumption => consumption * 1); // Default value
+  
+  const netRevenue = revenue.map((rev, i) => 
+    rev - (expenditure[i] + operationalCost[i] + miscellaneousCost[i])
+  );
+  
+  const roiMonths = netRevenue.map(net => net > 0 ? totalInvestment / net : Infinity);
+
+  return {
+    // Original fields
+    dailyConsumption,
+    monthlyConsumption,
+    revenue,
+    expenditure,
+    operationalCost,
+    miscellaneousCost,
+    netRevenue,
+    roiMonths,
+    roiYears: roiMonths.map(months => months / monthsInYear),
+    
+    // New fields
+    dailyEnergyRequirement,
+    monthlyUnitsConsumed,
+    monthlyChargingCost,
+    dailyFuelNeeded,
+    monthlyFuelCost,
+    monthlySavings,
+    yearlySavings,
+    totalSavingsOverTime,
+    totalEnergyConsumed,
+    costPerKm,
+    fuelCostPerKm,
+    breakEvenMonths,
+    comparisons: {
+      months,
+      chargingCosts,
+      fuelCosts,
+      savingsPerMonth,
+      cumulativeSavings
+    }
   };
 };
 
