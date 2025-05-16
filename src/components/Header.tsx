@@ -11,13 +11,13 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className="bg-black shadow-md shadow-zinc-900/30 sticky top-0 z-50">
       <div className="container mx-auto py-4 px-4 flex justify-between items-center">
         <EVLogo />
         
         {/* Mobile menu button */}
         <button 
-          className="md:hidden p-2 rounded-md hover:bg-gray-100 transition-colors"
+          className="md:hidden p-2 rounded-md hover:bg-zinc-800 transition-colors"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
         >
@@ -26,48 +26,48 @@ const Header: React.FC = () => {
         
         {/* Desktop navigation */}
         <nav className="hidden md:flex space-x-6">
-          <a href="#calculator" className="text-evgreen-dark hover:text-evgreen font-medium transition-colors">
+          <a href="#calculator" className="text-white hover:text-evgreen font-medium transition-colors">
             Calculator
           </a>
-          <a href="#about" className="text-evgreen-dark hover:text-evgreen font-medium transition-colors">
+          <a href="#about" className="text-white hover:text-evgreen font-medium transition-colors">
             About
           </a>
-          <a href="#contact" className="text-evgreen-dark hover:text-evgreen font-medium transition-colors">
+          <a href="#contact" className="text-white hover:text-evgreen font-medium transition-colors">
             Contact
           </a>
         </nav>
         
-        <button className="hidden md:block bg-evgreen text-white px-4 py-2 rounded-md hover:bg-evgreen-dark transition-colors">
+        <button className="hidden md:block bg-white text-black px-4 py-2 rounded-md hover:bg-zinc-200 transition-colors">
           Get a Quote
         </button>
         
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white shadow-md md:hidden">
+          <div className="absolute top-full left-0 right-0 bg-zinc-900 shadow-lg md:hidden">
             <nav className="flex flex-col py-2">
               <a 
                 href="#calculator" 
-                className="px-4 py-2 hover:bg-gray-100 text-evgreen-dark"
+                className="px-4 py-2 hover:bg-zinc-800 text-white"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Calculator
               </a>
               <a 
                 href="#about" 
-                className="px-4 py-2 hover:bg-gray-100 text-evgreen-dark"
+                className="px-4 py-2 hover:bg-zinc-800 text-white"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 About
               </a>
               <a 
                 href="#contact" 
-                className="px-4 py-2 hover:bg-gray-100 text-evgreen-dark"
+                className="px-4 py-2 hover:bg-zinc-800 text-white"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Contact
               </a>
               <div className="px-4 py-2">
-                <button className="w-full bg-evgreen text-white px-4 py-2 rounded-md hover:bg-evgreen-dark transition-colors">
+                <button className="w-full bg-white text-black px-4 py-2 rounded-md hover:bg-zinc-200 transition-colors">
                   Get a Quote
                 </button>
               </div>

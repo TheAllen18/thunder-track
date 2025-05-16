@@ -104,6 +104,8 @@ export default {
 			},
 			backgroundImage: {
 				'ev-gradient': 'linear-gradient(135deg, #4CAF74 0%, #A8A048 100%)',
+				'premium-black': 'linear-gradient(to bottom, #000000 0%, #121212 100%)',
+				'premium-dark': 'linear-gradient(to bottom, #121212 0%, #1a1a1a 100%)',
 			}
 		}
 	},
