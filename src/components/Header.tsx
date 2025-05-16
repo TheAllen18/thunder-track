@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import EVLogo from './EVLogo';
+import ThunderCalcLogo from './EVLogo';
 import { Menu, X } from 'lucide-react';
 
 const Header: React.FC = () => {
@@ -11,9 +11,9 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-black shadow-md shadow-zinc-900/30 sticky top-0 z-50">
+    <header className="bg-black bg-opacity-80 backdrop-blur-lg shadow-md shadow-zinc-900/30 sticky top-0 z-50">
       <div className="container mx-auto py-4 px-4 flex justify-between items-center">
-        <EVLogo />
+        <ThunderCalcLogo />
         
         {/* Mobile menu button */}
         <button 
@@ -26,24 +26,24 @@ const Header: React.FC = () => {
         
         {/* Desktop navigation */}
         <nav className="hidden md:flex space-x-6">
-          <a href="#calculator" className="text-white hover:text-evgreen font-medium transition-colors">
+          <a href="#calculator" className="text-white hover:text-thunder font-medium transition-colors">
             Calculator
           </a>
-          <a href="#about" className="text-white hover:text-evgreen font-medium transition-colors">
+          <a href="#about" className="text-white hover:text-thunder font-medium transition-colors">
             About
           </a>
-          <a href="#contact" className="text-white hover:text-evgreen font-medium transition-colors">
+          <a href="#contact" className="text-white hover:text-thunder font-medium transition-colors">
             Contact
           </a>
         </nav>
         
-        <button className="hidden md:block bg-white text-black px-4 py-2 rounded-md hover:bg-zinc-200 transition-colors">
+        <button className="hidden md:block bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors">
           Get a Quote
         </button>
         
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-zinc-900 shadow-lg md:hidden">
+          <div className="absolute top-full left-0 right-0 bg-zinc-900 bg-opacity-90 backdrop-blur-lg shadow-lg md:hidden">
             <nav className="flex flex-col py-2">
               <a 
                 href="#calculator" 
@@ -67,7 +67,7 @@ const Header: React.FC = () => {
                 Contact
               </a>
               <div className="px-4 py-2">
-                <button className="w-full bg-white text-black px-4 py-2 rounded-md hover:bg-zinc-200 transition-colors">
+                <button className="w-full bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors">
                   Get a Quote
                 </button>
               </div>

@@ -109,6 +109,7 @@ export const calculateROI = (
   const roiMonths = netRevenue.map(net => net > 0 ? totalInvestment / net : Infinity);
   const roiYears = roiMonths.map(months => months / 12);
 
+  // Add placeholder values for the additional fields to satisfy the type
   return {
     dailyConsumption,
     monthlyConsumption,
@@ -118,7 +119,26 @@ export const calculateROI = (
     miscellaneousCost,
     netRevenue,
     roiMonths,
-    roiYears
+    roiYears,
+    dailyEnergyRequirement: 0,
+    monthlyUnitsConsumed: 0,
+    monthlyChargingCost: 0,
+    dailyFuelNeeded: 0,
+    monthlyFuelCost: 0,
+    monthlySavings: 0,
+    yearlySavings: 0,
+    totalSavingsOverTime: 0,
+    totalEnergyConsumed: 0,
+    costPerKm: 0,
+    fuelCostPerKm: 0,
+    breakEvenMonths: 0,
+    comparisons: {
+      months: [],
+      chargingCosts: [],
+      fuelCosts: [],
+      savingsPerMonth: [],
+      cumulativeSavings: []
+    }
   };
 };
 

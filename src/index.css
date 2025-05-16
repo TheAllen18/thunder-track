@@ -5,37 +5,37 @@
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 100%;
+    --card: 240 10% 5%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 7%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 240 10% 5%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 142 38% 50%;
-    --primary-foreground: 142 38% 97%;
+    --primary: 229 70% 55%;
+    --primary-foreground: 229 70% 97%;
 
-    --secondary: 50 38% 47%;
-    --secondary-foreground: 50 38% 97%;
+    --secondary: 245 70% 65%;
+    --secondary-foreground: 245 70% 97%;
 
-    --muted: 0 0% 15%;
+    --muted: 240 5% 15%;
     --muted-foreground: 0 0% 70%;
 
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 245 70% 15%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 142 38% 50%;
+    --border: 240 5% 20%;
+    --input: 240 5% 20%;
+    --ring: 229 70% 55%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 7%;
+    --sidebar-background: 240 10% 5%;
     --sidebar-foreground: 240 5.3% 90%;
     --sidebar-primary: 240 5.9% 100%;
     --sidebar-primary-foreground: 0 0% 0%;
@@ -53,14 +53,15 @@
 
   body {
     @apply bg-background text-foreground;
+    scroll-behavior: smooth;
   }
   
   .ev-card {
-    @apply bg-zinc-900 rounded-xl shadow-md overflow-hidden border border-zinc-800;
+    @apply bg-zinc-900 rounded-xl shadow-lg overflow-hidden border border-zinc-800 backdrop-blur-sm;
   }
   
   .ev-card-header {
-    @apply bg-gradient-to-r from-zinc-800 to-zinc-900 text-white font-semibold p-4 border-b border-zinc-800;
+    @apply bg-gradient-to-r from-zinc-900 to-zinc-800 text-white font-semibold p-4 border-b border-zinc-700;
   }
   
   .ev-table th {
@@ -80,6 +81,49 @@
   }
   
   .ev-input {
-    @apply border border-zinc-800 bg-zinc-900 rounded-md p-2 focus:ring-2 focus:ring-evgreen focus:outline-none;
+    @apply border border-zinc-700 bg-zinc-900 rounded-md p-2 focus:ring-2 focus:ring-primary focus:outline-none;
+  }
+  
+  .premium-gradient {
+    @apply bg-gradient-to-br from-primary/80 to-secondary/50;
+  }
+  
+  .premium-card {
+    @apply bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700/50 shadow-xl;
+  }
+  
+  .glass-effect {
+    @apply backdrop-blur-md bg-black/20;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  .floating {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 1;
+      filter: brightness(1);
+    }
+    50% {
+      opacity: 0.8;
+      filter: brightness(1.2);
+    }
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
   }
 }

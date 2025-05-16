@@ -1,21 +1,20 @@
 
 import React from 'react';
 
-const EVLogo: React.FC = () => {
+const ThunderCalcLogo: React.FC = () => {
   return (
     <div className="flex items-center gap-2">
-      <div className="relative w-12 h-12">
-        {/* Cross shape with modern gradients */}
-        <div className="absolute inset-0 bg-gradient-to-br from-evgreen-light to-evgreen rounded-md rotate-45"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-evgreen to-evgreen-dark rounded-md -rotate-45"></div>
-        {/* Arrow overlay */}
-        <div className="absolute w-10 h-5 right-0 bottom-1 overflow-hidden">
-          <div className="absolute w-10 h-10 bg-gradient-to-br from-evgold-light to-evgold-dark rounded-full transform -rotate-[30deg] translate-y-4"></div>
-        </div>
+      <div className="relative w-12 h-12 pulse-glow">
+        {/* Use the uploaded image */}
+        <img 
+          src="/lovable-uploads/395e316a-0428-42ed-9920-5cbfa451f918.png" 
+          alt="ThunderCalc Logo" 
+          className="w-full h-full object-contain"
+        />
       </div>
-      <div className="font-bold text-xl text-white">EV<span className="text-evgold">ROI</span></div>
+      <div className="font-bold text-xl text-white">Thunder<span className="text-thunder">Calc</span></div>
     </div>
   );
 };
 
-export default EVLogo;
+export default ThunderCalcLogo;
