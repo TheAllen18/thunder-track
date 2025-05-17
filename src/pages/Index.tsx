@@ -5,14 +5,16 @@ import Footer from '@/components/Footer';
 import CalculatorForm from '@/components/CalculatorForm';
 import ResultsTable from '@/components/ResultsTable';
 import InformationSection from '@/components/InformationSection';
-import { ChargerType, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
+import { ChargerType, acChargerTypes, dcChargerTypes, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
 import { ArrowDown } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const [calculationResults, setCalculationResults] = useState<CalculationResult | null>(null);
   const [selectedCharger, setSelectedCharger] = useState<ChargerType | null>(null);
   const [chargerCount, setChargerCount] = useState<number>(1);
   const [civilWorkCost, setCivilWorkCost] = useState<number>(0);
+  const [chargerType, setChargerType] = useState<'AC' | 'DC'>('AC');
 
   const handleCalculate = (input: CalculationInput) => {
     const results = calculateEnhancedROI(input);
@@ -31,6 +33,11 @@ const Index = () => {
     }, 100);
   };
 
+  const handleChargerTypeChange = (type: 'AC' | 'DC') => {
+    setChargerType(type);
+    setCalculationResults(null);
+  };
+
   const scrollToCalculator = (e: React.MouseEvent) => {
     e.preventDefault();
     const calculatorElement = document.getElementById('calculator');
@@ -40,7 +47,7 @@ const Index = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
+    <div className="flex flex-col min-h-screen bg-white text-zinc-800">
       <Header />
       
       <main className="flex-1">
@@ -50,33 +57,23 @@ const Index = () => {
           
           <div className="container mx-auto px-4 text-center relative z-10">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-zinc-900 font-poppins">
-              <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Plus</span> EV ROI Calculator
+              <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Plus</span> ROI Calculator
             </h1>
             <p className="text-xl md:text-2xl max-w-3xl mx-auto text-zinc-700 font-montserrat">
-              Calculate the return on investment and savings for installing our AC EV chargers
+              Calculate the return on investment and savings for installing our EV chargers
             </p>
             
-            <div className="flex flex-col md:flex-row gap-8 justify-center mt-8 max-w-3xl mx-auto text-center">
-              <div className="flex flex-col items-center">
-                <div className="bg-zinc-100 p-4 rounded-full w-20 h-20 flex items-center justify-center mb-3 border border-thunder/30 hover:border-thunder/60 transition-all floating">
-                  <span className="text-2xl font-bold font-poppins text-zinc-900">3.3</span>
-                </div>
-                <p className="font-montserrat text-zinc-800">3.3 kW Single Phase</p>
-              </div>
-              
-              <div className="flex flex-col items-center">
-                <div className="bg-zinc-100 p-4 rounded-full w-20 h-20 flex items-center justify-center mb-3 border border-thunder/30 hover:border-thunder/60 transition-all floating">
-                  <span className="text-2xl font-bold font-poppins text-zinc-900">7.4</span>
-                </div>
-                <p className="font-montserrat text-zinc-800">7.4 kW Single Phase</p>
-              </div>
-              
-              <div className="flex flex-col items-center">
-                <div className="bg-zinc-100 p-4 rounded-full w-20 h-20 flex items-center justify-center mb-3 border border-thunder/30 hover:border-thunder/60 transition-all floating">
-                  <span className="text-2xl font-bold font-poppins text-zinc-900">22</span>
-                </div>
-                <p className="font-montserrat text-zinc-800">22 kW Three Phase</p>
-              </div>
+            <div className="mt-10">
+              <Tabs 
+                defaultValue="AC" 
+                className="w-full max-w-md mx-auto"
+                onValueChange={(value) => handleChargerTypeChange(value as 'AC' | 'DC')}
+              >
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="AC">AC Chargers</TabsTrigger>
+                  <TabsTrigger value="DC">DC Chargers</TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
             
             <a 
@@ -93,9 +90,14 @@ const Index = () => {
           <div className="absolute -bottom-32 -left-20 w-80 h-80 bg-accent2/5 rounded-full blur-3xl"></div>
         </div>
         
-        <div className="container mx-auto px-4 py-12 bg-black relative z-10" id="calculator">
+        <div className="container mx-auto px-4 py-12 bg-white relative z-10" id="calculator">
           <div className="max-w-4xl mx-auto">
-            <CalculatorForm onCalculate={handleCalculate} />
+            <CalculatorForm 
+              onCalculate={handleCalculate} 
+              chargerType={chargerType}
+              acChargers={acChargerTypes}
+              dcChargers={dcChargerTypes}
+            />
             
             <div id="results">
               <ResultsTable 
