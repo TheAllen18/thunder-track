@@ -50,7 +50,7 @@ const Quote = () => {
             
             <div className="ev-card">
               <div className="ev-card-header">
-                <h1 className="text-2xl font-barlow">Get a Quote for Your EV Charger</h1>
+                <h1 className="text-2xl font-poppins">Get a Quote for Your EV Charger</h1>
                 <p className="text-zinc-300 text-sm mt-1 font-montserrat">Fill in your details and we'll get back to you</p>
               </div>
               

@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
             <ThunderCalcLogo />
             <p className="text-zinc-300 text-sm font-montserrat">
               Providing innovative EV charging solutions for homes and businesses.
-              Calculate your ROI and make informed decisions with ThunderTrack.
+              Calculate your ROI and make informed decisions with Thunder Plus.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-green-600 transition-colors">
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="space-y-4">
-            <h3 className="font-barlow font-semibold text-xl text-white">Quick Links</h3>
+            <h3 className="font-poppins font-semibold text-xl text-white">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li><a href="#calculator" className="text-zinc-300 hover:text-thunder font-montserrat transition-colors">Calculator</a></li>
               <li><a href="#about" className="text-zinc-300 hover:text-thunder font-montserrat transition-colors">About</a></li>
@@ -50,11 +50,11 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="space-y-4">
-            <h3 className="font-barlow font-semibold text-xl text-white">Contact Us</h3>
+            <h3 className="font-poppins font-semibold text-xl text-white">Contact Us</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-zinc-300">
                 <Mail size={18} className="text-thunder mt-1 flex-shrink-0" />
-                <span className="font-montserrat text-sm">info@thundertrack.com</span>
+                <span className="font-montserrat text-sm">info@thunderplus.com</span>
               </li>
               <li className="flex items-start gap-3 text-zinc-300">
                 <Phone size={18} className="text-thunder mt-1 flex-shrink-0" />
@@ -69,7 +69,7 @@ const Footer: React.FC = () => {
         </div>
         
         <div className="border-t border-zinc-800 mt-8 pt-6 text-center text-sm text-zinc-400">
-          <p className="font-montserrat">© {new Date().getFullYear()} ThunderTrack. All rights reserved.</p>
+          <p className="font-montserrat">© {new Date().getFullYear()} Thunder Plus. All rights reserved.</p>
         </div>
       </div>
     </footer>

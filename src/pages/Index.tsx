@@ -49,8 +49,8 @@ const Index = () => {
           <div className="absolute inset-0 bg-futuristic-grid bg-[length:30px_30px] opacity-20"></div>
           
           <div className="container mx-auto px-4 text-center relative z-10">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white font-barlow">
-              <span className="bg-clip-text text-transparent bg-premium-gradient">ThunderTrack</span> EV ROI Calculator
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white font-poppins">
+              <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Plus</span> EV ROI Calculator
             </h1>
             <p className="text-xl md:text-2xl max-w-3xl mx-auto text-white/90 font-montserrat">
               Calculate the return on investment and savings for installing our AC EV chargers
@@ -59,21 +59,21 @@ const Index = () => {
             <div className="flex flex-col md:flex-row gap-8 justify-center mt-8 max-w-3xl mx-auto text-center">
               <div className="flex flex-col items-center">
                 <div className="bg-zinc-800/40 backdrop-blur-sm p-4 rounded-full w-20 h-20 flex items-center justify-center mb-3 border border-thunder/30 hover:border-thunder/60 transition-all floating">
-                  <span className="text-2xl font-bold font-barlow">3.3</span>
+                  <span className="text-2xl font-bold font-poppins">3.3</span>
                 </div>
                 <p className="font-montserrat">3.3 kW Single Phase</p>
               </div>
               
               <div className="flex flex-col items-center">
                 <div className="bg-zinc-800/40 backdrop-blur-sm p-4 rounded-full w-20 h-20 flex items-center justify-center mb-3 border border-thunder/30 hover:border-thunder/60 transition-all floating">
-                  <span className="text-2xl font-bold font-barlow">7.4</span>
+                  <span className="text-2xl font-bold font-poppins">7.4</span>
                 </div>
                 <p className="font-montserrat">7.4 kW Single Phase</p>
               </div>
               
               <div className="flex flex-col items-center">
                 <div className="bg-zinc-800/40 backdrop-blur-sm p-4 rounded-full w-20 h-20 flex items-center justify-center mb-3 border border-thunder/30 hover:border-thunder/60 transition-all floating">
-                  <span className="text-2xl font-bold font-barlow">22</span>
+                  <span className="text-2xl font-bold font-poppins">22</span>
                 </div>
                 <p className="font-montserrat">22 kW Three Phase</p>
               </div>

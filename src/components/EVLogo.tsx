@@ -7,12 +7,12 @@ const ThunderCalcLogo: React.FC = () => {
       <div className="relative w-12 h-12 pulse-glow">
         {/* Use the uploaded image */}
         <img 
-          src="/lovable-uploads/dfc0363a-7144-45ad-a3e3-0c82713cb4de.png" 
-          alt="ThunderTrack Logo" 
+          src="/lovable-uploads/498fde47-4ead-498a-82b1-11500fcda09e.png" 
+          alt="Thunder Plus Logo" 
           className="w-full h-full object-contain"
         />
       </div>
-      <div className="font-bold text-xl text-white font-barlow">Thunder<span className="text-thunder">Track</span></div>
+      <div className="font-bold text-xl text-white font-poppins">Thunder<span className="text-thunder">Plus</span></div>
     </div>
   );
 };
