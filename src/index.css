@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,16 +16,16 @@
     --popover: 240 10% 5%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 229 70% 55%;
-    --primary-foreground: 229 70% 97%;
+    --primary: 142 64% 42%;
+    --primary-foreground: 142 64% 97%;
 
-    --secondary: 245 70% 65%;
-    --secondary-foreground: 245 70% 97%;
+    --secondary: 160 84% 39%;
+    --secondary-foreground: 160 84% 97%;
 
     --muted: 240 5% 15%;
     --muted-foreground: 0 0% 70%;
 
-    --accent: 245 70% 15%;
+    --accent: 142 64% 15%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -31,7 +33,7 @@
 
     --border: 240 5% 20%;
     --input: 240 5% 20%;
-    --ring: 229 70% 55%;
+    --ring: 142 64% 42%;
 
     --radius: 0.75rem;
 
@@ -52,8 +54,12 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-montserrat;
     scroll-behavior: smooth;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-barlow;
   }
   
   .ev-card {
@@ -85,7 +91,7 @@
   }
   
   .premium-gradient {
-    @apply bg-gradient-to-br from-primary/80 to-secondary/50;
+    @apply bg-gradient-to-br from-green-600/80 to-emerald-500/50;
   }
   
   .premium-card {
@@ -125,5 +131,23 @@
 
   .pulse-glow {
     animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-down {
+    0% {
+      transform: translateY(-5px);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(5px);
+      opacity: 0;
+    }
+  }
+
+  .animate-scroll-down {
+    animation: scroll-down 1.5s ease-in-out infinite;
   }
 }

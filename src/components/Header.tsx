@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import ThunderCalcLogo from './EVLogo';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -26,20 +27,20 @@ const Header: React.FC = () => {
         
         {/* Desktop navigation */}
         <nav className="hidden md:flex space-x-6">
-          <a href="#calculator" className="text-white hover:text-thunder font-medium transition-colors">
+          <a href="#calculator" className="text-white hover:text-thunder font-montserrat font-medium transition-colors">
             Calculator
           </a>
-          <a href="#about" className="text-white hover:text-thunder font-medium transition-colors">
+          <a href="#about" className="text-white hover:text-thunder font-montserrat font-medium transition-colors">
             About
           </a>
-          <a href="#contact" className="text-white hover:text-thunder font-medium transition-colors">
+          <a href="#contact" className="text-white hover:text-thunder font-montserrat font-medium transition-colors">
             Contact
           </a>
         </nav>
         
-        <button className="hidden md:block bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors">
+        <Link to="/quote" className="hidden md:block bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors font-montserrat">
           Get a Quote
-        </button>
+        </Link>
         
         {/* Mobile menu */}
         {mobileMenuOpen && (
@@ -47,29 +48,29 @@ const Header: React.FC = () => {
             <nav className="flex flex-col py-2">
               <a 
                 href="#calculator" 
-                className="px-4 py-2 hover:bg-zinc-800 text-white"
+                className="px-4 py-2 hover:bg-zinc-800 text-white font-montserrat"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Calculator
               </a>
               <a 
                 href="#about" 
-                className="px-4 py-2 hover:bg-zinc-800 text-white"
+                className="px-4 py-2 hover:bg-zinc-800 text-white font-montserrat"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 About
               </a>
               <a 
                 href="#contact" 
-                className="px-4 py-2 hover:bg-zinc-800 text-white"
+                className="px-4 py-2 hover:bg-zinc-800 text-white font-montserrat"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Contact
               </a>
               <div className="px-4 py-2">
-                <button className="w-full bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors">
+                <Link to="/quote" className="block w-full bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors font-montserrat">
                   Get a Quote
-                </button>
+                </Link>
               </div>
             </nav>
           </div>

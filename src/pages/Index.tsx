@@ -49,48 +49,43 @@ const Index = () => {
           <div className="absolute inset-0 bg-futuristic-grid bg-[length:30px_30px] opacity-20"></div>
           
           <div className="container mx-auto px-4 text-center relative z-10">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-              <span className="bg-clip-text text-transparent bg-premium-gradient">ThunderCalc</span> EV ROI Calculator
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white font-barlow">
+              <span className="bg-clip-text text-transparent bg-premium-gradient">ThunderTrack</span> EV ROI Calculator
             </h1>
-            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-white/90">
+            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-white/90 font-montserrat">
               Calculate the return on investment and savings for installing our AC EV chargers
             </p>
             
             <div className="flex flex-col md:flex-row gap-8 justify-center mt-8 max-w-3xl mx-auto text-center">
               <div className="flex flex-col items-center">
                 <div className="bg-zinc-800/40 backdrop-blur-sm p-4 rounded-full w-20 h-20 flex items-center justify-center mb-3 border border-thunder/30 hover:border-thunder/60 transition-all floating">
-                  <span className="text-2xl font-bold">3.3</span>
+                  <span className="text-2xl font-bold font-barlow">3.3</span>
                 </div>
-                <p>3.3 kW Single Phase</p>
+                <p className="font-montserrat">3.3 kW Single Phase</p>
               </div>
               
               <div className="flex flex-col items-center">
                 <div className="bg-zinc-800/40 backdrop-blur-sm p-4 rounded-full w-20 h-20 flex items-center justify-center mb-3 border border-thunder/30 hover:border-thunder/60 transition-all floating">
-                  <span className="text-2xl font-bold">7.4</span>
+                  <span className="text-2xl font-bold font-barlow">7.4</span>
                 </div>
-                <p>7.4 kW Single Phase</p>
+                <p className="font-montserrat">7.4 kW Single Phase</p>
               </div>
               
               <div className="flex flex-col items-center">
                 <div className="bg-zinc-800/40 backdrop-blur-sm p-4 rounded-full w-20 h-20 flex items-center justify-center mb-3 border border-thunder/30 hover:border-thunder/60 transition-all floating">
-                  <span className="text-2xl font-bold">22</span>
+                  <span className="text-2xl font-bold font-barlow">22</span>
                 </div>
-                <p>22 kW Three Phase</p>
+                <p className="font-montserrat">22 kW Three Phase</p>
               </div>
             </div>
             
             <a 
               href="#calculator"
-              className="inline-flex flex-col items-center mt-10 text-white bg-zinc-800/30 hover:bg-zinc-700/40 backdrop-blur-sm px-5 py-3 rounded-full transition-all group border border-zinc-700/30 hover:border-thunder/30"
+              className="inline-flex items-center mt-10 text-white bg-zinc-800/30 hover:bg-zinc-700/40 backdrop-blur-sm px-5 py-3 rounded-full transition-all hover:scale-105 group border border-zinc-700/30 hover:border-thunder/30 font-montserrat"
               onClick={scrollToCalculator}
             >
-              <span className="flex items-center">
-                Calculate Your Savings
-                <ArrowDown className="ml-2 h-5 w-5" />
-              </span>
-              <span className="animate-scroll-down opacity-0 mt-2">
-                <ArrowDown className="h-4 w-4" />
-              </span>
+              Calculate Your Savings
+              <ArrowDown className="ml-2 h-5 w-5 animate-scroll-down" />
             </a>
           </div>
           
