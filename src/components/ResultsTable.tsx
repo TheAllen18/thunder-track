@@ -122,62 +122,62 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
-          <h3 className="font-semibold mb-2 font-poppins">Charger & Investment Details</h3>
-          <Table className="ev-table">
+          <h3 className="font-semibold mb-2 font-poppins text-white">Charger & Investment Details</h3>
+          <Table className="ev-table border-zinc-700">
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">Charger Type</TableCell>
-                <TableCell className="text-right">
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Charger Type</TableCell>
+                <TableCell className="text-right text-white">
                   {charger.name} ({charger.phase} Phase - {charger.power}kW)
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Number of Chargers</TableCell>
-                <TableCell className="text-right">
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Number of Chargers</TableCell>
+                <TableCell className="text-right text-white">
                   {chargerCount} units
                 </TableCell>
               </TableRow>
               {civilWorkCost > 0 && (
-                <TableRow>
-                  <TableCell className="font-medium">Civil Work Cost</TableCell>
-                  <TableCell className="text-right">{formatCurrency(civilWorkCost)}</TableCell>
+                <TableRow className="border-zinc-700">
+                  <TableCell className="font-medium text-zinc-300">Civil Work Cost</TableCell>
+                  <TableCell className="text-right text-white">{formatCurrency(civilWorkCost)}</TableCell>
                 </TableRow>
               )}
-              <TableRow>
-                <TableCell className="font-medium">Total Investment</TableCell>
-                <TableCell className="text-right font-bold">{formatCurrency(totalInvestment)}</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Total Investment</TableCell>
+                <TableCell className="text-right font-bold text-white">{formatCurrency(totalInvestment)}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </div>
         
         <div>
-          <h3 className="font-semibold mb-2 font-poppins">Energy & Cost Comparison</h3>
-          <Table className="ev-table">
+          <h3 className="font-semibold mb-2 font-poppins text-white">Energy & Cost Comparison</h3>
+          <Table className="ev-table border-zinc-700">
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">Daily Energy Requirement</TableCell>
-                <TableCell className="text-right">{formatNumber(results.dailyEnergyRequirement || 0)} kWh</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Daily Energy Requirement</TableCell>
+                <TableCell className="text-right text-white">{formatNumber(results.dailyEnergyRequirement || 0)} kWh</TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Monthly Energy Consumption</TableCell>
-                <TableCell className="text-right">{formatNumber(results.monthlyUnitsConsumed || 0, 0)} kWh</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Monthly Energy Consumption</TableCell>
+                <TableCell className="text-right text-white">{formatNumber(results.monthlyUnitsConsumed || 0, 0)} kWh</TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Monthly Charging Cost</TableCell>
-                <TableCell className="text-right">{formatCurrency(results.monthlyChargingCost || 0)}</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Monthly Charging Cost</TableCell>
+                <TableCell className="text-right text-white">{formatCurrency(results.monthlyChargingCost || 0)}</TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Monthly Fuel Cost</TableCell>
-                <TableCell className="text-right">{formatCurrency(results.monthlyFuelCost || 0)}</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Monthly Fuel Cost</TableCell>
+                <TableCell className="text-right text-white">{formatCurrency(results.monthlyFuelCost || 0)}</TableCell>
               </TableRow>
-              <TableRow className="bg-green-50">
-                <TableCell className="font-medium">Per km - EV</TableCell>
-                <TableCell className="text-right">{formatCurrency(results.costPerKm || 0)}/km</TableCell>
+              <TableRow className="bg-green-900/20 border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Per km - EV</TableCell>
+                <TableCell className="text-right text-white">{formatCurrency(results.costPerKm || 0)}/km</TableCell>
               </TableRow>
-              <TableRow className="bg-red-50">
-                <TableCell className="font-medium">Per km - Fuel</TableCell>
-                <TableCell className="text-right">{formatCurrency(results.fuelCostPerKm || 0)}/km</TableCell>
+              <TableRow className="bg-red-900/20 border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Per km - Fuel</TableCell>
+                <TableCell className="text-right text-white">{formatCurrency(results.fuelCostPerKm || 0)}/km</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -190,68 +190,68 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
-          <h3 className="font-semibold mb-2 font-poppins">Charger & Investment Details</h3>
-          <Table className="ev-table">
+          <h3 className="font-semibold mb-2 font-poppins text-white">Charger & Investment Details</h3>
+          <Table className="ev-table border-zinc-700">
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">Charger Type</TableCell>
-                <TableCell className="text-right">
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Charger Type</TableCell>
+                <TableCell className="text-right text-white">
                   {charger.name} ({charger.phase} Phase - {charger.power}kW)
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Number of Chargers</TableCell>
-                <TableCell className="text-right">
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Number of Chargers</TableCell>
+                <TableCell className="text-right text-white">
                   {chargerCount} units
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Warranty Period</TableCell>
-                <TableCell className="text-right">
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Warranty Period</TableCell>
+                <TableCell className="text-right text-white">
                   {charger.warranty}
                 </TableCell>
               </TableRow>
               {civilWorkCost > 0 && (
-                <TableRow>
-                  <TableCell className="font-medium">Civil Work Cost</TableCell>
-                  <TableCell className="text-right">{formatCurrency(civilWorkCost)}</TableCell>
+                <TableRow className="border-zinc-700">
+                  <TableCell className="font-medium text-zinc-300">Civil Work Cost</TableCell>
+                  <TableCell className="text-right text-white">{formatCurrency(civilWorkCost)}</TableCell>
                 </TableRow>
               )}
-              <TableRow>
-                <TableCell className="font-medium">Total Investment</TableCell>
-                <TableCell className="text-right font-bold">{formatCurrency(totalInvestment)}</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Total Investment</TableCell>
+                <TableCell className="text-right font-bold text-white">{formatCurrency(totalInvestment)}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </div>
         
         <div>
-          <h3 className="font-semibold mb-2 font-poppins">Business Performance</h3>
-          <Table className="ev-table">
+          <h3 className="font-semibold mb-2 font-poppins text-white">Business Performance</h3>
+          <Table className="ev-table border-zinc-700">
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">Daily Units Consumed</TableCell>
-                <TableCell className="text-right">{formatNumber(results.dailyUnitsConsumed || 0)} kWh</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Daily Units Consumed</TableCell>
+                <TableCell className="text-right text-white">{formatNumber(results.dailyUnitsConsumed || 0)} kWh</TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Monthly Units Consumed</TableCell>
-                <TableCell className="text-right">{formatNumber(results.monthlyUnitsConsumed || 0, 0)} kWh</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Monthly Units Consumed</TableCell>
+                <TableCell className="text-right text-white">{formatNumber(results.monthlyUnitsConsumed || 0, 0)} kWh</TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Monthly Revenue</TableCell>
-                <TableCell className="text-right">{formatCurrency(results.monthlyRevenue || 0)}</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Monthly Revenue</TableCell>
+                <TableCell className="text-right text-white">{formatCurrency(results.monthlyRevenue || 0)}</TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Monthly Net Revenue</TableCell>
-                <TableCell className="text-right">{formatCurrency(results.monthlyNetRevenue || 0)}</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Monthly Net Revenue</TableCell>
+                <TableCell className="text-right text-white">{formatCurrency(results.monthlyNetRevenue || 0)}</TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Yearly Net Revenue</TableCell>
-                <TableCell className="text-right">{formatCurrency(results.yearlyNetRevenue || 0)}</TableCell>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Yearly Net Revenue</TableCell>
+                <TableCell className="text-right text-white">{formatCurrency(results.yearlyNetRevenue || 0)}</TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Break-Even Time</TableCell>
-                <TableCell className="text-right">
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Break-Even Time</TableCell>
+                <TableCell className="text-right text-white">
                   {results.breakEvenMonths === Infinity ? 
                     "Never" : 
                     `${Math.floor((results.breakEvenMonths || 0)/12)} years ${Math.round((results.breakEvenMonths || 0) % 12)} months`
@@ -265,21 +265,21 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
 
       {/* Yearly Profit Projection */}
       <div className="mt-6">
-        <h3 className="font-semibold mb-2 font-poppins">Yearly Profit Projection</h3>
-        <Table className="ev-table">
+        <h3 className="font-semibold mb-2 font-poppins text-white">Yearly Profit Projection</h3>
+        <Table className="ev-table border-zinc-700">
           <TableHeader>
-            <TableRow>
-              <TableHead>Year</TableHead>
-              <TableHead className="text-right">Profit</TableHead>
-              <TableHead className="text-right">Cumulative Profit</TableHead>
+            <TableRow className="border-zinc-700">
+              <TableHead className="text-zinc-300">Year</TableHead>
+              <TableHead className="text-right text-zinc-300">Profit</TableHead>
+              <TableHead className="text-right text-zinc-300">Cumulative Profit</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {(results.profitYears || []).map((profit, index) => (
-              <TableRow key={index}>
-                <TableCell>Year {index + 1}</TableCell>
-                <TableCell className="text-right">{formatCurrency(profit)}</TableCell>
-                <TableCell className="text-right">{formatCurrency(profit * (index + 1))}</TableCell>
+              <TableRow key={index} className="border-zinc-700">
+                <TableCell className="text-zinc-300">Year {index + 1}</TableCell>
+                <TableCell className="text-right text-white">{formatCurrency(profit)}</TableCell>
+                <TableCell className="text-right text-white">{formatCurrency(profit * (index + 1))}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -459,7 +459,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
   );
 
   return (
-    <Card className="bg-white shadow-lg border border-gray-200 mt-8">
+    <Card className="bg-zinc-800 shadow-lg border border-zinc-700 mt-8">
       <CardHeader className="bg-premium-gradient text-white">
         <CardTitle className="flex items-center justify-between">
           <span className="font-poppins">ROI Calculation Results</span>
@@ -477,10 +477,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
             <CardContent className="p-4 text-center">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-zinc-400">
                 {isAC ? 'Monthly Savings' : 'Monthly Net Revenue'}
               </p>
-              <p className="text-3xl font-bold text-green-600">
+              <p className="text-3xl font-bold text-green-400">
                 {formatCurrency(isAC ? (results.monthlySavings || 0) : (results.monthlyNetRevenue || 0))}
               </p>
             </CardContent>
@@ -488,10 +488,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
           
           <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
             <CardContent className="p-4 text-center">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-zinc-400">
                 {isAC ? 'Yearly Savings' : 'Yearly Net Revenue'}
               </p>
-              <p className="text-3xl font-bold text-green-600">
+              <p className="text-3xl font-bold text-green-400">
                 {formatCurrency(isAC ? (results.yearlySavings || 0) : (results.yearlyNetRevenue || 0))}
               </p>
             </CardContent>
@@ -499,8 +499,8 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
           
           <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
             <CardContent className="p-4 text-center">
-              <p className="text-sm text-gray-500">Break-even Time</p>
-              <p className="text-3xl font-bold text-green-600">
+              <p className="text-sm text-zinc-400">Break-even Time</p>
+              <p className="text-3xl font-bold text-green-400">
                 {results.breakEvenMonths === Infinity ? 
                   "Never" : 
                   `${Math.floor((results.breakEvenMonths || 0)/12)} years ${Math.round((results.breakEvenMonths || 0) % 12)} months`
@@ -514,7 +514,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         {isAC ? renderACResults() : renderDCResults()}
         
         <div className="mt-8 space-y-6">
-          <h3 className="font-semibold font-poppins">
+          <h3 className="font-semibold font-poppins text-white">
             {isAC ? 'Cost Comparison & Savings Analysis' : 'Revenue, Cost & Profit Analysis'}
           </h3>
           

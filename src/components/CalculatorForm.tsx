@@ -137,30 +137,30 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   const renderACFields = () => (
     <>
       <div>
-        <h3 className="font-medium text-lg mb-3">Vehicle & Usage Details</h3>
+        <h3 className="font-medium text-lg mb-3 font-poppins text-white">Vehicle & Usage Details</h3>
         
         <div className="space-y-4">
           <div>
-            <Label htmlFor="daily-kilometers">Daily Kilometers Driven</Label>
+            <Label htmlFor="daily-kilometers" className="text-zinc-300">Daily Kilometers Driven</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
                 id="daily-kilometers"
-                className="ev-input"
+                className="ev-input bg-zinc-800 border-zinc-700 text-white"
                 value={dailyKilometers}
                 onChange={(e) => setDailyKilometers(Number(e.target.value))}
               />
-              <span className="text-sm text-gray-500">km</span>
+              <span className="text-sm text-zinc-400">km</span>
             </div>
           </div>
 
           <div className="space-y-2">
             <Tabs defaultValue="efficiency" onValueChange={(v) => setInputType(v as 'efficiency' | 'battery')}>
               <div className="flex justify-between items-center">
-                <Label>Car Energy Efficiency</Label>
-                <TabsList className="grid grid-cols-2 w-[200px]">
-                  <TabsTrigger value="efficiency">km/kWh</TabsTrigger>
-                  <TabsTrigger value="battery">Battery Size</TabsTrigger>
+                <Label className="text-zinc-300">Car Energy Efficiency</Label>
+                <TabsList className="grid grid-cols-2 w-[200px] bg-zinc-800">
+                  <TabsTrigger value="efficiency" className="data-[state=active]:bg-premium-gradient">km/kWh</TabsTrigger>
+                  <TabsTrigger value="battery" className="data-[state=active]:bg-premium-gradient">Battery Size</TabsTrigger>
                 </TabsList>
               </div>
               
@@ -169,13 +169,13 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   <Input
                     type="number"
                     id="car-efficiency"
-                    className="ev-input"
+                    className="ev-input bg-zinc-800 border-zinc-700 text-white"
                     value={carEfficiency}
                     onChange={(e) => setCarEfficiency(Number(e.target.value))}
                     step="0.1"
                     min="1"
                   />
-                  <span className="text-sm text-gray-500">km/kWh</span>
+                  <span className="text-sm text-zinc-400">km/kWh</span>
                 </div>
               </TabsContent>
               
@@ -184,20 +184,20 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   <Input
                     type="number"
                     id="battery-size"
-                    className="ev-input"
+                    className="ev-input bg-zinc-800 border-zinc-700 text-white"
                     value={batterySize}
                     onChange={(e) => setBatterySize(Number(e.target.value))}
                     step="1"
                     min="10"
                   />
-                  <span className="text-sm text-gray-500">kWh</span>
+                  <span className="text-sm text-zinc-400">kWh</span>
                 </div>
               </TabsContent>
             </Tabs>
           </div>
 
           <div>
-            <Label htmlFor="charging-frequency">Charging Frequency (days per week)</Label>
+            <Label htmlFor="charging-frequency" className="text-zinc-300">Charging Frequency (days per week)</Label>
             <div className="mt-2">
               <Slider
                 id="charging-frequency"
@@ -208,7 +208,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 onValueChange={(values) => setChargingFrequency(values[0])}
                 className="mt-2"
               />
-              <div className="flex justify-between mt-1 text-sm text-gray-500">
+              <div className="flex justify-between mt-1 text-sm text-zinc-400">
                 <span>1 day</span>
                 <span>{chargingFrequency} days</span>
                 <span>7 days</span>
@@ -219,16 +219,17 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
       </div>
 
       <div>
-        <h3 className="font-medium text-lg mb-3">Energy & Fuel Costs</h3>
+        <h3 className="font-medium text-lg mb-3 font-poppins text-white">Energy & Fuel Costs</h3>
         
         <div className="space-y-4">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="property-type">Commercial Property</Label>
+              <Label htmlFor="property-type" className="text-zinc-300">Commercial Property</Label>
               <Switch
                 id="property-type"
                 checked={isCommercialProperty}
                 onCheckedChange={setIsCommercialProperty}
+                className="bg-zinc-700 data-[state=checked]:bg-premium-gradient"
               />
             </div>
             
@@ -236,49 +237,49 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
               <Input
                 type="number"
                 id="electricity-cost"
-                className="ev-input"
+                className="ev-input bg-zinc-800 border-zinc-700 text-white"
                 value={electricityCost}
                 onChange={(e) => setElectricityCost(Number(e.target.value))}
                 step="0.1"
                 min="1"
               />
-              <span className="text-sm text-gray-500">₹/kWh</span>
+              <span className="text-sm text-zinc-400">₹/kWh</span>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-zinc-500 mt-1">
               {isCommercialProperty ? 'Commercial electricity rates' : 'Residential electricity rates'}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="fuel-cost">Fuel Cost (Petrol/Diesel)</Label>
+              <Label htmlFor="fuel-cost" className="text-zinc-300">Fuel Cost (Petrol/Diesel)</Label>
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
                   id="fuel-cost"
-                  className="ev-input"
+                  className="ev-input bg-zinc-800 border-zinc-700 text-white"
                   value={fuelCost}
                   onChange={(e) => setFuelCost(Number(e.target.value))}
                   step="0.1"
                   min="1"
                 />
-                <span className="text-sm text-gray-500">₹/liter</span>
+                <span className="text-sm text-zinc-400">₹/liter</span>
               </div>
             </div>
 
             <div>
-              <Label htmlFor="fuel-efficiency">Fuel Vehicle Efficiency</Label>
+              <Label htmlFor="fuel-efficiency" className="text-zinc-300">Fuel Vehicle Efficiency</Label>
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
                   id="fuel-efficiency"
-                  className="ev-input"
+                  className="ev-input bg-zinc-800 border-zinc-700 text-white"
                   value={fuelEfficiency}
                   onChange={(e) => setFuelEfficiency(Number(e.target.value))}
                   step="0.1"
                   min="1"
                 />
-                <span className="text-sm text-gray-500">km/liter</span>
+                <span className="text-sm text-zinc-400">km/liter</span>
               </div>
             </div>
           </div>
@@ -290,11 +291,11 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   const renderDCFields = () => (
     <>
       <div>
-        <h3 className="font-medium text-lg mb-3">Usage Details</h3>
+        <h3 className="font-medium text-lg mb-3 font-poppins text-white">Usage Details</h3>
         
         <div className="space-y-4">
           <div>
-            <Label htmlFor="daily-operating-hours">Daily Operating Hours</Label>
+            <Label htmlFor="daily-operating-hours" className="text-zinc-300">Daily Operating Hours</Label>
             <div className="mt-2">
               <Slider
                 id="daily-operating-hours"
@@ -305,7 +306,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 onValueChange={(values) => setDailyOperatingHours(values[0])}
                 className="mt-2"
               />
-              <div className="flex justify-between mt-1 text-sm text-gray-500">
+              <div className="flex justify-between mt-1 text-sm text-zinc-400">
                 <span>1 hour</span>
                 <span>{dailyOperatingHours} hours</span>
                 <span>5 hours</span>
@@ -314,68 +315,68 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
           </div>
 
           <div>
-            <Label htmlFor="average-customers">Average Customers Per Day</Label>
+            <Label htmlFor="average-customers" className="text-zinc-300">Average Customers Per Day</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
                 id="average-customers"
-                className="ev-input"
+                className="ev-input bg-zinc-800 border-zinc-700 text-white"
                 value={averageCustomersPerDay}
                 onChange={(e) => setAverageCustomersPerDay(Math.max(1, Number(e.target.value)))}
                 min="1"
               />
-              <span className="text-sm text-gray-500">customers</span>
+              <span className="text-sm text-zinc-400">customers</span>
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        <h3 className="font-medium text-lg mb-3">Revenue & Cost Details</h3>
+        <h3 className="font-medium text-lg mb-3 font-poppins text-white">Revenue & Cost Details</h3>
         
         <div className="space-y-4">
           <div>
-            <Label htmlFor="revenue-per-unit">Revenue Per Unit</Label>
+            <Label htmlFor="revenue-per-unit" className="text-zinc-300">Revenue Per Unit</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
                 id="revenue-per-unit"
-                className="ev-input"
+                className="ev-input bg-zinc-800 border-zinc-700 text-white"
                 value={revenuePerUnit}
                 onChange={(e) => setRevenuePerUnit(Number(e.target.value))}
                 step="0.1"
                 min="1"
               />
-              <span className="text-sm text-gray-500">₹/unit</span>
+              <span className="text-sm text-zinc-400">₹/unit</span>
             </div>
           </div>
 
           <div>
-            <Label htmlFor="electricity-cost-dc">Electricity Cost</Label>
+            <Label htmlFor="electricity-cost-dc" className="text-zinc-300">Electricity Cost</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
                 id="electricity-cost-dc"
-                className="ev-input"
+                className="ev-input bg-zinc-800 border-zinc-700 text-white"
                 value={electricityCost}
                 onChange={(e) => setElectricityCost(Number(e.target.value))}
                 step="0.1"
                 min="1"
               />
-              <span className="text-sm text-gray-500">₹/unit</span>
+              <span className="text-sm text-zinc-400">₹/unit</span>
             </div>
           </div>
 
-          <div className="p-3 bg-gray-100 rounded-md">
+          <div className="p-3 bg-zinc-800/70 rounded-md">
             <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">Operational Cost Per Unit</span>
-              <span className="text-sm">₹1.00</span>
+              <span className="text-sm font-medium text-zinc-300">Operational Cost Per Unit</span>
+              <span className="text-sm text-zinc-300">₹1.00</span>
             </div>
             <div className="flex justify-between items-center mt-2">
-              <span className="text-sm font-medium">Miscellaneous Cost Per Unit</span>
-              <span className="text-sm">₹1.00</span>
+              <span className="text-sm font-medium text-zinc-300">Miscellaneous Cost Per Unit</span>
+              <span className="text-sm text-zinc-300">₹1.00</span>
             </div>
-            <p className="text-xs text-gray-500 mt-2">*These values are fixed and non-editable</p>
+            <p className="text-xs text-zinc-500 mt-2">*These values are fixed and non-editable</p>
           </div>
         </div>
       </div>
@@ -383,7 +384,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   );
 
   return (
-    <Card className="bg-white shadow-lg border border-gray-200">
+    <Card className="bg-zinc-800 shadow-lg border border-zinc-700">
       <CardHeader className="bg-premium-gradient text-white">
         <CardTitle className="flex items-center gap-2 font-poppins">
           Thunder Plus {chargerType} ROI Calculator
@@ -395,22 +396,22 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
       <CardContent className="p-6 space-y-6">
         <div className="space-y-6">
           <div>
-            <h3 className="font-medium text-lg mb-3 font-poppins">Charger Selection</h3>
+            <h3 className="font-medium text-lg mb-3 font-poppins text-white">Charger Selection</h3>
             
             <div>
-              <Label htmlFor="charger-type" className="flex items-center gap-1">
+              <Label htmlFor="charger-type" className="flex items-center gap-1 text-zinc-300">
                 Charger Type <Info size={16} className="cursor-help" />
               </Label>
               <Select
                 value={selectedChargerId}
                 onValueChange={setSelectedChargerId}
               >
-                <SelectTrigger className="w-full border border-gray-300 rounded-md mt-1">
+                <SelectTrigger className="w-full border border-zinc-700 bg-zinc-800 text-white rounded-md mt-1">
                   <SelectValue placeholder="Select a charger type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
                   {chargers.map((charger) => (
-                    <SelectItem key={charger.id} value={charger.id}>
+                    <SelectItem key={charger.id} value={charger.id} className="text-white hover:bg-zinc-700">
                       {charger.name} ({charger.phase} Phase - {charger.power}kW) - {charger.warranty} Warranty
                     </SelectItem>
                   ))}
@@ -420,12 +421,12 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <div>
-                <Label htmlFor="charger-count">Number of Chargers</Label>
+                <Label htmlFor="charger-count" className="text-zinc-300">Number of Chargers</Label>
                 <div className="flex items-center gap-4 mt-1">
                   <Input
                     type="number"
                     id="charger-count"
-                    className="border border-gray-300 rounded-md flex-1"
+                    className="bg-zinc-800 border-zinc-700 text-white rounded-md flex-1"
                     min={1}
                     max={10}
                     value={chargerCount}
@@ -436,6 +437,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                       variant="outline" 
                       size="icon" 
                       onClick={() => setChargerCount(Math.max(1, chargerCount - 1))}
+                      className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"
                     >
                       -
                     </Button>
@@ -443,6 +445,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                       variant="outline" 
                       size="icon" 
                       onClick={() => setChargerCount(chargerCount + 1)}
+                      className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"
                     >
                       +
                     </Button>
@@ -452,11 +455,12 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <Label htmlFor="civil-work-needed">Civil Work Needed</Label>
+                  <Label htmlFor="civil-work-needed" className="text-zinc-300">Civil Work Needed</Label>
                   <Switch
                     id="civil-work-needed"
                     checked={civilWorkNeeded}
                     onCheckedChange={setCivilWorkNeeded}
+                    className="bg-zinc-700 data-[state=checked]:bg-premium-gradient"
                   />
                 </div>
                 
@@ -464,7 +468,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   <Input
                     type="number"
                     id="civil-work-cost"
-                    className="border border-gray-300 rounded-md mt-1"
+                    className="bg-zinc-800 border-zinc-700 text-white rounded-md mt-1"
                     placeholder="Enter civil work cost"
                     value={civilWorkCost}
                     onChange={(e) => setCivilWorkCost(Number(e.target.value))}
@@ -478,7 +482,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
           {chargerType === 'AC' ? renderACFields() : renderDCFields()}
 
           <div>
-            <Label htmlFor="time-horizon">Time Horizon for ROI Analysis</Label>
+            <Label htmlFor="time-horizon" className="text-zinc-300">Time Horizon for ROI Analysis</Label>
             <div className="mt-2">
               <Slider
                 id="time-horizon"
@@ -489,7 +493,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 onValueChange={(values) => setTimeHorizon(values[0])}
                 className="mt-2"
               />
-              <div className="flex justify-between mt-1 text-sm text-gray-500">
+              <div className="flex justify-between mt-1 text-sm text-zinc-400">
                 <span>1 year</span>
                 <span>3 years</span>
                 <span>5 years</span>

@@ -47,19 +47,19 @@ const Index = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-zinc-800">
+    <div className="flex flex-col min-h-screen bg-zinc-900 text-white">
       <Header />
       
       <main className="flex-1">
-        <div className="bg-white py-16 relative overflow-hidden">
+        <div className="bg-zinc-900 py-16 relative overflow-hidden">
           {/* Futuristic grid pattern background */}
           <div className="absolute inset-0 bg-futuristic-grid bg-[length:30px_30px] opacity-20"></div>
           
           <div className="container mx-auto px-4 text-center relative z-10">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-zinc-900 font-poppins">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white font-poppins">
               <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Plus</span> ROI Calculator
             </h1>
-            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-zinc-700 font-montserrat">
+            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-zinc-300 font-montserrat">
               Calculate the return on investment and savings for installing our EV chargers
             </p>
             
@@ -69,9 +69,9 @@ const Index = () => {
                 className="w-full max-w-md mx-auto"
                 onValueChange={(value) => handleChargerTypeChange(value as 'AC' | 'DC')}
               >
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="AC">AC Chargers</TabsTrigger>
-                  <TabsTrigger value="DC">DC Chargers</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-2 bg-zinc-800/50 backdrop-blur-sm">
+                  <TabsTrigger value="AC" className="text-white data-[state=active]:bg-premium-gradient data-[state=active]:text-white">AC Chargers</TabsTrigger>
+                  <TabsTrigger value="DC" className="text-white data-[state=active]:bg-premium-gradient data-[state=active]:text-white">DC Chargers</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -90,7 +90,7 @@ const Index = () => {
           <div className="absolute -bottom-32 -left-20 w-80 h-80 bg-accent2/5 rounded-full blur-3xl"></div>
         </div>
         
-        <div className="container mx-auto px-4 py-12 bg-white relative z-10" id="calculator">
+        <div className="container mx-auto px-4 py-12 bg-zinc-900 relative z-10" id="calculator">
           <div className="max-w-4xl mx-auto">
             <CalculatorForm 
               onCalculate={handleCalculate} 

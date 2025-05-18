@@ -1,4 +1,3 @@
-
 export type ChargerType = {
   id: string;
   name: string;
@@ -225,7 +224,8 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     fuelEfficiency,
     chargingFrequency,
     timeHorizon,
-    revenuePerUnit
+    revenuePerUnit,
+    averageCustomersPerDay
   } = input;
 
   const daysPerMonth = 30;
@@ -238,8 +238,9 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     const operationalCostPerUnit = 1; // Fixed at ₹1
     const miscellaneousCostPerUnit = 1; // Fixed at ₹1
     
-    // Calculate daily consumption
-    const dailyConsumption = charger.power * dailyOperatingHours;
+    // Calculate daily consumption - FIX: Multiply by number of customers
+    const customersPerDay = averageCustomersPerDay || 10; // Default to 10 if not specified
+    const dailyConsumption = charger.power * dailyOperatingHours * customersPerDay;
     const monthlyConsumption = dailyConsumption * daysPerMonth;
     
     // Calculate revenue and costs
@@ -299,6 +300,7 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
       }
     };
   }
+  
   // AC Charger ROI Calculation (existing logic)
   else {
     // Calculate daily energy requirement
