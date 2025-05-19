@@ -1,3 +1,4 @@
+
 export type ChargerType = {
   id: string;
   name: string;
@@ -91,8 +92,7 @@ export type CalculationInput = {
   chargerCount: number;
   civilWorkCost: number;
   dailyKilometers?: number;
-  carEfficiency?: number;
-  batterySize?: number;
+  batterySize: number; // Changed from carEfficiency
   chargingFrequency?: number;
   electricityCost: number;
   isCommercialProperty?: boolean;
@@ -134,6 +134,10 @@ export type CalculationResult = {
   monthlyNetRevenue?: number;
   yearlyNetRevenue?: number;
   profitYears?: number[];
+  // New AC-specific fields
+  dailyChargeTime?: number;
+  fullChargeTime?: number;
+  annualizedROIPercentage?: number;
   comparisons?: {
     months: string[];
     chargingCosts?: number[];
@@ -218,7 +222,7 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     chargerCount, 
     civilWorkCost, 
     dailyKilometers, 
-    carEfficiency, 
+    batterySize, // Changed from carEfficiency 
     electricityCost, 
     fuelCost, 
     fuelEfficiency,
@@ -238,7 +242,7 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     const operationalCostPerUnit = 1; // Fixed at ₹1
     const miscellaneousCostPerUnit = 1; // Fixed at ₹1
     
-    // Calculate daily consumption - FIX: Multiply by number of customers
+    // Calculate daily consumption - Multiply by number of customers
     const customersPerDay = averageCustomersPerDay || 10; // Default to 10 if not specified
     const dailyConsumption = charger.power * dailyOperatingHours * customersPerDay;
     const monthlyConsumption = dailyConsumption * daysPerMonth;
@@ -301,10 +305,14 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     };
   }
   
-  // AC Charger ROI Calculation (existing logic)
+  // AC Charger ROI Calculation (updated)
   else {
-    // Calculate daily energy requirement
-    const dailyEnergyRequirement = dailyKilometers ? dailyKilometers / carEfficiency! : 0; // kWh
+    // Calculate daily energy requirement based on battery size and daily kilometers
+    const dailyEnergyRequirement = Math.min(dailyKilometers ? dailyKilometers / 5 : batterySize * 0.8, batterySize); // kWh, limit to max 80% of battery
+    
+    // Calculate charging times - new calculations
+    const dailyChargeTime = dailyEnergyRequirement / charger.power; // Hours needed to charge daily energy
+    const fullChargeTime = batterySize / charger.power; // Hours needed for full charge (0-100%)
     
     // Monthly energy consumption based on charging frequency (days per week)
     const daysPerWeek = Math.min(chargingFrequency || 7, 7);
@@ -324,10 +332,13 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     const breakEvenMonths = monthlySavings > 0 ? totalInvestment / monthlySavings : Infinity;
     const roiYears = breakEvenMonths / monthsInYear;
     
+    // New: Annualized ROI percentage
+    const annualizedROIPercentage = (yearlySavings / totalInvestment) * 100;
+    
     // Additional calculations
     const totalEnergyConsumed = monthlyUnitsConsumed * timeHorizon * monthsInYear;
     const totalSavingsOverTime = monthlySavings * timeHorizon * monthsInYear;
-    const costPerKm = dailyKilometers ? monthlyChargingCost / (dailyKilometers * daysPerMonth) : 0;
+    const costPerKm = dailyKilometers ? monthlyChargingCost / (dailyKilometers * effectiveMonthlyDays) : 0;
     const fuelCostPerKm = dailyKilometers ? monthlyFuelCost / (dailyKilometers * daysPerMonth) : 0;
     
     // Generate comparison data for charts
@@ -390,6 +401,10 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
       costPerKm,
       fuelCostPerKm,
       breakEvenMonths,
+      // New calculations
+      dailyChargeTime,
+      fullChargeTime,
+      annualizedROIPercentage,
       comparisons: {
         months,
         chargingCosts,

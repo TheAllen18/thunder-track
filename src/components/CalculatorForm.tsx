@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Card,
@@ -50,13 +49,11 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   const [chargerCount, setChargerCount] = useState<number>(1);
   const [civilWorkNeeded, setCivilWorkNeeded] = useState<boolean>(false);
   const [civilWorkCost, setCivilWorkCost] = useState<number>(0);
-  const [inputType, setInputType] = useState<'efficiency' | 'battery'>('efficiency');
   const [isCommercialProperty, setIsCommercialProperty] = useState<boolean>(false);
   const [timeHorizon, setTimeHorizon] = useState<number>(3); // default 3 years
   
   // AC specific fields
   const [dailyKilometers, setDailyKilometers] = useState<number>(50);
-  const [carEfficiency, setCarEfficiency] = useState<number>(5); // km/kWh
   const [batterySize, setBatterySize] = useState<number>(40); // kWh
   const [chargingFrequency, setChargingFrequency] = useState<number>(3); // days per week
   
@@ -89,23 +86,18 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
       civilWorkCost: civilWorkNeeded ? civilWorkCost : 0,
       electricityCost,
       revenuePerUnit,
-      timeHorizon
+      timeHorizon,
+      batterySize // Added as required field
     };
 
     // Add type-specific fields
     let input: CalculationInput;
     
     if (chargerType === 'AC') {
-      // Use carEfficiency directly or derive from battery size depending on input type
-      const actualEfficiency = inputType === 'efficiency' ? 
-        carEfficiency : 
-        dailyKilometers / batterySize;
-
       input = {
         ...baseInput,
         dailyKilometers,
-        carEfficiency: actualEfficiency,
-        batterySize: inputType === 'battery' ? batterySize : undefined,
+        batterySize,
         chargingFrequency,
         isCommercialProperty,
         fuelCost,
@@ -125,7 +117,6 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   const form = useForm({
     defaultValues: {
       daily_kilometers: dailyKilometers,
-      car_efficiency: carEfficiency,
       battery_size: batterySize,
       charging_frequency: chargingFrequency,
       electricity_cost: electricityCost,
@@ -154,46 +145,20 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Tabs defaultValue="efficiency" onValueChange={(v) => setInputType(v as 'efficiency' | 'battery')}>
-              <div className="flex justify-between items-center">
-                <Label className="text-zinc-300">Car Energy Efficiency</Label>
-                <TabsList className="grid grid-cols-2 w-[200px] bg-zinc-800">
-                  <TabsTrigger value="efficiency" className="data-[state=active]:bg-premium-gradient">km/kWh</TabsTrigger>
-                  <TabsTrigger value="battery" className="data-[state=active]:bg-premium-gradient">Battery Size</TabsTrigger>
-                </TabsList>
-              </div>
-              
-              <TabsContent value="efficiency">
-                <div className="flex items-center gap-2 mt-1">
-                  <Input
-                    type="number"
-                    id="car-efficiency"
-                    className="ev-input bg-zinc-800 border-zinc-700 text-white"
-                    value={carEfficiency}
-                    onChange={(e) => setCarEfficiency(Number(e.target.value))}
-                    step="0.1"
-                    min="1"
-                  />
-                  <span className="text-sm text-zinc-400">km/kWh</span>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="battery">
-                <div className="flex items-center gap-2 mt-1">
-                  <Input
-                    type="number"
-                    id="battery-size"
-                    className="ev-input bg-zinc-800 border-zinc-700 text-white"
-                    value={batterySize}
-                    onChange={(e) => setBatterySize(Number(e.target.value))}
-                    step="1"
-                    min="10"
-                  />
-                  <span className="text-sm text-zinc-400">kWh</span>
-                </div>
-              </TabsContent>
-            </Tabs>
+          <div>
+            <Label htmlFor="battery-size" className="text-zinc-300">Battery Size</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                id="battery-size"
+                className="ev-input bg-zinc-800 border-zinc-700 text-white"
+                value={batterySize}
+                onChange={(e) => setBatterySize(Number(e.target.value))}
+                step="1"
+                min="10"
+              />
+              <span className="text-sm text-zinc-400">kWh</span>
+            </div>
           </div>
 
           <div>

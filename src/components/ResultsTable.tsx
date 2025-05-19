@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Card,
@@ -147,6 +146,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                 <TableCell className="font-medium text-zinc-300">Total Investment</TableCell>
                 <TableCell className="text-right font-bold text-white">{formatCurrency(totalInvestment)}</TableCell>
               </TableRow>
+              <TableRow className="border-zinc-700 bg-green-900/10">
+                <TableCell className="font-medium text-zinc-300">Annualized ROI</TableCell>
+                <TableCell className="text-right font-bold text-white">
+                  {formatNumber(results.annualizedROIPercentage || 0)}%
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </div>
@@ -156,8 +161,16 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
           <Table className="ev-table border-zinc-700">
             <TableBody>
               <TableRow className="border-zinc-700">
-                <TableCell className="font-medium text-zinc-300">Daily Energy Requirement</TableCell>
+                <TableCell className="font-medium text-zinc-300">Est. Daily Energy Needed</TableCell>
                 <TableCell className="text-right text-white">{formatNumber(results.dailyEnergyRequirement || 0)} kWh</TableCell>
+              </TableRow>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Est. Time for Daily Charge</TableCell>
+                <TableCell className="text-right text-white">{formatNumber(results.dailyChargeTime || 0)} hours</TableCell>
+              </TableRow>
+              <TableRow className="border-zinc-700">
+                <TableCell className="font-medium text-zinc-300">Est. Time for Full Charge (0-100%)</TableCell>
+                <TableCell className="text-right text-white">{formatNumber(results.fullChargeTime || 0)} hours</TableCell>
               </TableRow>
               <TableRow className="border-zinc-700">
                 <TableCell className="font-medium text-zinc-300">Monthly Energy Consumption</TableCell>

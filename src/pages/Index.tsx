@@ -108,7 +108,7 @@ const Index = () => {
               />
             </div>
             
-            <InformationSection />
+            <InformationSection chargerType={chargerType} />
           </div>
         </div>
       </main>
