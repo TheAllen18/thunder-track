@@ -1,4 +1,3 @@
-
 export type ChargerType = {
   id: string;
   name: string;
@@ -42,7 +41,7 @@ export const acChargerTypes: ChargerType[] = [
 export const dcChargerTypes: ChargerType[] = [
   {
     id: 'dc30',
-    name: 'DC 30kWh',
+    name: 'Thunder Swift 30 kW DC',
     power: 30,
     price: 600000,
     phase: 'Three',
@@ -51,7 +50,7 @@ export const dcChargerTypes: ChargerType[] = [
   },
   {
     id: 'dc60',
-    name: 'DC 60kWh',
+    name: 'Thunder Falcon 60 kW DC',
     power: 60,
     price: 1200000,
     phase: 'Three',
@@ -60,7 +59,7 @@ export const dcChargerTypes: ChargerType[] = [
   },
   {
     id: 'dc120',
-    name: 'DC 120kWh',
+    name: 'Thunder Hulk 120 kW DC',
     power: 120,
     price: 1500000,
     phase: 'Three',
@@ -69,16 +68,7 @@ export const dcChargerTypes: ChargerType[] = [
   },
   {
     id: 'dc240',
-    name: 'DC 240kWh',
-    power: 240,
-    price: 2200000,
-    phase: 'Three',
-    type: 'DC',
-    warranty: '3 Years'
-  },
-  {
-    id: 'dc240_8gun',
-    name: 'DC 240kWh (8 Gun)',
+    name: 'Thunder Hornet 240 kW DC',
     power: 240,
     price: 3200000,
     phase: 'Three',
@@ -103,6 +93,8 @@ export type CalculationInput = {
   dailyOperatingHours?: number;
   averageCustomersPerDay?: number;
   revenuePerUnit: number;
+  operationalCostPerUnit: number; // New parameter
+  miscellaneousCostPerUnit: number; // New parameter
 };
 
 export type CalculationResult = {
@@ -222,14 +214,16 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     chargerCount, 
     civilWorkCost, 
     dailyKilometers, 
-    batterySize, // Changed from carEfficiency 
+    batterySize, 
     electricityCost, 
     fuelCost, 
     fuelEfficiency,
     chargingFrequency,
     timeHorizon,
     revenuePerUnit,
-    averageCustomersPerDay
+    averageCustomersPerDay,
+    operationalCostPerUnit, // New parameter
+    miscellaneousCostPerUnit // New parameter
   } = input;
 
   const daysPerMonth = 30;
@@ -239,10 +233,11 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
   // DC Charger ROI Calculation
   if (charger.type === 'DC') {
     const dailyOperatingHours = input.dailyOperatingHours || 3; // Default 3 hours
-    const operationalCostPerUnit = 1; // Fixed at ₹1
-    const miscellaneousCostPerUnit = 1; // Fixed at ₹1
+    // Use provided costs or default to 1
+    const operationalCostPerUnitValue = operationalCostPerUnit || 1;
+    const miscellaneousCostPerUnitValue = miscellaneousCostPerUnit || 1;
     
-    // Calculate daily consumption - Multiply by number of customers
+    // Calculate daily consumption - Multiply by number of customers AND hours
     const customersPerDay = averageCustomersPerDay || 10; // Default to 10 if not specified
     const dailyConsumption = charger.power * dailyOperatingHours * customersPerDay;
     const monthlyConsumption = dailyConsumption * daysPerMonth;
@@ -250,8 +245,8 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     // Calculate revenue and costs
     const revenue = monthlyConsumption * revenuePerUnit;
     const expenditure = monthlyConsumption * electricityCost;
-    const operationalCost = monthlyConsumption * operationalCostPerUnit;
-    const miscellaneousCost = monthlyConsumption * miscellaneousCostPerUnit;
+    const operationalCost = monthlyConsumption * operationalCostPerUnitValue;
+    const miscellaneousCost = monthlyConsumption * miscellaneousCostPerUnitValue;
     
     // Calculate net revenue
     const monthlyNetRevenue = revenue - (expenditure + operationalCost + miscellaneousCost);
@@ -261,10 +256,10 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     const breakEvenMonths = monthlyNetRevenue > 0 ? totalInvestment / monthlyNetRevenue : Infinity;
     const roiYears = breakEvenMonths / 12;
     
-    // Calculate profit for years 1-5
-    const profitYears = Array.from({ length: 5 }, (_, i) => yearlyNetRevenue * (i + 1));
+    // Calculate profit for years 1-7 (extended from 5)
+    const profitYears = Array.from({ length: 7 }, (_, i) => yearlyNetRevenue * (i + 1));
     
-    // Generate comparison data for charts
+    // Generate comparison data for charts based on actual timeHorizon
     const months = Array.from({ length: timeHorizon * 12 }, (_, i) => `Month ${i + 1}`);
     const revenues = Array(timeHorizon * 12).fill(revenue);
     const costs = Array(timeHorizon * 12).fill(expenditure + operationalCost + miscellaneousCost);

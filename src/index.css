@@ -7,43 +7,43 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
 
-    --card: 240 10% 5%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
 
-    --popover: 240 10% 5%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
 
     --primary: 142 64% 42%;
-    --primary-foreground: 142 64% 97%;
+    --primary-foreground: 142 0% 100%;
 
     --secondary: 160 84% 39%;
-    --secondary-foreground: 160 84% 97%;
+    --secondary-foreground: 160 0% 100%;
 
-    --muted: 240 5% 15%;
-    --muted-foreground: 0 0% 70%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 5% 45%;
 
-    --accent: 142 64% 15%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 142 64% 96%;
+    --accent-foreground: 142 64% 20%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 5% 20%;
-    --input: 240 5% 20%;
+    --border: 240 5% 90%;
+    --input: 240 5% 80%;
     --ring: 142 64% 42%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 240 10% 5%;
-    --sidebar-foreground: 240 5.3% 90%;
-    --sidebar-primary: 240 5.9% 100%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 240 4.8% 15%;
-    --sidebar-accent-foreground: 240 5.9% 100%;
-    --sidebar-border: 220 13% 20%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 5.3% 26%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4.8% 95%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 90%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
@@ -54,7 +54,7 @@
   }
 
   body {
-    @apply bg-white text-zinc-800 font-montserrat;
+    @apply bg-white text-gray-800 font-montserrat;
     scroll-behavior: smooth;
   }
   
@@ -63,43 +63,43 @@
   }
   
   .ev-card {
-    @apply bg-zinc-900 rounded-xl shadow-lg overflow-hidden border border-zinc-800 backdrop-blur-sm;
+    @apply bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 backdrop-blur-sm;
   }
   
   .ev-card-header {
-    @apply bg-gradient-to-r from-zinc-900 to-zinc-800 text-white font-semibold p-4 border-b border-zinc-700;
+    @apply bg-gradient-to-r from-green-600 to-emerald-500 text-white font-semibold p-4 border-b border-gray-200;
   }
   
   .ev-table th {
-    @apply bg-zinc-800 text-white p-2;
+    @apply bg-gray-50 text-gray-700 p-2;
   }
   
   .ev-table td {
-    @apply p-2 border border-zinc-800;
+    @apply p-2 border border-gray-200;
   }
   
   .ev-table tr:nth-child(even) {
-    @apply bg-zinc-900;
+    @apply bg-white;
   }
   
   .ev-table tr:nth-child(odd) {
-    @apply bg-zinc-950;
+    @apply bg-gray-50;
   }
   
   .ev-input {
-    @apply border border-zinc-700 bg-zinc-900 rounded-md p-2 focus:ring-2 focus:ring-primary focus:outline-none;
+    @apply border border-gray-300 bg-white rounded-md p-2 focus:ring-2 focus:ring-primary focus:outline-none;
   }
   
   .premium-gradient {
-    @apply bg-gradient-to-br from-green-600/80 to-emerald-500/50;
+    @apply bg-gradient-to-br from-green-600 to-emerald-500;
   }
   
   .premium-card {
-    @apply bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700/50 shadow-xl;
+    @apply bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 shadow-xl;
   }
   
   .glass-effect {
-    @apply backdrop-blur-md bg-black/20;
+    @apply backdrop-blur-md bg-white/90;
   }
 
   @keyframes float {
