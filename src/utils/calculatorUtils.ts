@@ -1,3 +1,4 @@
+
 export type ChargerType = {
   id: string;
   name: string;
@@ -11,7 +12,7 @@ export type ChargerType = {
 export const acChargerTypes: ChargerType[] = [
   { 
     id: 'basic',
-    name: '3.3kW Basic', 
+    name: 'Thunder Lite 3.3 kW AC', 
     power: 3.3, 
     price: 15000,
     phase: 'Single',
@@ -20,7 +21,7 @@ export const acChargerTypes: ChargerType[] = [
   },
   { 
     id: 'standard',
-    name: '7.4kW Standard', 
+    name: 'Thunder Smart 7.4 kW AC', 
     power: 7.4, 
     price: 45000,
     phase: 'Single',
@@ -29,7 +30,7 @@ export const acChargerTypes: ChargerType[] = [
   },
   { 
     id: 'premium',
-    name: '22kW Premium', 
+    name: 'Thunder Blaze 22 kW AC', 
     power: 22, 
     price: 65000,
     phase: 'Three',
@@ -82,7 +83,7 @@ export type CalculationInput = {
   chargerCount: number;
   civilWorkCost: number;
   dailyKilometers?: number;
-  batterySize: number; // Changed from carEfficiency
+  batterySize: number;
   chargingFrequency?: number;
   electricityCost: number;
   isCommercialProperty?: boolean;
@@ -93,8 +94,11 @@ export type CalculationInput = {
   dailyOperatingHours?: number;
   averageCustomersPerDay?: number;
   revenuePerUnit: number;
-  operationalCostPerUnit: number; // New parameter
-  miscellaneousCostPerUnit: number; // New parameter
+  operationalCostPerUnit: number;
+  miscellaneousCostPerUnit: number;
+  // New AC comparison field
+  publicChargingCost?: number;
+  usePublicChargingComparison?: boolean;
 };
 
 export type CalculationResult = {
@@ -130,10 +134,15 @@ export type CalculationResult = {
   dailyChargeTime?: number;
   fullChargeTime?: number;
   annualizedROIPercentage?: number;
+  // New public charging comparison fields
+  publicChargingMonthlyCost?: number;
+  publicChargingSavings?: number;
+  publicChargingYearlySavings?: number;
   comparisons?: {
     months: string[];
     chargingCosts?: number[];
     fuelCosts?: number[];
+    publicChargingCosts?: number[];
     savingsPerMonth?: number[];
     cumulativeSavings: number[];
     revenues?: number[];
@@ -222,8 +231,10 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     timeHorizon,
     revenuePerUnit,
     averageCustomersPerDay,
-    operationalCostPerUnit, // New parameter
-    miscellaneousCostPerUnit // New parameter
+    operationalCostPerUnit,
+    miscellaneousCostPerUnit,
+    publicChargingCost,
+    usePublicChargingComparison
   } = input;
 
   const daysPerMonth = 30;
@@ -319,9 +330,19 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     const dailyFuelNeeded = dailyKilometers && fuelEfficiency ? dailyKilometers / fuelEfficiency : 0; // liters
     const monthlyFuelCost = dailyFuelNeeded * (fuelCost || 0) * daysPerMonth;
     
-    // Savings
-    const monthlySavings = monthlyFuelCost - monthlyChargingCost;
+    // Public charging comparison
+    const publicChargingMonthlyCost = usePublicChargingComparison && publicChargingCost 
+      ? monthlyUnitsConsumed * publicChargingCost 
+      : 0;
+    
+    // Savings calculation - compare with fuel or public charging based on user selection
+    const comparisonCost = usePublicChargingComparison ? publicChargingMonthlyCost : monthlyFuelCost;
+    const monthlySavings = comparisonCost - monthlyChargingCost;
     const yearlySavings = monthlySavings * monthsInYear;
+    
+    // Calculate public charging specific savings if selected
+    const publicChargingSavings = usePublicChargingComparison ? publicChargingMonthlyCost - monthlyChargingCost : 0;
+    const publicChargingYearlySavings = publicChargingSavings * monthsInYear;
     
     // ROI
     const breakEvenMonths = monthlySavings > 0 ? totalInvestment / monthlySavings : Infinity;
@@ -340,6 +361,7 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     const months: string[] = [];
     const chargingCosts: number[] = [];
     const fuelCosts: number[] = [];
+    const publicChargingCosts: number[] = [];
     const savingsPerMonth: number[] = [];
     const cumulativeSavings: number[] = [];
     
@@ -349,6 +371,7 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
       months.push(`Month ${i}`);
       chargingCosts.push(monthlyChargingCost);
       fuelCosts.push(monthlyFuelCost);
+      publicChargingCosts.push(publicChargingMonthlyCost);
       savingsPerMonth.push(monthlySavings);
       
       totalSavingsSoFar += monthlySavings;
@@ -400,10 +423,15 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
       dailyChargeTime,
       fullChargeTime,
       annualizedROIPercentage,
+      // Public charging comparison
+      publicChargingMonthlyCost,
+      publicChargingSavings,
+      publicChargingYearlySavings,
       comparisons: {
         months,
         chargingCosts,
         fuelCosts,
+        publicChargingCosts,
         savingsPerMonth,
         cumulativeSavings
       }

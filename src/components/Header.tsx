@@ -14,7 +14,9 @@ const Header: React.FC = () => {
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto py-4 px-4 flex justify-between items-center">
-        <ThunderCalcLogo />
+        <a href="https://www.thunderplus.io/" target="_blank" rel="noopener noreferrer">
+          <ThunderCalcLogo />
+        </a>
         
         {/* Mobile menu button */}
         <button 
@@ -33,14 +35,19 @@ const Header: React.FC = () => {
           <a href="#about" className="text-zinc-800 hover:text-thunder font-montserrat font-medium transition-colors">
             About
           </a>
-          <a href="#contact" className="text-zinc-800 hover:text-thunder font-montserrat font-medium transition-colors">
+          <a href="https://www.thunderplus.io/contactus.php" target="_blank" rel="noopener noreferrer" className="text-zinc-800 hover:text-thunder font-montserrat font-medium transition-colors">
             Contact
           </a>
         </nav>
         
-        <Link to="/quote" className="hidden md:block bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors font-montserrat">
+        <a 
+          href="https://www.thunderplus.io/contactus.php" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="hidden md:block bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors font-montserrat"
+        >
           Get a Quote
-        </Link>
+        </a>
         
         {/* Mobile menu */}
         {mobileMenuOpen && (
@@ -61,16 +68,24 @@ const Header: React.FC = () => {
                 About
               </a>
               <a 
-                href="#contact" 
+                href="https://www.thunderplus.io/contactus.php" 
+                target="_blank" 
+                rel="noopener noreferrer" 
                 className="px-4 py-2 hover:bg-gray-100 text-zinc-800 font-montserrat"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Contact
               </a>
               <div className="px-4 py-2">
-                <Link to="/quote" className="block w-full bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors font-montserrat">
+                <a 
+                  href="https://www.thunderplus.io/contactus.php" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block w-full bg-premium-gradient text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors font-montserrat"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   Get a Quote
-                </Link>
+                </a>
               </div>
             </nav>
           </div>

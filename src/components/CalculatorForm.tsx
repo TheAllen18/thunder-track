@@ -49,12 +49,12 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   const [selectedChargerId, setSelectedChargerId] = useState<string>("");
   const [chargerCount, setChargerCount] = useState<number>(1);
   const [civilWorkCost, setCivilWorkCost] = useState<number>(0);
-  const [isCommercialProperty, setIsCommercialProperty] = useState<boolean>(false);
+  const [usePublicChargingComparison, setUsePublicChargingComparison] = useState<boolean>(false);
   const [timeHorizon, setTimeHorizon] = useState<number>(3); // default 3 years
   
   // AC specific fields
   const [dailyKilometers, setDailyKilometers] = useState<number>(50);
-  const [batterySize, setBatterySize] = useState<number>(40); // kWh
+  const [batterySize, setBatterySize] = useState<number>(3.5); // kWh - updated default to 3.5
   const [chargingFrequency, setChargingFrequency] = useState<number>(3); // days per week
   
   // DC specific fields
@@ -64,12 +64,13 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   // Common fields
   const [electricityCost, setElectricityCost] = useState<number>(8); // ₹/kWh
   const [revenuePerUnit, setRevenuePerUnit] = useState<number>(18); // ₹/unit
-  const [operationalCostPerUnit, setOperationalCostPerUnit] = useState<number>(1); // New editable field
-  const [miscellaneousCostPerUnit, setMiscellaneousCostPerUnit] = useState<number>(1); // New editable field
+  const [operationalCostPerUnit, setOperationalCostPerUnit] = useState<number>(1);
+  const [miscellaneousCostPerUnit, setMiscellaneousCostPerUnit] = useState<number>(1);
   
   // AC specific fields
   const [fuelCost, setFuelCost] = useState<number>(100); // ₹/liter
   const [fuelEfficiency, setFuelEfficiency] = useState<number>(15); // km/l
+  const [publicChargingCost, setPublicChargingCost] = useState<number>(18); // ₹/kWh
 
   // Reset selected charger when charger type changes
   useEffect(() => {
@@ -93,7 +94,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
       revenuePerUnit,
       timeHorizon,
       batterySize, // Added as required field
-      operationalCostPerUnit, // Add new fields
+      operationalCostPerUnit,
       miscellaneousCostPerUnit
     };
 
@@ -106,9 +107,11 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
         dailyKilometers,
         batterySize,
         chargingFrequency,
-        isCommercialProperty,
         fuelCost,
-        fuelEfficiency
+        fuelEfficiency,
+        // New fields for public charging comparison
+        publicChargingCost,
+        usePublicChargingComparison
       };
     } else {
       input = {
@@ -139,7 +142,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
         
         <div className="space-y-4">
           <div>
-            <Label htmlFor="daily-kilometers" className="text-gray-700">Daily Kilometers Driven</Label>
+            <Label htmlFor="daily-kilometers" className="text-gray-700">Avg. Kilometres Per Day</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
@@ -162,8 +165,8 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 className="ev-input bg-white border-gray-300 text-gray-800"
                 value={batterySize}
                 onChange={(e) => setBatterySize(Number(e.target.value))}
-                step="1"
-                min="10"
+                step="0.1"
+                min="1"
                 onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
               />
               <span className="text-sm text-gray-600">kWh</span>
@@ -193,20 +196,11 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
       </div>
 
       <div>
-        <h3 className="font-medium text-lg mb-3 font-poppins text-gray-800">Energy & Fuel Costs</h3>
+        <h3 className="font-medium text-lg mb-3 font-poppins text-gray-800">Energy & Cost Details</h3>
         
         <div className="space-y-4">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="property-type" className="text-gray-700">Commercial Property</Label>
-              <Switch
-                id="property-type"
-                checked={isCommercialProperty}
-                onCheckedChange={setIsCommercialProperty}
-                className="bg-gray-300 data-[state=checked]:bg-primary"
-              />
-            </div>
-            
+            <Label htmlFor="electricity-cost" className="text-gray-700">Home Electricity Tariff (₹/kWh)</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
@@ -220,46 +214,72 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
               />
               <span className="text-sm text-gray-600">₹/kWh</span>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              {isCommercialProperty ? 'Commercial electricity rates' : 'Residential electricity rates'}
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex items-center justify-between mb-2">
+            <Label htmlFor="comparison-type" className="text-gray-700">Compare With Public EV Charging</Label>
+            <Switch
+              id="comparison-type"
+              checked={usePublicChargingComparison}
+              onCheckedChange={setUsePublicChargingComparison}
+              className="bg-gray-300 data-[state=checked]:bg-primary"
+            />
+          </div>
+
+          {usePublicChargingComparison ? (
             <div>
-              <Label htmlFor="fuel-cost" className="text-gray-700">Fuel Cost (Petrol/Diesel)</Label>
+              <Label htmlFor="public-charging-cost" className="text-gray-700">Public Charging Cost</Label>
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
-                  id="fuel-cost"
+                  id="public-charging-cost"
                   className="ev-input bg-white border-gray-300 text-gray-800"
-                  value={fuelCost}
-                  onChange={(e) => setFuelCost(Number(e.target.value))}
+                  value={publicChargingCost}
+                  onChange={(e) => setPublicChargingCost(Number(e.target.value))}
                   step="0.1"
                   min="1"
                   onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
                 />
-                <span className="text-sm text-gray-600">₹/liter</span>
+                <span className="text-sm text-gray-600">₹/kWh</span>
               </div>
             </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="fuel-cost" className="text-gray-700">Fuel Cost (Petrol/Diesel)</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    id="fuel-cost"
+                    className="ev-input bg-white border-gray-300 text-gray-800"
+                    value={fuelCost}
+                    onChange={(e) => setFuelCost(Number(e.target.value))}
+                    step="0.1"
+                    min="1"
+                    onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                  />
+                  <span className="text-sm text-gray-600">₹/liter</span>
+                </div>
+              </div>
 
-            <div>
-              <Label htmlFor="fuel-efficiency" className="text-gray-700">Fuel Vehicle Efficiency</Label>
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  id="fuel-efficiency"
-                  className="ev-input bg-white border-gray-300 text-gray-800"
-                  value={fuelEfficiency}
-                  onChange={(e) => setFuelEfficiency(Number(e.target.value))}
-                  step="0.1"
-                  min="1"
-                  onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
-                />
-                <span className="text-sm text-gray-600">km/liter</span>
+              <div>
+                <Label htmlFor="fuel-efficiency" className="text-gray-700">Vehicle Mileage</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    id="fuel-efficiency"
+                    className="ev-input bg-white border-gray-300 text-gray-800"
+                    value={fuelEfficiency}
+                    onChange={(e) => setFuelEfficiency(Number(e.target.value))}
+                    step="0.1"
+                    min="1"
+                    onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                  />
+                  <span className="text-sm text-gray-600">km/liter</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>
@@ -393,7 +413,9 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
           Thunder Track {chargerType} ROI Calculator
         </CardTitle>
         <CardDescription className="text-gray-100">
-          Calculate the return on investment and savings for your {chargerType} charging station
+          {chargerType === 'AC' 
+            ? "Calculate your savings from your AC charger"
+            : "Calculate the return on investment and savings for your DC charging station"}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-6 space-y-6">
@@ -415,7 +437,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 <SelectContent className="bg-white border-gray-300 text-gray-800">
                   {chargers.map((charger) => (
                     <SelectItem key={charger.id} value={charger.id} className="text-gray-800 hover:bg-gray-100">
-                      {charger.name} ({charger.phase} Phase - {charger.power}kW) - {charger.warranty} Warranty
+                      {charger.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -484,7 +506,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
             onClick={handleCalculate} 
             className="w-full bg-premium-gradient hover:opacity-90 text-white flex items-center justify-center gap-2"
           >
-            Calculate ROI <ArrowRight className="h-4 w-4" />
+            Calculate {chargerType === 'AC' ? 'Savings' : 'ROI'} <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
       </CardContent>
