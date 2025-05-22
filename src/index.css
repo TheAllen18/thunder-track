@@ -211,6 +211,25 @@
     animation: slider-toggle 0.3s ease-out reverse forwards;
   }
   
+  /* Fix for AC/DC Toggle */
+  .ac-dc-toggle {
+    @apply relative z-20;
+  }
+  
+  .ac-dc-toggle .sliding-bg {
+    @apply absolute top-0 bottom-0 w-1/2 bg-premium-gradient rounded-full transition-all duration-300 ease-in-out z-0;
+  }
+  
+  .ac-dc-toggle button {
+    @apply relative z-10 font-medium transition-colors;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  }
+  
+  .ac-dc-toggle button[data-state="active"] {
+    @apply text-white;
+    text-shadow: none;
+  }
+  
   /* Chart Enhancements */
   .recharts-surface {
     overflow: visible;

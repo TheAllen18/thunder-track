@@ -407,8 +407,8 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   );
 
   return (
-    <Card className="bg-white shadow-lg border border-gray-200">
-      <CardHeader className="bg-premium-gradient text-white">
+    <Card className="bg-white shadow-lg border border-gray-200 rounded-xl">
+      <CardHeader className="bg-premium-gradient text-white rounded-t-xl">
         <CardTitle className="flex items-center gap-2 font-poppins">
           Thunder Track {chargerType} ROI Calculator
         </CardTitle>

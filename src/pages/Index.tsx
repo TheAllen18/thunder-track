@@ -71,18 +71,18 @@ const Index = () => {
                 className="w-full max-w-md mx-auto"
                 onValueChange={(value) => handleChargerTypeChange(value as 'AC' | 'DC')}
               >
-                <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full relative">
+                <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full relative ac-dc-toggle">
                   {/* Sliding background */}
-                  <div className={`absolute top-0 bottom-0 w-1/2 bg-premium-gradient rounded-full transition-all duration-300 ease-in-out ${chargerType === 'DC' ? 'translate-x-full' : 'translate-x-0'}`}></div>
+                  <div className={`sliding-bg ${chargerType === 'DC' ? 'translate-x-full' : 'translate-x-0'}`}></div>
                   <TabsTrigger 
                     value="AC" 
-                    className="text-gray-800 data-[state=active]:text-white rounded-full z-10 transition-colors"
+                    className="rounded-full z-10 transition-colors font-medium py-2"
                   >
                     AC Chargers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="DC" 
-                    className="text-gray-800 data-[state=active]:text-white rounded-full z-10 transition-colors"
+                    className="rounded-full z-10 transition-colors font-medium py-2"
                   >
                     DC Chargers
                   </TabsTrigger>
@@ -108,7 +108,7 @@ const Index = () => {
         
         <div className="container mx-auto px-4 py-12 bg-white relative z-10" id="calculator">
           <div className="max-w-4xl mx-auto">
-            <div className="rounded-xl shadow-md border border-gray-100 transition-shadow hover:shadow-lg p-6">
+            <div>
               <CalculatorForm 
                 onCalculate={handleCalculate} 
                 chargerType={chargerType}
