@@ -102,6 +102,21 @@
     @apply backdrop-blur-md bg-white/90;
   }
 
+  /* Section Titles */
+  .section-title {
+    @apply text-xl md:text-2xl font-bold text-gray-800 font-poppins border-b-2 border-green-500 inline-block pb-2 mb-4;
+  }
+
+  /* Contact Section */
+  #contact {
+    @apply bg-gray-50 relative;
+  }
+  
+  #contact::before {
+    content: '';
+    @apply absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-600 to-emerald-500;
+  }
+
   @keyframes float {
     0% {
       transform: translateY(0px);
@@ -180,6 +195,20 @@
   
   .animate-scale-in {
     animation: scale-in 0.4s ease-out forwards;
+  }
+  
+  /* Tab toggle animation */
+  @keyframes slider-toggle {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+  }
+  
+  .slider-toggle-ac-to-dc {
+    animation: slider-toggle 0.3s ease-out forwards;
+  }
+  
+  .slider-toggle-dc-to-ac {
+    animation: slider-toggle 0.3s ease-out reverse forwards;
   }
   
   /* Chart Enhancements */

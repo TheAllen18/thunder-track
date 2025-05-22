@@ -30,13 +30,54 @@ const Quote = () => {
   // Combine AC and DC charger types
   const allChargerTypes = [...acChargerTypes, ...dcChargerTypes];
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const sendEmail = async (data: any) => {
+    try {
+      // In a real implementation, this would use a proper email service
+      // For now, we'll simulate sending an email with a fetch request
+      await fetch('https://formspree.io/f/sales@thunderplus.io', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          charger: data.charger,
+          location: data.location,
+          message: data.message,
+          subject: 'New Quote Request from Thunder ROI Calculator'
+        })
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Error sending email:', error);
+      return false;
+    }
+  };
+
+  const onSubmit = async (data: any) => {
     toast({
-      title: "Quote Request Sent",
-      description: "We'll contact you shortly with more information.",
+      title: "Processing your request...",
+      description: "Please wait while we submit your quote request.",
     });
-    reset();
+    
+    const emailSent = await sendEmail(data);
+    
+    if (emailSent) {
+      toast({
+        title: "Quote Request Sent",
+        description: "We'll contact you shortly with more information.",
+      });
+      reset();
+    } else {
+      toast({
+        title: "Request Failed",
+        description: "There was an error sending your request. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (

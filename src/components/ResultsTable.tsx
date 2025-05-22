@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,7 +25,8 @@ import {
   ReferenceLine,
   Legend,
   Area,
-  AreaChart
+  AreaChart,
+  Label
 } from 'recharts';
 import html2pdf from 'html2pdf.js';
 import { Download, TrendingUp, Clock, IndianRupee, ZoomIn, ArrowDownCircle } from 'lucide-react';
@@ -225,7 +225,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
           </Card>
 
           {/* Charts Section - Now placed immediately after Charger & Investment Details */}
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Savings/Profit Projection Chart */}
             <Card className="shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all">
               <CardHeader className="bg-gray-50 pb-2 flex flex-row justify-between items-center">
@@ -252,7 +252,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                     {isAC ? (
                       <AreaChart 
                         data={chartData} 
-                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
                       >
                         <defs>
                           <linearGradient id="colorSavings" x1="0" y1="0" x2="0" y2="1">
@@ -260,17 +260,21 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                             <stop offset="95%" stopColor="#22C55E" stopOpacity={0.1}/>
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                         <XAxis 
                           dataKey="month" 
                           tick={{ fontSize: 12 }} 
                           tickFormatter={(value) => value.replace('Month ', '')}
                           interval={Math.floor(chartData.length / 6)}
-                        />
+                        >
+                          <Label value="Months" position="insideBottom" offset={-10} />
+                        </XAxis>
                         <YAxis 
                           tick={{ fontSize: 12 }}
                           tickFormatter={(value) => `₹${value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}`}
-                        />
+                        >
+                          <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={-15} style={{ textAnchor: 'middle' }} />
+                        </YAxis>
                         <Tooltip content={<ChartTooltipContent />} />
                         <Legend content={<ChartLegendContent />} />
                         <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} />
@@ -290,7 +294,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                     ) : (
                       <AreaChart 
                         data={chartData} 
-                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
                       >
                         <defs>
                           <linearGradient id="colorCumulativeProfit" x1="0" y1="0" x2="0" y2="1">
@@ -298,17 +302,21 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                             <stop offset="95%" stopColor="#22C55E" stopOpacity={0.1}/>
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                         <XAxis 
                           dataKey="month" 
                           tick={{ fontSize: 12 }} 
                           tickFormatter={(value) => value.replace('Month ', '')}
                           interval={Math.floor(chartData.length / 6)}
-                        />
+                        >
+                          <Label value="Months" position="insideBottom" offset={-10} />
+                        </XAxis>
                         <YAxis 
                           tick={{ fontSize: 12 }}
                           tickFormatter={(value) => `₹${value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}`}
-                        />
+                        >
+                          <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={-15} style={{ textAnchor: 'middle' }} />
+                        </YAxis>
                         <Tooltip content={<ChartTooltipContent />} />
                         <Legend content={<ChartLegendContent />} />
                         <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} />

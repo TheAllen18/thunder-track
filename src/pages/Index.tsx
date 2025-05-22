@@ -55,7 +55,7 @@ const Index = () => {
           {/* Subtle grid pattern background */}
           <div className="absolute inset-0 bg-futuristic-grid bg-[length:30px_30px] opacity-5"></div>
           
-          <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="container mx-auto px-4 text-center relative z-10 rounded-xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 font-poppins animate-fade-in">
               <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Track</span> ROI Calculator
             </h1>
@@ -71,16 +71,18 @@ const Index = () => {
                 className="w-full max-w-md mx-auto"
                 onValueChange={(value) => handleChargerTypeChange(value as 'AC' | 'DC')}
               >
-                <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full">
+                <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full relative">
+                  {/* Sliding background */}
+                  <div className={`absolute top-0 bottom-0 w-1/2 bg-premium-gradient rounded-full transition-all duration-300 ease-in-out ${chargerType === 'DC' ? 'translate-x-full' : 'translate-x-0'}`}></div>
                   <TabsTrigger 
                     value="AC" 
-                    className="text-gray-800 data-[state=active]:bg-premium-gradient data-[state=active]:text-white rounded-full"
+                    className="text-gray-800 data-[state=active]:text-white rounded-full z-10 transition-colors"
                   >
                     AC Chargers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="DC" 
-                    className="text-gray-800 data-[state=active]:bg-premium-gradient data-[state=active]:text-white rounded-full"
+                    className="text-gray-800 data-[state=active]:text-white rounded-full z-10 transition-colors"
                   >
                     DC Chargers
                   </TabsTrigger>
@@ -106,7 +108,7 @@ const Index = () => {
         
         <div className="container mx-auto px-4 py-12 bg-white relative z-10" id="calculator">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 transition-shadow hover:shadow-lg p-6">
+            <div className="rounded-xl shadow-md border border-gray-100 transition-shadow hover:shadow-lg p-6">
               <CalculatorForm 
                 onCalculate={handleCalculate} 
                 chargerType={chargerType}

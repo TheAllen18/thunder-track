@@ -28,7 +28,14 @@ const Header: React.FC = () => {
         </div>
         
         <nav className="hidden md:flex items-center space-x-8">
-          <Link to="/" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors">Home</Link>
+          <a 
+            href="https://www.thunderplus.io/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-zinc-700 hover:text-thunder font-montserrat transition-colors"
+          >
+            Home
+          </a>
           <Link to="/quote" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors">Get Quote</Link>
           <a 
             href="#contact" 

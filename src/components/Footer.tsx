@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
                 className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-100 hover:bg-green-600 hover:text-white transition-colors text-zinc-800"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="w-4 h-4" />
+                <Linkedin className="w-4 w-4" />
               </a>
               <a 
                 href="https://www.youtube.com/@Thunder_Plus" 

@@ -7,7 +7,7 @@ const ThunderCalcLogo: React.FC = () => {
       <div className="relative w-14 h-14 md:w-16 md:h-16">
         {/* Use the uploaded image */}
         <img 
-          src="/lovable-uploads/f800110d-478c-4adc-bd8b-30087dc66b31.png" 
+          src="/lovable-uploads/b45010db-f330-4d78-aa9a-a01fda53944c.png" 
           alt="Thunder Plus Logo" 
           className="w-full h-full object-contain"
         />
