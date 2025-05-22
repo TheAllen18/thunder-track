@@ -27,7 +27,7 @@ import {
   Legend
 } from 'recharts';
 import html2pdf from 'html2pdf.js';
-import { Download } from 'lucide-react';
+import { Download, TrendingUp, Clock, IndianRupee } from 'lucide-react';
 
 interface ResultsTableProps {
   results: CalculationResult | null;
@@ -83,6 +83,11 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
   const monthlyRevenue = isAC ? 0 : results.revenue[0] || 0;
   const monthlyCost = isAC ? 0 : (results.expenditure[0] + results.operationalCost[0] + results.miscellaneousCost[0]) || 0;
   const monthlyProfit = isAC ? 0 : results.netRevenue[0] || 0;
+  
+  // Calculate metrics for key cards
+  const monthlySavings = isAC ? results.monthlySavings || 0 : results.netRevenue[0] || 0;
+  const yearlySavings = isAC ? results.yearlySavings || 0 : (results.yearlyNetRevenue || 0);
+  const breakEvenTimeDisplayValue = breakEvenMonths === Infinity ? '∞' : `${formatNumber(breakEvenMonths)} months`;
 
   // Check for public charging comparison
   const hasPublicChargingData = isAC && 
@@ -139,285 +144,337 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
         </CardHeader>
         
         <CardContent className="p-6 space-y-8">
-          {/* Charger & Investment Details */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 font-poppins text-gray-800">Charger & Investment Details</h3>
+          {/* Key Metrics Dashboard Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="shadow-md border-l-4 border-l-green-500 hover:shadow-lg transition-all">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Monthly Savings</p>
+                    <h3 className="text-2xl font-bold text-gray-800">{formatCurrency(monthlySavings)}</h3>
+                  </div>
+                  <div className="bg-green-100 p-3 rounded-full">
+                    <IndianRupee className="h-6 w-6 text-green-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600">Selected Charger</p>
-                <p className="font-semibold text-gray-900">{charger.name}</p>
-              </div>
-              
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600">Number of Chargers</p>
-                <p className="font-semibold text-gray-900">{chargerCount}</p>
-              </div>
-              
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600">Total Investment</p>
-                <p className="font-semibold text-gray-900">{formatCurrency(totalInvestment)}</p>
-              </div>
-            </div>
+            <Card className="shadow-md border-l-4 border-l-blue-500 hover:shadow-lg transition-all">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Yearly Savings</p>
+                    <h3 className="text-2xl font-bold text-gray-800">{formatCurrency(yearlySavings)}</h3>
+                  </div>
+                  <div className="bg-blue-100 p-3 rounded-full">
+                    <TrendingUp className="h-6 w-6 text-blue-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-md border-l-4 border-l-purple-500 hover:shadow-lg transition-all">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Break-even Time</p>
+                    <h3 className="text-2xl font-bold text-gray-800">{breakEvenTimeDisplayValue}</h3>
+                  </div>
+                  <div className="bg-purple-100 p-3 rounded-full">
+                    <Clock className="h-6 w-6 text-purple-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
+
+          {/* Charger & Investment Details */}
+          <Card className="shadow-sm">
+            <CardHeader className="bg-gray-50 pb-2">
+              <h3 className="text-lg font-semibold font-poppins text-gray-800">Charger & Investment Details</h3>
+            </CardHeader>
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-600">Selected Charger</p>
+                  <p className="font-semibold text-gray-900">{charger.name}</p>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-600">Number of Chargers</p>
+                  <p className="font-semibold text-gray-900">{chargerCount}</p>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-600">Total Investment</p>
+                  <p className="font-semibold text-gray-900">{formatCurrency(totalInvestment)}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* AC Charger Results */}
           {isAC && (
             <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4 font-poppins text-gray-800">Energy & Charging Details</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Est. Daily Energy Needed</p>
-                    <p className="font-semibold text-gray-900">{formatNumber(results.dailyEnergyRequirement || 0)} kWh</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Est. Time for Daily Charge</p>
-                    <p className="font-semibold text-gray-900">{formatNumber(results.dailyChargeTime || 0)} hours</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Est. Time for Full Charge (0-100%)</p>
-                    <p className="font-semibold text-gray-900">{formatNumber(results.fullChargeTime || 0)} hours</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="text-lg font-semibold mb-4 font-poppins text-gray-800">Monthly Cost Comparison</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Monthly Energy Consumption</p>
-                    <p className="font-semibold text-gray-900">{formatNumber(monthlyUsage)} kWh</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-green-500">
-                    <p className="text-gray-600">Home Charging Cost</p>
-                    <p className="font-semibold text-gray-900">{formatCurrency(results.monthlyChargingCost || 0)}</p>
-                  </div>
-                  
-                  {hasPublicChargingData ? (
-                    <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
-                      <p className="text-gray-600">Public Charging Cost</p>
-                      <p className="font-semibold text-gray-900">{formatCurrency(results.publicChargingMonthlyCost || 0)}</p>
+              <Card className="shadow-sm">
+                <CardHeader className="bg-gray-50 pb-2">
+                  <h3 className="text-lg font-semibold font-poppins text-gray-800">Energy & Charging Details</h3>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">Est. Daily Energy Needed</p>
+                      <p className="font-semibold text-gray-900">{formatNumber(results.dailyEnergyRequirement || 0)} kWh</p>
                     </div>
-                  ) : (
-                    <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-red-500">
-                      <p className="text-gray-600">Fuel Cost</p>
-                      <p className="font-semibold text-gray-900">{formatCurrency(results.monthlyFuelCost || 0)}</p>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">Est. Time for Daily Charge</p>
+                      <p className="font-semibold text-gray-900">{formatNumber(results.dailyChargeTime || 0)} hours</p>
                     </div>
-                  )}
-                </div>
-              </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">Est. Time for Full Charge (0-100%)</p>
+                      <p className="font-semibold text-gray-900">{formatNumber(results.fullChargeTime || 0)} hours</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
               
-              <div>
-                <h3 className="text-lg font-semibold mb-4 font-poppins text-gray-800">Savings & ROI</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Monthly Savings</p>
-                    <p className="font-semibold text-gray-900">{formatCurrency(results.monthlySavings || 0)}</p>
+              <Card className="shadow-sm">
+                <CardHeader className="bg-gray-50 pb-2">
+                  <h3 className="text-lg font-semibold font-poppins text-gray-800">Monthly Cost Comparison</h3>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">Monthly Energy Consumption</p>
+                      <p className="font-semibold text-gray-900">{formatNumber(monthlyUsage)} kWh</p>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-green-500">
+                      <p className="text-gray-600">Home Charging Cost</p>
+                      <p className="font-semibold text-gray-900">{formatCurrency(results.monthlyChargingCost || 0)}</p>
+                    </div>
+                    
+                    {hasPublicChargingData ? (
+                      <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <p className="text-gray-600">Public Charging Cost</p>
+                        <p className="font-semibold text-gray-900">{formatCurrency(results.publicChargingMonthlyCost || 0)}</p>
+                      </div>
+                    ) : (
+                      <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-red-500">
+                        <p className="text-gray-600">Fuel Cost</p>
+                        <p className="font-semibold text-gray-900">{formatCurrency(results.monthlyFuelCost || 0)}</p>
+                      </div>
+                    )}
                   </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Yearly Savings</p>
-                    <p className="font-semibold text-gray-900">{formatCurrency(results.yearlySavings || 0)}</p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-sm">
+                <CardHeader className="bg-gray-50 pb-2">
+                  <h3 className="text-lg font-semibold font-poppins text-gray-800">Additional Metrics</h3>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">Total Savings (over {results.comparisons?.months.length ? Math.ceil(results.comparisons.months.length / 12) : 0} years)</p>
+                      <p className="font-semibold text-gray-900">{formatCurrency(results.totalSavingsOverTime || 0)}</p>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">Per KM Cost (EV)</p>
+                      <p className="font-semibold text-gray-900">₹{formatNumber(results.costPerKm || 0, 2)}/km</p>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">ROI (Annualized)</p>
+                      <p className="font-semibold text-gray-900">{formatNumber(results.annualizedROIPercentage || 0, 1)}%</p>
+                    </div>
                   </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Break-even Time</p>
-                    <p className="font-semibold text-gray-900">{breakEvenMonths === Infinity ? '∞' : `${formatNumber(breakEvenMonths)} months`}</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Total Savings (over {results.comparisons?.months.length ? Math.ceil(results.comparisons.months.length / 12) : 0} years)</p>
-                    <p className="font-semibold text-gray-900">{formatCurrency(results.totalSavingsOverTime || 0)}</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Per KM Cost (EV)</p>
-                    <p className="font-semibold text-gray-900">₹{formatNumber(results.costPerKm || 0, 2)}/km</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">ROI (Annualized)</p>
-                    <p className="font-semibold text-gray-900">{formatNumber(results.annualizedROIPercentage || 0, 1)}%</p>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           )}
           
           {/* DC Charger Results */}
           {!isAC && (
             <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4 font-poppins text-gray-800">Monthly Performance Metrics</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Monthly Energy Delivered</p>
-                    <p className="font-semibold text-gray-900">{formatNumber(monthlyUsage)} kWh</p>
+              <Card className="shadow-sm">
+                <CardHeader className="bg-gray-50 pb-2">
+                  <h3 className="text-lg font-semibold font-poppins text-gray-800">Monthly Performance Metrics</h3>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">Monthly Energy Delivered</p>
+                      <p className="font-semibold text-gray-900">{formatNumber(monthlyUsage)} kWh</p>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">Monthly Revenue</p>
+                      <p className="font-semibold text-gray-900">{formatCurrency(monthlyRevenue)}</p>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-600">Monthly Cost</p>
+                      <p className="font-semibold text-gray-900">{formatCurrency(monthlyCost)}</p>
+                    </div>
                   </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Monthly Revenue</p>
-                    <p className="font-semibold text-gray-900">{formatCurrency(monthlyRevenue)}</p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-sm">
+                <CardHeader className="bg-gray-50 pb-2">
+                  <h3 className="text-lg font-semibold font-poppins text-gray-800">Projected Yearly Profits</h3>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white shadow-sm rounded-lg overflow-hidden">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-2 text-left text-gray-700 font-medium">Year</th>
+                          {results.profitYears?.map((_, index) => (
+                            <th key={index} className="px-4 py-2 text-left text-gray-700 font-medium">Year {index + 1}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="px-4 py-2 border-t text-gray-900">Profit</td>
+                          {results.profitYears?.map((profit, index) => (
+                            <td key={index} className="px-4 py-2 border-t text-gray-900">{formatCurrency(profit)}</td>
+                          ))}
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-2 border-t text-gray-900">Cumulative</td>
+                          {results.profitYears?.map((_, index) => {
+                            const cumulativeProfit = results.profitYears?.slice(0, index + 1).reduce((sum, profit) => sum + profit, 0) || 0;
+                            return (
+                              <td key={index} className="px-4 py-2 border-t text-gray-900">{formatCurrency(cumulativeProfit)}</td>
+                            );
+                          })}
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Monthly Cost</p>
-                    <p className="font-semibold text-gray-900">{formatCurrency(monthlyCost)}</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Monthly Net Profit</p>
-                    <p className="font-semibold text-gray-900">{formatCurrency(monthlyProfit)}</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Yearly Net Profit</p>
-                    <p className="font-semibold text-gray-900">{formatCurrency((results.yearlyNetRevenue || 0))}</p>
-                  </div>
-                  
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">Break-even Time</p>
-                    <p className="font-semibold text-gray-900">{breakEvenMonths === Infinity ? '∞' : `${formatNumber(breakEvenMonths)} months`}</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="text-lg font-semibold mb-4 font-poppins text-gray-800">Projected Yearly Profits</h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full bg-white ev-table">
-                    <thead>
-                      <tr>
-                        <th>Year</th>
-                        {results.profitYears?.map((_, index) => (
-                          <th key={index}>Year {index + 1}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Profit</td>
-                        {results.profitYears?.map((profit, index) => (
-                          <td key={index}>{formatCurrency(profit)}</td>
-                        ))}
-                      </tr>
-                      <tr>
-                        <td>Cumulative</td>
-                        {results.profitYears?.map((_, index) => {
-                          const cumulativeProfit = results.profitYears?.slice(0, index + 1).reduce((sum, profit) => sum + profit, 0) || 0;
-                          return (
-                            <td key={index}>{formatCurrency(cumulativeProfit)}</td>
-                          );
-                        })}
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           )}
           
           {/* Charts Section */}
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold mb-4 font-poppins text-gray-800">
-              {isAC ? 'Savings Projection' : 'Profit Projection'}
-            </h3>
-            
-            <div className="h-80">
-              <ChartContainer config={{
-                profit: { label: 'Profit', color: colors.profit },
-                revenue: { label: 'Revenue', color: colors.revenue },
-                cost: { label: 'Cost', color: colors.cost },
-                savings: { label: 'Savings', color: colors.savings },
-              }}>
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="month" 
-                    tick={{ fontSize: 12 }} 
-                    tickFormatter={(value) => value.replace('Month ', '')}
-                    interval={Math.floor(chartData.length / 6)}
-                  />
-                  <YAxis 
-                    tick={{ fontSize: 12 }}
-                    tickFormatter={(value) => `₹${value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}`}
-                  />
-                  <Tooltip content={<ChartTooltipContent />} />
-                  <Legend content={<ChartLegendContent />} />
-                  <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} />
-                  
-                  <Line
-                    type="monotone"
-                    name="CumulativeSavings"
-                    dataKey="CumulativeSavings"
-                    stroke={colors.profit}
-                    strokeWidth={2}
-                    dot={false}
-                    isAnimationActive={true}
-                    animationDuration={1000}
-                  />
-                </LineChart>
-              </ChartContainer>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="shadow-sm">
+              <CardHeader className="bg-gray-50 pb-2">
+                <h3 className="text-lg font-semibold font-poppins text-gray-800">
+                  {isAC ? 'Savings Projection' : 'Profit Projection'}
+                </h3>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="h-80">
+                  <ChartContainer config={{
+                    profit: { label: 'Profit', color: colors.profit },
+                    revenue: { label: 'Revenue', color: colors.revenue },
+                    cost: { label: 'Cost', color: colors.cost },
+                    savings: { label: 'Savings', color: colors.savings },
+                  }}>
+                    <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis 
+                        dataKey="month" 
+                        tick={{ fontSize: 12 }} 
+                        tickFormatter={(value) => value.replace('Month ', '')}
+                        interval={Math.floor(chartData.length / 6)}
+                      />
+                      <YAxis 
+                        tick={{ fontSize: 12 }}
+                        tickFormatter={(value) => `₹${value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}`}
+                      />
+                      <Tooltip content={<ChartTooltipContent />} />
+                      <Legend content={<ChartLegendContent />} />
+                      <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} />
+                      
+                      <Line
+                        type="monotone"
+                        name="CumulativeSavings"
+                        dataKey="CumulativeSavings"
+                        stroke={colors.profit}
+                        strokeWidth={2}
+                        dot={false}
+                        isAnimationActive={true}
+                        animationDuration={1000}
+                      />
+                    </LineChart>
+                  </ChartContainer>
+                </div>
+              </CardContent>
+            </Card>
 
-            <h3 className="text-lg font-semibold mb-4 font-poppins text-gray-800">
-              {isAC ? 'Cost Comparison' : 'Revenue vs. Cost Breakdown'}
-            </h3>
-            
-            <div className="h-80">
-              {isAC ? (
-                <BarChart
-                  data={chartData.filter((_, i) => i % 3 === 0)} // Only show every 3rd data point to avoid crowding
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="month" 
-                    tick={{ fontSize: 12 }}
-                    tickFormatter={(value) => value.replace('Month ', '')}
-                    interval={Math.floor(chartData.length / 12)}
-                  />
-                  <YAxis 
-                    tick={{ fontSize: 12 }}
-                    tickFormatter={(value) => `₹${value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}`}
-                  />
-                  <Tooltip formatter={(value) => [`₹${formatLargeNumber(Number(value))}`, undefined]} />
-                  <Legend />
-                  <Bar dataKey="HomeCharging" name="Home Charging" fill={colors.charging} />
-                  {hasPublicChargingData ? (
-                    <Bar dataKey="PublicCharging" name="Public Charging" fill={colors.publicCharging} />
+            <Card className="shadow-sm">
+              <CardHeader className="bg-gray-50 pb-2">
+                <h3 className="text-lg font-semibold font-poppins text-gray-800">
+                  {isAC ? 'Cost Comparison' : 'Revenue vs. Cost Breakdown'}
+                </h3>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="h-80">
+                  {isAC ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={[
+                            { name: 'Home Charging', value: results.monthlyChargingCost || 0 },
+                            hasPublicChargingData 
+                              ? { name: 'Public Charging', value: results.publicChargingMonthlyCost || 0 }
+                              : { name: 'Fuel', value: results.monthlyFuelCost || 0 }
+                          ]}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={true}
+                          outerRadius={100}
+                          fill="#8884d8"
+                          dataKey="value"
+                          nameKey="name"
+                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          animationDuration={1000}
+                        >
+                          <Cell fill={colors.charging} />
+                          <Cell fill={hasPublicChargingData ? colors.publicCharging : colors.fuel} />
+                        </Pie>
+                        <Tooltip formatter={(value) => [`₹${formatLargeNumber(Number(value))}`, undefined]} />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
                   ) : (
-                    <Bar dataKey="Fuel" name="Fuel" fill={colors.fuel} />
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={costBreakdownData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={true}
+                          outerRadius={100}
+                          fill="#8884d8"
+                          dataKey="value"
+                          nameKey="name"
+                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          animationDuration={1000}
+                        >
+                          {costBreakdownData.map((entry, index) => {
+                            const colors = ['#22C55E', '#EF4444', '#FB923C', '#8B5CF6'];
+                            return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                          })}
+                        </Pie>
+                        <Tooltip formatter={(value) => [`₹${formatLargeNumber(Number(value))}`, undefined]} />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
                   )}
-                </BarChart>
-              ) : (
-                <PieChart>
-                  <Pie
-                    data={costBreakdownData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={true}
-                    outerRadius={110}
-                    fill="#8884d8"
-                    dataKey="value"
-                    nameKey="name"
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    animationDuration={1000}
-                  >
-                    {costBreakdownData.map((entry, index) => {
-                      const colors = ['#22C55E', '#EF4444', '#FB923C', '#8B5CF6'];
-                      return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
-                    })}
-                  </Pie>
-                  <Tooltip formatter={(value) => [`₹${formatLargeNumber(Number(value))}`, undefined]} />
-                  <Legend />
-                </PieChart>
-              )}
-            </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </CardContent>
       </Card>

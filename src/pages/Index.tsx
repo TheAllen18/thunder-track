@@ -60,7 +60,9 @@ const Index = () => {
               <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Track</span> ROI Calculator
             </h1>
             <p className="text-xl md:text-2xl max-w-3xl mx-auto text-gray-700 font-montserrat">
-              Calculate the return on investment and savings for installing our EV chargers
+              {chargerType === 'AC' 
+                ? 'Calculate your savings from your AC charger' 
+                : 'Calculate the return on investment and savings for installing our EV chargers'}
             </p>
             
             <div className="mt-10">
