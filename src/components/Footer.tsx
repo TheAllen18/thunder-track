@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-white border-t border-zinc-200" id="contact">
+    <footer className="bg-gray-50 border-t border-zinc-200 mt-16" id="contact">
       <div className="container mx-auto px-4 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4 md:col-span-2">
@@ -80,7 +80,7 @@ const Footer: React.FC = () => {
               </li>
               <li className="flex items-start gap-3 text-zinc-700">
                 <MapPin size={18} className="text-thunder mt-1 flex-shrink-0" />
-                <span className="font-montserrat text-sm">123 EV Street, Electric City, India</span>
+                <span className="font-montserrat text-sm">#9-1-83 & 84, Amarchand Sharma Complex, Sarojini Devi Road, Secunderabad, Telangana, India. 500003</span>
               </li>
             </ul>
           </div>

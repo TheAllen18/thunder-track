@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface InformationSectionProps {
   chargerType: 'AC' | 'DC';
@@ -8,190 +8,165 @@ interface InformationSectionProps {
 
 const InformationSection: React.FC<InformationSectionProps> = ({ chargerType }) => {
   return (
-    <div className="mt-12 mb-8" id="about">
-      <h2 className="text-2xl font-bold mb-6 text-gray-900 font-poppins">
-        Understanding the {chargerType} ROI Calculator
-      </h2>
-
-      <div className="space-y-6 text-gray-700">
-        <Card className="bg-white shadow-sm">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold mb-3 font-poppins">How the Calculator Works</h3>
-            
+    <div className="mt-16 space-y-8" id="about">
+      {/* Understanding the Calculator */}
+      <div>
+        <h2 className="text-2xl font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block">
+          Understanding the {chargerType} ROI Calculator
+        </h2>
+        <Card className="mt-4">
+          <CardContent className="pt-6">
             {chargerType === 'AC' ? (
-              <div className="space-y-4">
+              <div className="space-y-4 text-gray-700">
                 <p>
-                  The AC charging ROI calculator helps you understand the financial benefits of 
-                  installing a Thunder AC charger compared to using conventional fuel or public EV charging.
+                  The AC ROI calculator helps you determine how much you can save by charging your electric vehicle at home 
+                  compared to refueling a petrol/diesel vehicle or using public charging stations.
                 </p>
-                
-                <h4 className="font-semibold mt-4">Key Calculations</h4>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>
-                    <strong>Energy Requirements:</strong> Based on your daily kilometers driven and 
-                    battery size, we calculate how much energy you need each day.
-                  </li>
-                  <li>
-                    <strong>Charging Time:</strong> We calculate how long it takes to charge both your 
-                    daily energy needs and a full battery (0-100%) based on your selected charger power.
-                  </li>
-                  <li>
-                    <strong>Monthly Costs:</strong> We compare your home charging costs against either fuel 
-                    costs or public charging costs depending on your selection.
-                  </li>
-                  <li>
-                    <strong>Savings:</strong> By comparing costs, we calculate your monthly and yearly savings.
-                  </li>
-                  <li>
-                    <strong>Break-even Point:</strong> We determine how long it will take for your savings to 
-                    cover your initial investment.
-                  </li>
-                  <li>
-                    <strong>ROI Percentage:</strong> We calculate your annualized return on investment as a 
-                    percentage to help you understand the value of your purchase.
-                  </li>
-                </ul>
+                <p>
+                  By inputting your daily driving habits, electricity tariff, and other parameters, you can see a detailed 
+                  breakdown of your potential savings and understand when your investment in a home EV charger will pay for itself.
+                </p>
+                <p>
+                  The calculator takes into account the initial investment cost, your usage patterns, and compares the ongoing 
+                  operational costs to give you a clear picture of the financial benefits.
+                </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-4 text-gray-700">
                 <p>
-                  The DC charging ROI calculator helps you understand the financial returns of 
-                  installing Thunder DC fast charging stations as a business investment.
+                  Our DC ROI calculator is designed for businesses looking to invest in DC fast charging infrastructure 
+                  for electric vehicles. It helps you understand the potential return on your investment based on several key factors.
                 </p>
-                
-                <h4 className="font-semibold mt-4">Key Calculations</h4>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>
-                    <strong>Energy Delivery:</strong> Based on daily operating hours and average customers, 
-                    we calculate your station's energy delivery capacity.
-                  </li>
-                  <li>
-                    <strong>Revenue:</strong> We calculate potential revenue based on your pricing per unit (kWh).
-                  </li>
-                  <li>
-                    <strong>Costs:</strong> We factor in electricity costs, operational costs, and miscellaneous expenses.
-                  </li>
-                  <li>
-                    <strong>Profitability:</strong> We calculate monthly and yearly net profit potential.
-                  </li>
-                  <li>
-                    <strong>Break-even:</strong> We determine how long it will take to recover your investment.
-                  </li>
-                  <li>
-                    <strong>Long-term Returns:</strong> We project profits over your selected time horizon.
-                  </li>
-                </ul>
+                <p>
+                  By entering your expected usage levels, electricity rates, and charging fees, you can generate detailed 
+                  projections of revenue, costs, and profits over time. The calculator provides insights into when your 
+                  investment will break even and what kind of returns you can expect in the years following.
+                </p>
+                <p>
+                  This tool is invaluable for businesses planning to deploy DC fast charging stations as part of their 
+                  service offerings or as an amenity for customers and employees.
+                </p>
               </div>
             )}
           </CardContent>
         </Card>
-        
-        <Card className="bg-white shadow-sm">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold mb-3 font-poppins">
-              Our {chargerType} Charger Lineup
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-              {chargerType === 'AC' ? (
-                <>
-                  <div className="premium-card p-4 rounded-xl">
-                    <div className="premium-gradient rounded-lg p-3 text-white">
-                      <h4 className="font-semibold">Thunder Lite</h4>
-                    </div>
-                    <div className="mt-3">
-                      <p className="text-sm">3.3 kW single-phase charger</p>
-                      <p className="text-sm mt-1">Perfect for overnight home charging</p>
-                      <p className="font-semibold mt-2">₹15,000</p>
-                    </div>
-                  </div>
-                  
-                  <div className="premium-card p-4 rounded-xl">
-                    <div className="premium-gradient rounded-lg p-3 text-white">
-                      <h4 className="font-semibold">Thunder Smart</h4>
-                    </div>
-                    <div className="mt-3">
-                      <p className="text-sm">7.4 kW single-phase charger</p>
-                      <p className="text-sm mt-1">Ideal for homes and small businesses</p>
-                      <p className="font-semibold mt-2">₹45,000</p>
-                    </div>
-                  </div>
-                  
-                  <div className="premium-card p-4 rounded-xl">
-                    <div className="premium-gradient rounded-lg p-3 text-white">
-                      <h4 className="font-semibold">Thunder Blaze</h4>
-                    </div>
-                    <div className="mt-3">
-                      <p className="text-sm">22 kW three-phase charger</p>
-                      <p className="text-sm mt-1">Advanced solution for businesses</p>
-                      <p className="font-semibold mt-2">₹65,000</p>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="premium-card p-4 rounded-xl">
-                    <div className="premium-gradient rounded-lg p-3 text-white">
-                      <h4 className="font-semibold">Thunder Swift</h4>
-                    </div>
-                    <div className="mt-3">
-                      <p className="text-sm">30 kW DC fast charger</p>
-                      <p className="text-sm mt-1">Entry-level DC solution</p>
-                      <p className="font-semibold mt-2">₹6,00,000</p>
-                    </div>
-                  </div>
-                  
-                  <div className="premium-card p-4 rounded-xl">
-                    <div className="premium-gradient rounded-lg p-3 text-white">
-                      <h4 className="font-semibold">Thunder Falcon</h4>
-                    </div>
-                    <div className="mt-3">
-                      <p className="text-sm">60 kW DC fast charger</p>
-                      <p className="text-sm mt-1">Mid-range solution for businesses</p>
-                      <p className="font-semibold mt-2">₹12,00,000</p>
-                    </div>
-                  </div>
-                  
-                  <div className="premium-card p-4 rounded-xl">
-                    <div className="premium-gradient rounded-lg p-3 text-white">
-                      <h4 className="font-semibold">Thunder Hulk</h4>
-                    </div>
-                    <div className="mt-3">
-                      <p className="text-sm">120 kW DC fast charger</p>
-                      <p className="text-sm mt-1">High-power charging station</p>
-                      <p className="font-semibold mt-2">₹15,00,000</p>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-            
-            {chargerType === 'DC' && (
-              <div className="mt-4 flex justify-center">
-                <div className="premium-card p-4 rounded-xl max-w-xs">
-                  <div className="premium-gradient rounded-lg p-3 text-white">
-                    <h4 className="font-semibold">Thunder Hornet</h4>
-                  </div>
-                  <div className="mt-3">
-                    <p className="text-sm">240 kW DC ultra-fast charger</p>
-                    <p className="text-sm mt-1">Premium high-capacity solution</p>
-                    <p className="font-semibold mt-2">₹32,00,000</p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-white shadow-sm">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold mb-3 font-poppins">Important Notes</h3>
-            
-            <ul className="list-disc pl-6 space-y-2 text-gray-700">
-              <li>Results are estimates based on provided inputs and may vary in real-world conditions.</li>
-              <li>Electricity rates may vary by provider, season, and time of use.</li>
-              <li>Battery performance can be affected by temperature, driving style, and battery age.</li>
-              <li>Warranty is included with all charger models.</li>
+      </div>
+
+      {/* Our Charger Lineup */}
+      <div>
+        <h2 className="text-2xl font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block">
+          Our {chargerType} Charger Lineup
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+          {chargerType === 'AC' ? (
+            <>
+              <Card className="overflow-hidden hover:shadow-lg transition-all">
+                <div className="h-2 bg-premium-gradient"></div>
+                <CardHeader>
+                  <CardTitle>Thunder Lite 3.3 kW AC</CardTitle>
+                  <CardDescription>Entry-Level Home Charging</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-700">
+                    Designed for overnight charging, the Thunder Lite offers reliable charging for 
+                    daily commuters with standard driving needs. Perfect for home installation with 
+                    minimal electrical requirements.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="overflow-hidden hover:shadow-lg transition-all">
+                <div className="h-2 bg-premium-gradient"></div>
+                <CardHeader>
+                  <CardTitle>Thunder Smart 7.4 kW AC</CardTitle>
+                  <CardDescription>Smart Home Charging</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-700">
+                    Our most popular home charging solution, the Thunder Smart balances charging speed 
+                    with cost-effectiveness. Features smart charging capabilities and mobile app integration 
+                    for optimal charging management.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="overflow-hidden hover:shadow-lg transition-all">
+                <div className="h-2 bg-premium-gradient"></div>
+                <CardHeader>
+                  <CardTitle>Thunder Blaze 22 kW AC</CardTitle>
+                  <CardDescription>Premium Fast Charging</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-700">
+                    Our premium offering for homes and small businesses, the Thunder Blaze delivers 
+                    the fastest AC charging possible. Ideal for multi-vehicle households or locations 
+                    where vehicles need to charge quickly between uses.
+                  </p>
+                </CardContent>
+              </Card>
+            </>
+          ) : (
+            <>
+              <Card className="overflow-hidden hover:shadow-lg transition-all">
+                <div className="h-2 bg-premium-gradient"></div>
+                <CardHeader>
+                  <CardTitle>Thunder Quick 30 kW DC</CardTitle>
+                  <CardDescription>Entry-Level DC Fast Charging</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-700">
+                    The Thunder Quick is our compact DC fast charging solution, perfect for small businesses, 
+                    retail locations, and municipal installations. It offers a balance of power and affordability.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="overflow-hidden hover:shadow-lg transition-all">
+                <div className="h-2 bg-premium-gradient"></div>
+                <CardHeader>
+                  <CardTitle>Thunder Rapid 60 kW DC</CardTitle>
+                  <CardDescription>Mid-Range Fast Charging</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-700">
+                    Our Thunder Rapid charger delivers substantial charging power for locations with moderate 
+                    to high traffic. Ideal for shopping centers, hotels, and highway corridor installations.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="overflow-hidden hover:shadow-lg transition-all">
+                <div className="h-2 bg-premium-gradient"></div>
+                <CardHeader>
+                  <CardTitle>Thunder Ultra 120/240 kW DC</CardTitle>
+                  <CardDescription>Premium Ultra-Fast Charging</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-700">
+                    The Thunder Ultra is our flagship DC fast charging solution, delivering maximum power for 
+                    minimal charging times. Perfect for highway service stations, fleet depots, and high-traffic 
+                    locations where charging speed is essential.
+                  </p>
+                </CardContent>
+              </Card>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Important Notes */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block">
+          Important Notes
+        </h2>
+        <Card className="mt-4">
+          <CardContent className="pt-6">
+            <ul className="list-disc list-inside space-y-2 text-gray-700">
+              <li>All calculations are estimates and actual results may vary based on specific vehicle models, driving conditions, and electricity rates.</li>
+              <li>The calculator assumes consistent usage patterns as specified in your inputs.</li>
+              <li>For AC chargers, the calculation accounts for the cost of the charger and your specified civil work costs.</li>
+              <li>For DC chargers, revenue estimates are based on your specified utilization rates and charging fees.</li>
+              <li>We recommend consulting with our experts for a personalized assessment of your specific situation.</li>
             </ul>
           </CardContent>
         </Card>

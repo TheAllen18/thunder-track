@@ -95,7 +95,7 @@
   }
   
   .premium-card {
-    @apply bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 shadow-xl;
+    @apply bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 shadow-xl rounded-xl;
   }
   
   .glass-effect {
@@ -201,5 +201,11 @@
   
   .recharts-legend-item {
     @apply cursor-pointer;
+  }
+
+  /* Calculator and Results Styles */
+  #calculator > div > div,
+  #results > div {
+    @apply rounded-xl overflow-hidden;
   }
 }
