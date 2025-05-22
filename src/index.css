@@ -63,7 +63,7 @@
   }
   
   .ev-card {
-    @apply bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 backdrop-blur-sm;
+    @apply bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 backdrop-blur-sm transition-all hover:shadow-xl;
   }
   
   .ev-card-header {
@@ -149,5 +149,57 @@
 
   .animate-scroll-down {
     animation: scroll-down 1.5s ease-in-out infinite;
+  }
+  
+  /* New Animations */
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes scale-in {
+    0% {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.4s ease-out forwards;
+  }
+  
+  /* Chart Enhancements */
+  .recharts-surface {
+    overflow: visible;
+  }
+  
+  .recharts-default-tooltip {
+    @apply bg-white/95 border border-gray-200 shadow-lg rounded-lg backdrop-blur-sm !px-3 !py-2;
+  }
+  
+  .recharts-tooltip-label {
+    @apply text-gray-700 font-medium;
+  }
+  
+  .recharts-tooltip-item {
+    @apply text-gray-700;
+  }
+  
+  .recharts-legend-item {
+    @apply cursor-pointer;
   }
 }

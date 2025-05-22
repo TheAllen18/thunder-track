@@ -56,34 +56,46 @@ const Index = () => {
           <div className="absolute inset-0 bg-futuristic-grid bg-[length:30px_30px] opacity-5"></div>
           
           <div className="container mx-auto px-4 text-center relative z-10">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 font-poppins">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 font-poppins animate-fade-in">
               <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Track</span> ROI Calculator
             </h1>
-            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-gray-700 font-montserrat">
+            <p className="text-xl md:text-2xl max-w-3xl mx-auto text-gray-700 font-montserrat animate-fade-in" style={{animationDelay: '0.2s'}}>
               {chargerType === 'AC' 
                 ? 'Calculate your savings from your AC charger' 
                 : 'Calculate the return on investment and savings for installing our EV chargers'}
             </p>
             
-            <div className="mt-10">
+            <div className="mt-10 animate-fade-in" style={{animationDelay: '0.3s'}}>
               <Tabs 
                 defaultValue="AC" 
                 className="w-full max-w-md mx-auto"
                 onValueChange={(value) => handleChargerTypeChange(value as 'AC' | 'DC')}
               >
-                <TabsList className="grid w-full grid-cols-2 bg-gray-100">
-                  <TabsTrigger value="AC" className="text-gray-800 data-[state=active]:bg-premium-gradient data-[state=active]:text-white">AC Chargers</TabsTrigger>
-                  <TabsTrigger value="DC" className="text-gray-800 data-[state=active]:bg-premium-gradient data-[state=active]:text-white">DC Chargers</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full">
+                  <TabsTrigger 
+                    value="AC" 
+                    className="text-gray-800 data-[state=active]:bg-premium-gradient data-[state=active]:text-white rounded-full"
+                  >
+                    AC Chargers
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="DC" 
+                    className="text-gray-800 data-[state=active]:bg-premium-gradient data-[state=active]:text-white rounded-full"
+                  >
+                    DC Chargers
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
             
             <a 
               href="#calculator"
-              className="inline-flex items-center mt-10 text-white bg-premium-gradient hover:opacity-90 px-5 py-3 rounded-full transition-all hover:scale-105 group border border-green-600/30 hover:border-thunder/30 font-montserrat"
+              className="inline-flex items-center mt-10 text-white bg-premium-gradient hover:opacity-90 px-6 py-3 rounded-full transition-all hover:scale-105 hover:shadow-lg group border border-green-600/30 hover:border-green-600/50 font-montserrat animate-fade-in"
               onClick={scrollToCalculator}
+              style={{animationDelay: '0.4s'}}
             >
               Calculate Your Savings
+              <ArrowDown className="ml-2 h-4 w-4 group-hover:animate-bounce" />
             </a>
           </div>
           
@@ -94,12 +106,14 @@ const Index = () => {
         
         <div className="container mx-auto px-4 py-12 bg-white relative z-10" id="calculator">
           <div className="max-w-4xl mx-auto">
-            <CalculatorForm 
-              onCalculate={handleCalculate} 
-              chargerType={chargerType}
-              acChargers={acChargerTypes}
-              dcChargers={dcChargerTypes}
-            />
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 transition-shadow hover:shadow-lg p-6">
+              <CalculatorForm 
+                onCalculate={handleCalculate} 
+                chargerType={chargerType}
+                acChargers={acChargerTypes}
+                dcChargers={dcChargerTypes}
+              />
+            </div>
             
             <div id="results">
               <ResultsTable 
