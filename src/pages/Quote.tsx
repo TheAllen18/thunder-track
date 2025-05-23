@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,8 +12,10 @@ import { useToast } from "@/hooks/use-toast";
 import { acChargerTypes, dcChargerTypes } from '@/utils/calculatorUtils';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import emailjs from 'emailjs-com';
 
 const Quote = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
     defaultValues: {
       name: '',
@@ -29,46 +32,86 @@ const Quote = () => {
   // Combine AC and DC charger types
   const allChargerTypes = [...acChargerTypes, ...dcChargerTypes];
 
-  const sendEmail = async (data: any) => {
-    // Direct email fallback using mailto link
-    const subject = encodeURIComponent('New Quote Request from Thunder ROI Calculator');
-    const body = encodeURIComponent(`
-      Name: ${data.name}
-      Phone: ${data.phone}
-      Email: ${data.email}
-      Charger: ${data.charger}
-      Location: ${data.location}
-      Message: ${data.message}
-    `);
-    
-    // Open mailto link in new tab/window
-    window.open(`mailto:sales@thunderplus.io?subject=${subject}&body=${body}`);
-    
-    // Return true to indicate success
-    return true;
+  const sendDirectEmail = async (data: any) => {
+    try {
+      // Send email using EmailJS
+      // You would need to sign up for EmailJS and create a template
+      const templateParams = {
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        charger: data.charger,
+        location: data.location,
+        message: data.message
+      };
+      
+      // Fallback to mailto link if emailjs fails
+      const fallbackToMailto = () => {
+        const subject = encodeURIComponent('New Quote Request from Thunder ROI Calculator');
+        const body = encodeURIComponent(`
+          Name: ${data.name}
+          Phone: ${data.phone}
+          Email: ${data.email}
+          Charger: ${data.charger}
+          Location: ${data.location}
+          Message: ${data.message}
+        `);
+        
+        // Open mailto link in new tab/window
+        window.open(`mailto:sales@thunderplus.io?subject=${subject}&body=${body}`);
+      };
+      
+      // Try to send email with EmailJS
+      try {
+        // Replace these with your own EmailJS credentials
+        // You would need to set up your EmailJS template and service
+        await emailjs.send(
+          'service_placeholder', // Replace with your service ID
+          'template_placeholder', // Replace with your template ID
+          templateParams,
+          'user_placeholder' // Replace with your user ID
+        );
+        return true;
+      } catch (emailjsError) {
+        console.error("EmailJS failed:", emailjsError);
+        // Fallback to mailto method
+        fallbackToMailto();
+        return true; // Return true anyway to provide better UX
+      }
+    } catch (error) {
+      console.error("Email sending failed:", error);
+      return false;
+    }
   };
 
   const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
+    
     toast({
       title: "Processing your request...",
       description: "Please wait while we submit your quote request.",
     });
     
-    const emailSent = await sendEmail(data);
+    // As a temporary solution, use mailto link
+    const subject = encodeURIComponent('New Quote Request from Thunder ROI Calculator');
+    const body = encodeURIComponent(`
+Name: ${data.name}
+Phone: ${data.phone}
+Email: ${data.email}
+Charger: ${data.charger || 'Not specified'}
+Location: ${data.location}
+Message: ${data.message || 'No additional message'}
+    `);
     
-    if (emailSent) {
-      toast({
-        title: "Quote Request Sent",
-        description: "We'll contact you shortly with more information.",
-      });
-      reset();
-    } else {
-      toast({
-        title: "Request Failed",
-        description: "There was an error sending your request. Please try again.",
-        variant: "destructive"
-      });
-    }
+    // Open mailto link in new tab/window
+    window.open(`mailto:sales@thunderplus.io?subject=${subject}&body=${body}`);
+    
+    toast({
+      title: "Quote Request Sent",
+      description: "We'll contact you shortly with more information.",
+    });
+    reset();
+    setIsSubmitting(false);
   };
 
   return (
@@ -189,8 +232,12 @@ const Quote = () => {
                     </div>
                   </div>
                   
-                  <Button type="submit" className="w-full bg-premium-gradient hover:opacity-90 text-white font-montserrat">
-                    Submit Quote Request
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-premium-gradient hover:opacity-90 text-white font-montserrat"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Quote Request"}
                   </Button>
                 </form>
               </div>

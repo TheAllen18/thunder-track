@@ -212,7 +212,7 @@
   
   /* Fix for AC/DC Toggle */
   .ac-dc-toggle {
-    @apply relative z-20;
+    @apply relative z-0;
   }
   
   .ac-dc-toggle .sliding-bg {

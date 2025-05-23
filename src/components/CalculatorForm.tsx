@@ -1,7 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -407,18 +405,18 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   );
 
   return (
-    <Card className="bg-white shadow-lg border border-gray-200 rounded-xl">
-      <CardHeader className="bg-premium-gradient text-white rounded-t-xl">
-        <CardTitle className="flex items-center gap-2 font-poppins">
+    <div className="bg-white shadow-lg border border-gray-200 rounded-xl">
+      <div className="bg-premium-gradient text-white p-6 rounded-t-xl">
+        <h2 className="text-xl flex items-center gap-2 font-poppins font-medium">
           Thunder Track {chargerType} ROI Calculator
-        </CardTitle>
-        <CardDescription className="text-gray-100">
+        </h2>
+        <p className="text-gray-100 text-sm mt-1">
           {chargerType === 'AC' 
             ? "Calculate your savings from your AC charger"
             : "Calculate the return on investment and savings for your DC charging station"}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="p-6 space-y-6">
+        </p>
+      </div>
+      <div className="p-6 space-y-6">
         <div className="space-y-6">
           <div>
             <h3 className="font-medium text-lg mb-3 font-poppins text-gray-800">Choose Your Charger</h3>
@@ -504,13 +502,13 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
 
           <Button 
             onClick={handleCalculate} 
-            className="w-full bg-premium-gradient hover:opacity-90 text-white flex items-center justify-center gap-2"
+            className="w-full bg-premium-gradient hover:opacity-90 text-white flex items-center justify-center"
           >
-            Calculate {chargerType === 'AC' ? 'Savings' : 'ROI'} <ArrowRight className="h-4 w-4" />
+            Calculate {chargerType === 'AC' ? 'Savings' : 'ROI'}
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
