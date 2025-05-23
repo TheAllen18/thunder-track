@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -69,18 +70,18 @@ const Index = () => {
                 className="w-full max-w-md mx-auto"
                 onValueChange={(value) => handleChargerTypeChange(value as 'AC' | 'DC')}
               >
-                <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full relative ac-dc-toggle">
+                <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full ac-dc-toggle">
                   {/* Sliding background */}
                   <div className={`sliding-bg ${chargerType === 'DC' ? 'translate-x-full' : 'translate-x-0'}`}></div>
                   <TabsTrigger 
                     value="AC" 
-                    className="rounded-full z-10 transition-colors font-medium py-2"
+                    className="rounded-full transition-colors font-medium py-2 z-20"
                   >
                     AC Chargers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="DC" 
-                    className="rounded-full z-10 transition-colors font-medium py-2"
+                    className="rounded-full transition-colors font-medium py-2 z-20"
                   >
                     DC Chargers
                   </TabsTrigger>

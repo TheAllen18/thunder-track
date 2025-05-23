@@ -212,7 +212,7 @@
   
   /* Fix for AC/DC Toggle */
   .ac-dc-toggle {
-    @apply relative z-0;
+    @apply relative;
   }
   
   .ac-dc-toggle .sliding-bg {
@@ -224,11 +224,11 @@
   }
   
   .ac-dc-toggle button[data-state="active"] {
-    @apply text-white font-semibold;
+    @apply text-white font-semibold z-20;
   }
   
   .ac-dc-toggle button[data-state="inactive"] {
-    @apply text-gray-700;
+    @apply text-gray-700 z-20;
   }
   
   /* Chart Enhancements */
