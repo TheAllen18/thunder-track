@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -6,7 +5,6 @@ import CalculatorForm from '@/components/CalculatorForm';
 import ResultsTable from '@/components/ResultsTable';
 import InformationSection from '@/components/InformationSection';
 import { ChargerType, acChargerTypes, dcChargerTypes, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
-import { ArrowDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
@@ -97,7 +95,6 @@ const Index = () => {
               style={{animationDelay: '0.4s'}}
             >
               Calculate Your Savings
-              <ArrowDown className="ml-2 h-4 w-4 group-hover:animate-bounce" />
             </a>
           </div>
           

@@ -61,6 +61,8 @@ const Footer: React.FC = () => {
             <h3 className="font-poppins font-semibold text-xl text-zinc-900">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li><Link to="/#calculator" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors">Calculator</Link></li>
+              <li><a href="https://www.thunderplus.io/acchargers.php" target="_blank" rel="noopener noreferrer" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors">AC Chargers</a></li>
+              <li><a href="https://www.thunderplus.io/dcchargers.php" target="_blank" rel="noopener noreferrer" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors">DC Chargers</a></li>
               <li><Link to="/#about" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors">About</Link></li>
               <li><a href="https://www.thunderplus.io/contactus.php" target="_blank" rel="noopener noreferrer" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors">Get a Quote</a></li>
               <li><a href="https://www.thunderplus.io/contactus.php" target="_blank" rel="noopener noreferrer" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors">Contact</a></li>

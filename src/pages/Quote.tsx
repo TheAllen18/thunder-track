@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -31,80 +30,22 @@ const Quote = () => {
   const allChargerTypes = [...acChargerTypes, ...dcChargerTypes];
 
   const sendEmail = async (data: any) => {
-    try {
-      // Use a proper email service - in this case EmailJS
-      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          service_id: 'default_service', // Replace with your EmailJS service ID
-          template_id: 'template_default', // Replace with your EmailJS template ID
-          user_id: 'user_yourUserID', // Replace with your EmailJS user ID
-          template_params: {
-            to_email: 'sales@thunderplus.io',
-            from_name: data.name,
-            reply_to: data.email,
-            phone: data.phone,
-            charger: data.charger,
-            location: data.location,
-            message: data.message,
-            subject: 'New Quote Request from Thunder ROI Calculator'
-          }
-        })
-      });
-      
-      // Alternatively, use a server function like Formspree as a fallback
-      if (!response.ok) {
-        const formspreeResponse = await fetch('https://formspree.io/f/sales@thunderplus.io', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: data.name,
-            phone: data.phone,
-            email: data.email,
-            charger: data.charger,
-            location: data.location,
-            message: data.message,
-            subject: 'New Quote Request from Thunder ROI Calculator'
-          })
-        });
-        
-        if (!formspreeResponse.ok) {
-          // Direct email fallback using mailto link
-          const subject = encodeURIComponent('New Quote Request from Thunder ROI Calculator');
-          const body = encodeURIComponent(`
-            Name: ${data.name}
-            Phone: ${data.phone}
-            Email: ${data.email}
-            Charger: ${data.charger}
-            Location: ${data.location}
-            Message: ${data.message}
-          `);
-          window.open(`mailto:sales@thunderplus.io?subject=${subject}&body=${body}`);
-        }
-      }
-      
-      return true;
-    } catch (error) {
-      console.error('Error sending email:', error);
-      
-      // Fallback to direct email link if all else fails
-      const subject = encodeURIComponent('New Quote Request from Thunder ROI Calculator');
-      const body = encodeURIComponent(`
-        Name: ${data.name}
-        Phone: ${data.phone}
-        Email: ${data.email}
-        Charger: ${data.charger}
-        Location: ${data.location}
-        Message: ${data.message}
-      `);
-      window.open(`mailto:sales@thunderplus.io?subject=${subject}&body=${body}`);
-      return true;
-    }
+    // Direct email fallback using mailto link
+    const subject = encodeURIComponent('New Quote Request from Thunder ROI Calculator');
+    const body = encodeURIComponent(`
+      Name: ${data.name}
+      Phone: ${data.phone}
+      Email: ${data.email}
+      Charger: ${data.charger}
+      Location: ${data.location}
+      Message: ${data.message}
+    `);
+    
+    // Open mailto link in new tab/window
+    window.open(`mailto:sales@thunderplus.io?subject=${subject}&body=${body}`);
+    
+    // Return true to indicate success
+    return true;
   };
 
   const onSubmit = async (data: any) => {

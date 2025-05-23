@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -222,12 +221,14 @@
   
   .ac-dc-toggle button {
     @apply relative z-10 font-medium transition-colors;
-    text-shadow: 0 0 10px rgba(255,255,255,0.5);
   }
   
   .ac-dc-toggle button[data-state="active"] {
-    @apply text-white;
-    text-shadow: none;
+    @apply text-white font-semibold;
+  }
+  
+  .ac-dc-toggle button[data-state="inactive"] {
+    @apply text-gray-700;
   }
   
   /* Chart Enhancements */
