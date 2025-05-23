@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -49,12 +50,12 @@ const Index = () => {
       <Header />
       
       <main className="flex-1">
-        <div className="bg-white py-16 relative overflow-hidden">
+        <div className="bg-white py-12 relative overflow-hidden">
           {/* Subtle grid pattern background */}
           <div className="absolute inset-0 bg-futuristic-grid bg-[length:30px_30px] opacity-5"></div>
           
           <div className="container mx-auto px-4 text-center relative z-10 rounded-xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 font-poppins animate-fade-in">
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 text-gray-900 font-poppins animate-fade-in">
               <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Track</span> ROI Calculator
             </h1>
             <p className="text-xl md:text-2xl max-w-3xl mx-auto text-gray-700 font-montserrat animate-fade-in" style={{animationDelay: '0.2s'}}>
@@ -63,7 +64,7 @@ const Index = () => {
                 : 'Calculate the return on investment and savings for installing our EV chargers'}
             </p>
             
-            <div className="mt-10 animate-fade-in" style={{animationDelay: '0.3s'}}>
+            <div className="mt-8 animate-fade-in" style={{animationDelay: '0.3s'}}>
               <Tabs 
                 defaultValue="AC" 
                 className="w-full max-w-md mx-auto"
@@ -90,7 +91,7 @@ const Index = () => {
             
             <a 
               href="#calculator"
-              className="inline-flex items-center mt-10 text-white bg-premium-gradient hover:opacity-90 px-6 py-3 rounded-full transition-all hover:scale-105 hover:shadow-lg group border border-green-600/30 hover:border-green-600/50 font-montserrat animate-fade-in"
+              className="inline-flex items-center mt-8 text-white bg-premium-gradient hover:opacity-90 px-6 py-3 rounded-full transition-all hover:scale-105 hover:shadow-lg group border border-green-600/30 hover:border-green-600/50 font-montserrat animate-fade-in"
               onClick={scrollToCalculator}
               style={{animationDelay: '0.4s'}}
             >
@@ -103,7 +104,7 @@ const Index = () => {
           <div className="absolute -bottom-32 -left-20 w-80 h-80 bg-green-500/5 rounded-full blur-3xl"></div>
         </div>
         
-        <div className="container mx-auto px-4 py-12 bg-white relative z-10" id="calculator">
+        <div className="container mx-auto px-4 py-8 bg-white relative z-10" id="calculator">
           <div className="max-w-4xl mx-auto">
             <div>
               <CalculatorForm 
