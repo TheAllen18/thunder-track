@@ -4,8 +4,8 @@ import React from 'react';
 const ThunderCalcLogo: React.FC = () => {
   return (
     <div className="flex items-center gap-2">
-      <div className="relative w-14 h-14 md:w-16 md:h-16">
-        {/* Use the uploaded image */}
+      <div className="relative w-36 h-36 md:w-40 md:h-40">
+        {/* Use the uploaded image with increased size (2.5x) */}
         <img 
           src="/lovable-uploads/b45010db-f330-4d78-aa9a-a01fda53944c.png" 
           alt="Thunder Plus Logo" 

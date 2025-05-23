@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -71,7 +70,7 @@ const Index = () => {
                 onValueChange={(value) => handleChargerTypeChange(value as 'AC' | 'DC')}
               >
                 <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full ac-dc-toggle">
-                  {/* Sliding background */}
+                  {/* Sliding background - must be below buttons for proper layering */}
                   <div className={`sliding-bg ${chargerType === 'DC' ? 'translate-x-full' : 'translate-x-0'}`}></div>
                   <TabsTrigger 
                     value="AC" 

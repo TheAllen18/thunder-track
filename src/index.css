@@ -225,10 +225,12 @@
   
   .ac-dc-toggle button[data-state="active"] {
     @apply text-white font-semibold z-20;
+    background-color: transparent !important;
   }
   
   .ac-dc-toggle button[data-state="inactive"] {
     @apply text-gray-700 z-20;
+    background-color: transparent !important;
   }
   
   /* Chart Enhancements */
