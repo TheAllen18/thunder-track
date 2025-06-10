@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   CardContent,
@@ -36,7 +37,7 @@ interface CalculatorFormProps {
   chargerType: 'AC' | 'DC';
   acChargers: ChargerType[];
   dcChargers: ChargerType[];
-  hideACChargers?: boolean; // New prop to hide AC chargers
+  hideACChargers?: boolean;
 }
 
 const CalculatorForm: React.FC<CalculatorFormProps> = ({ 
@@ -44,66 +45,60 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   chargerType, 
   acChargers, 
   dcChargers,
-  hideACChargers = false // Default to false to maintain backwards compatibility
+  hideACChargers = false
 }) => {
   const [selectedChargerId, setSelectedChargerId] = useState<string>("");
   const [chargerCount, setChargerCount] = useState<number>(1);
   const [civilWorkCost, setCivilWorkCost] = useState<number>(0);
   const [usePublicChargingComparison, setUsePublicChargingComparison] = useState<boolean>(false);
-  const [timeHorizon, setTimeHorizon] = useState<number>(3); // default 3 years
+  const [timeHorizon, setTimeHorizon] = useState<number>(3);
   
-  // AC specific fields - keeping all the logic intact
+  // AC specific fields
   const [dailyKilometers, setDailyKilometers] = useState<number>(50);
-  const [batterySize, setBatterySize] = useState<number>(3.5); // kWh - updated default to 3.5
-  const [chargingFrequency, setChargingFrequency] = useState<number>(3); // days per week
+  const [batterySize, setBatterySize] = useState<number>(3.5);
+  const [chargingFrequency, setChargingFrequency] = useState<number>(3);
   
   // DC specific fields
   const [dailyOperatingHours, setDailyOperatingHours] = useState<number>(3);
   const [averageCustomersPerDay, setAverageCustomersPerDay] = useState<number>(10);
   
   // Common fields
-  const [electricityCost, setElectricityCost] = useState<number>(8); // ₹/kWh
-  const [revenuePerUnit, setRevenuePerUnit] = useState<number>(18); // ₹/unit
+  const [electricityCost, setElectricityCost] = useState<number>(8);
+  const [revenuePerUnit, setRevenuePerUnit] = useState<number>(18);
   const [operationalCostPerUnit, setOperationalCostPerUnit] = useState<number>(1);
   const [miscellaneousCostPerUnit, setMiscellaneousCostPerUnit] = useState<number>(1);
   
-  // AC specific fields - keeping all the logic intact
-  const [fuelCost, setFuelCost] = useState<number>(100); // ₹/liter
-  const [fuelEfficiency, setFuelEfficiency] = useState<number>(15); // km/l
-  const [publicChargingCost, setPublicChargingCost] = useState<number>(18); // ₹/kWh
+  // AC specific fields
+  const [fuelCost, setFuelCost] = useState<number>(100);
+  const [fuelEfficiency, setFuelEfficiency] = useState<number>(15);
+  const [publicChargingCost, setPublicChargingCost] = useState<number>(18);
 
   // Reset selected charger when charger type changes
   useEffect(() => {
-    // When AC chargers are hidden, always default to DC
     const defaultChargerId = (hideACChargers || chargerType === 'DC') ? dcChargers[0].id : acChargers[0].id;
     setSelectedChargerId(defaultChargerId);
   }, [chargerType, acChargers, dcChargers, hideACChargers]);
 
-  // When AC chargers are hidden, always use DC chargers
   const chargers = (hideACChargers || chargerType === 'DC') ? dcChargers : acChargers;
   const selectedCharger = chargers.find(c => c.id === selectedChargerId) || chargers[0];
 
-  // Generate hours for dropdown (1-24)
   const hoursOptions = Array.from({ length: 24 }, (_, i) => i + 1);
 
   const handleCalculate = () => {
-    // Common input fields
     const baseInput: CalculationInput = {
       charger: selectedCharger,
       chargerCount,
-      civilWorkCost: 0, // Removed Civil Work option
+      civilWorkCost: 0,
       electricityCost,
       revenuePerUnit,
       timeHorizon,
-      batterySize, // Added as required field
+      batterySize,
       operationalCostPerUnit,
       miscellaneousCostPerUnit
     };
 
-    // Add type-specific fields
     let input: CalculationInput;
     
-    // When AC chargers are hidden, always use DC logic
     if (!hideACChargers && chargerType === 'AC') {
       input = {
         ...baseInput,
@@ -112,7 +107,6 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
         chargingFrequency,
         fuelCost,
         fuelEfficiency,
-        // New fields for public charging comparison
         publicChargingCost,
         usePublicChargingComparison
       };
@@ -138,7 +132,6 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
     }
   });
 
-  // AC Fields Component - keeping all logic intact but conditionally rendered
   const renderACFields = () => (
     <>
       <div>
@@ -154,7 +147,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 className="ev-input bg-white border-gray-300 text-gray-800"
                 value={dailyKilometers}
                 onChange={(e) => setDailyKilometers(Number(e.target.value))}
-                onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                onClick={(e) => (e.target as HTMLInputElement).select()}
               />
               <span className="text-sm text-gray-600">km</span>
             </div>
@@ -171,7 +164,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 onChange={(e) => setBatterySize(Number(e.target.value))}
                 step="0.1"
                 min="1"
-                onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                onClick={(e) => (e.target as HTMLInputElement).select()}
               />
               <span className="text-sm text-gray-600">kWh</span>
             </div>
@@ -214,7 +207,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 onChange={(e) => setElectricityCost(Number(e.target.value))}
                 step="0.1"
                 min="1"
-                onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                onClick={(e) => (e.target as HTMLInputElement).select()}
               />
               <span className="text-sm text-gray-600">₹/kWh</span>
             </div>
@@ -242,7 +235,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   onChange={(e) => setPublicChargingCost(Number(e.target.value))}
                   step="0.1"
                   min="1"
-                  onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
                 />
                 <span className="text-sm text-gray-600">₹/kWh</span>
               </div>
@@ -260,7 +253,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                     onChange={(e) => setFuelCost(Number(e.target.value))}
                     step="0.1"
                     min="1"
-                    onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                    onClick={(e) => (e.target as HTMLInputElement).select()}
                   />
                   <span className="text-sm text-gray-600">₹/liter</span>
                 </div>
@@ -277,7 +270,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                     onChange={(e) => setFuelEfficiency(Number(e.target.value))}
                     step="0.1"
                     min="1"
-                    onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                    onClick={(e) => (e.target as HTMLInputElement).select()}
                   />
                   <span className="text-sm text-gray-600">km/liter</span>
                 </div>
@@ -324,7 +317,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 value={averageCustomersPerDay}
                 onChange={(e) => setAverageCustomersPerDay(Math.max(1, Number(e.target.value)))}
                 min="1"
-                onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                onClick={(e) => (e.target as HTMLInputElement).select()}
               />
               <span className="text-sm text-gray-600">customers</span>
             </div>
@@ -347,7 +340,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 onChange={(e) => setRevenuePerUnit(Number(e.target.value))}
                 step="0.1"
                 min="1"
-                onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                onClick={(e) => (e.target as HTMLInputElement).select()}
               />
               <span className="text-sm text-gray-600">₹/unit</span>
             </div>
@@ -364,7 +357,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 onChange={(e) => setElectricityCost(Number(e.target.value))}
                 step="0.1"
                 min="1"
-                onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                onClick={(e) => (e.target as HTMLInputElement).select()}
               />
               <span className="text-sm text-gray-600">₹/unit</span>
             </div>
@@ -382,7 +375,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   onChange={(e) => setOperationalCostPerUnit(Number(e.target.value))}
                   step="0.1"
                   min="0"
-                  onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
                 />
                 <span className="text-sm text-gray-600">₹</span>
               </div>
@@ -399,7 +392,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   onChange={(e) => setMiscellaneousCostPerUnit(Number(e.target.value))}
                   step="0.1"
                   min="0"
-                  onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
                 />
                 <span className="text-sm text-gray-600">₹</span>
               </div>
@@ -461,7 +454,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   max={10}
                   value={chargerCount}
                   onChange={(e) => setChargerCount(Number(e.target.value))}
-                  onClick={(e) => (e.target as HTMLInputElement).select()} // Fix for input behavior
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
                 />
                 <div className="flex items-center gap-1">
                   <Button 
@@ -485,7 +478,6 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
             </div>
           </div>
 
-          {/* Conditionally render fields based on charger type and hideACChargers */}
           {!hideACChargers && chargerType === 'AC' ? renderACFields() : renderDCFields()}
 
           <div>
@@ -521,5 +513,3 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
 };
 
 export default CalculatorForm;
-
-</edits_to_apply>
