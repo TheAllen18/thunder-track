@@ -13,7 +13,10 @@ const Index = () => {
   const [selectedCharger, setSelectedCharger] = useState<ChargerType | null>(null);
   const [chargerCount, setChargerCount] = useState<number>(1);
   const [civilWorkCost, setCivilWorkCost] = useState<number>(0);
-  const [chargerType, setChargerType] = useState<'AC' | 'DC'>('AC');
+  const [chargerType, setChargerType] = useState<'AC' | 'DC'>('DC'); // Default to DC since AC is hidden
+
+  // AC_CHARGERS_HIDDEN: Set this to true to show AC chargers again
+  const AC_CHARGERS_HIDDEN = true;
 
   const handleCalculate = (input: CalculationInput) => {
     const results = calculateEnhancedROI(input);
@@ -59,35 +62,40 @@ const Index = () => {
               <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Track</span> ROI Calculator
             </h1>
             <p className="text-xl md:text-2xl max-w-3xl mx-auto text-gray-700 font-montserrat animate-fade-in" style={{animationDelay: '0.2s'}}>
-              {chargerType === 'AC' 
-                ? 'Calculate your savings from your AC charger' 
-                : 'Calculate the return on investment and savings for installing our EV chargers'}
+              {AC_CHARGERS_HIDDEN 
+                ? 'Calculate the return on investment and savings for installing our DC EV chargers'
+                : (chargerType === 'AC' 
+                  ? 'Calculate your savings from your AC charger' 
+                  : 'Calculate the return on investment and savings for installing our EV chargers')}
             </p>
             
-            <div className="mt-8 animate-fade-in" style={{animationDelay: '0.3s'}}>
-              <Tabs 
-                defaultValue="AC" 
-                className="w-full max-w-md mx-auto"
-                onValueChange={(value) => handleChargerTypeChange(value as 'AC' | 'DC')}
-              >
-                <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full ac-dc-toggle">
-                  {/* Sliding background - must be below buttons for proper layering */}
-                  <div className={`sliding-bg ${chargerType === 'DC' ? 'translate-x-full' : 'translate-x-0'}`}></div>
-                  <TabsTrigger 
-                    value="AC" 
-                    className="rounded-full transition-colors font-medium py-2 z-20"
-                  >
-                    AC Chargers
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="DC" 
-                    className="rounded-full transition-colors font-medium py-2 z-20"
-                  >
-                    DC Chargers
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
+            {/* AC/DC Toggle - Hidden when AC_CHARGERS_HIDDEN is true */}
+            {!AC_CHARGERS_HIDDEN && (
+              <div className="mt-8 animate-fade-in" style={{animationDelay: '0.3s'}}>
+                <Tabs 
+                  defaultValue="AC" 
+                  className="w-full max-w-md mx-auto"
+                  onValueChange={(value) => handleChargerTypeChange(value as 'AC' | 'DC')}
+                >
+                  <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-full ac-dc-toggle">
+                    {/* Sliding background - must be below buttons for proper layering */}
+                    <div className={`sliding-bg ${chargerType === 'DC' ? 'translate-x-full' : 'translate-x-0'}`}></div>
+                    <TabsTrigger 
+                      value="AC" 
+                      className="rounded-full transition-colors font-medium py-2 z-20"
+                    >
+                      AC Chargers
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="DC" 
+                      className="rounded-full transition-colors font-medium py-2 z-20"
+                    >
+                      DC Chargers
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+            )}
             
             <a 
               href="#calculator"
@@ -95,7 +103,7 @@ const Index = () => {
               onClick={scrollToCalculator}
               style={{animationDelay: '0.4s'}}
             >
-              Calculate Your Savings
+              Calculate Your {AC_CHARGERS_HIDDEN ? 'ROI' : (chargerType === 'AC' ? 'Savings' : 'ROI')}
             </a>
           </div>
           
@@ -109,9 +117,10 @@ const Index = () => {
             <div>
               <CalculatorForm 
                 onCalculate={handleCalculate} 
-                chargerType={chargerType}
+                chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType}
                 acChargers={acChargerTypes}
                 dcChargers={dcChargerTypes}
+                hideACChargers={AC_CHARGERS_HIDDEN}
               />
             </div>
             
@@ -124,7 +133,7 @@ const Index = () => {
               />
             </div>
             
-            <InformationSection chargerType={chargerType} />
+            <InformationSection chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} />
           </div>
         </div>
       </main>

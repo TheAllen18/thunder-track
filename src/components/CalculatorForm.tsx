@@ -36,13 +36,15 @@ interface CalculatorFormProps {
   chargerType: 'AC' | 'DC';
   acChargers: ChargerType[];
   dcChargers: ChargerType[];
+  hideACChargers?: boolean; // New prop to hide AC chargers
 }
 
 const CalculatorForm: React.FC<CalculatorFormProps> = ({ 
   onCalculate, 
   chargerType, 
   acChargers, 
-  dcChargers 
+  dcChargers,
+  hideACChargers = false // Default to false to maintain backwards compatibility
 }) => {
   const [selectedChargerId, setSelectedChargerId] = useState<string>("");
   const [chargerCount, setChargerCount] = useState<number>(1);
@@ -50,7 +52,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   const [usePublicChargingComparison, setUsePublicChargingComparison] = useState<boolean>(false);
   const [timeHorizon, setTimeHorizon] = useState<number>(3); // default 3 years
   
-  // AC specific fields
+  // AC specific fields - keeping all the logic intact
   const [dailyKilometers, setDailyKilometers] = useState<number>(50);
   const [batterySize, setBatterySize] = useState<number>(3.5); // kWh - updated default to 3.5
   const [chargingFrequency, setChargingFrequency] = useState<number>(3); // days per week
@@ -65,18 +67,20 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   const [operationalCostPerUnit, setOperationalCostPerUnit] = useState<number>(1);
   const [miscellaneousCostPerUnit, setMiscellaneousCostPerUnit] = useState<number>(1);
   
-  // AC specific fields
+  // AC specific fields - keeping all the logic intact
   const [fuelCost, setFuelCost] = useState<number>(100); // ₹/liter
   const [fuelEfficiency, setFuelEfficiency] = useState<number>(15); // km/l
   const [publicChargingCost, setPublicChargingCost] = useState<number>(18); // ₹/kWh
 
   // Reset selected charger when charger type changes
   useEffect(() => {
-    const defaultChargerId = chargerType === 'AC' ? acChargers[0].id : dcChargers[0].id;
+    // When AC chargers are hidden, always default to DC
+    const defaultChargerId = (hideACChargers || chargerType === 'DC') ? dcChargers[0].id : acChargers[0].id;
     setSelectedChargerId(defaultChargerId);
-  }, [chargerType, acChargers, dcChargers]);
+  }, [chargerType, acChargers, dcChargers, hideACChargers]);
 
-  const chargers = chargerType === 'AC' ? acChargers : dcChargers;
+  // When AC chargers are hidden, always use DC chargers
+  const chargers = (hideACChargers || chargerType === 'DC') ? dcChargers : acChargers;
   const selectedCharger = chargers.find(c => c.id === selectedChargerId) || chargers[0];
 
   // Generate hours for dropdown (1-24)
@@ -99,7 +103,8 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
     // Add type-specific fields
     let input: CalculationInput;
     
-    if (chargerType === 'AC') {
+    // When AC chargers are hidden, always use DC logic
+    if (!hideACChargers && chargerType === 'AC') {
       input = {
         ...baseInput,
         dailyKilometers,
@@ -133,6 +138,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
     }
   });
 
+  // AC Fields Component - keeping all logic intact but conditionally rendered
   const renderACFields = () => (
     <>
       <div>
@@ -408,12 +414,14 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
     <div className="bg-white shadow-lg border border-gray-200 rounded-xl">
       <div className="bg-premium-gradient text-white p-6 rounded-t-xl">
         <h2 className="text-xl flex items-center gap-2 font-poppins font-medium">
-          Thunder Track {chargerType} ROI Calculator
+          Thunder Track {hideACChargers ? 'DC' : chargerType} ROI Calculator
         </h2>
         <p className="text-gray-100 text-sm mt-1">
-          {chargerType === 'AC' 
-            ? "Calculate your savings from your AC charger"
-            : "Calculate the return on investment and savings for your DC charging station"}
+          {hideACChargers 
+            ? "Calculate the return on investment and savings for your DC charging station"
+            : (chargerType === 'AC' 
+              ? "Calculate your savings from your AC charger"
+              : "Calculate the return on investment and savings for your DC charging station")}
         </p>
       </div>
       <div className="p-6 space-y-6">
@@ -477,8 +485,8 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
             </div>
           </div>
 
-          {/* Render fields based on charger type */}
-          {chargerType === 'AC' ? renderACFields() : renderDCFields()}
+          {/* Conditionally render fields based on charger type and hideACChargers */}
+          {!hideACChargers && chargerType === 'AC' ? renderACFields() : renderDCFields()}
 
           <div>
             <Label htmlFor="time-horizon" className="text-gray-700">Time Horizon for ROI Analysis</Label>
@@ -504,7 +512,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
             onClick={handleCalculate} 
             className="w-full bg-premium-gradient hover:opacity-90 text-white flex items-center justify-center"
           >
-            Calculate {chargerType === 'AC' ? 'Savings' : 'ROI'}
+            Calculate ROI
           </Button>
         </div>
       </div>
@@ -513,3 +521,5 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
 };
 
 export default CalculatorForm;
+
+</edits_to_apply>
