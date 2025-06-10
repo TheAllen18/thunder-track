@@ -1,4 +1,3 @@
-
 export type ChargerType = {
   id: string;
   name: string;
@@ -248,7 +247,7 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     const operationalCostPerUnitValue = operationalCostPerUnit || 1;
     const miscellaneousCostPerUnitValue = miscellaneousCostPerUnit || 1;
     
-    // Calculate daily consumption - Multiply by number of customers AND hours
+    // Calculate daily consumption - Use default customers per day if not provided
     const customersPerDay = averageCustomersPerDay || 10; // Default to 10 if not specified
     const dailyConsumption = charger.power * dailyOperatingHours * customersPerDay;
     const monthlyConsumption = dailyConsumption * daysPerMonth;

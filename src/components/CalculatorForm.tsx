@@ -60,7 +60,6 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
   
   // DC specific fields
   const [dailyOperatingHours, setDailyOperatingHours] = useState<number>(3);
-  const [averageCustomersPerDay, setAverageCustomersPerDay] = useState<number>(10);
   
   // Common fields
   const [electricityCost, setElectricityCost] = useState<number>(8);
@@ -114,7 +113,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
       input = {
         ...baseInput,
         dailyOperatingHours,
-        averageCustomersPerDay
+        averageCustomersPerDay: 10 // Default value since field is removed
       };
     }
 
@@ -306,22 +305,6 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
               </SelectContent>
             </Select>
           </div>
-
-          <div>
-            <Label htmlFor="average-customers" className="text-gray-700">Average Customers Per Day</Label>
-            <div className="flex items-center gap-2">
-              <Input
-                type="number"
-                id="average-customers"
-                className="ev-input bg-white border-gray-300 text-gray-800"
-                value={averageCustomersPerDay}
-                onChange={(e) => setAverageCustomersPerDay(Math.max(1, Number(e.target.value)))}
-                min="1"
-                onClick={(e) => (e.target as HTMLInputElement).select()}
-              />
-              <span className="text-sm text-gray-600">customers</span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -407,14 +390,10 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
     <div className="bg-white shadow-lg border border-gray-200 rounded-xl">
       <div className="bg-premium-gradient text-white p-6 rounded-t-xl">
         <h2 className="text-xl flex items-center gap-2 font-poppins font-medium">
-          Thunder Track {hideACChargers ? 'DC' : chargerType} ROI Calculator
+          Thunder Track DC ROI Calculator
         </h2>
         <p className="text-gray-100 text-sm mt-1">
-          {hideACChargers 
-            ? "Calculate the return on investment and savings for your DC charging station"
-            : (chargerType === 'AC' 
-              ? "Calculate your savings from your AC charger"
-              : "Calculate the return on investment and savings for your DC charging station")}
+          Calculate the return on investment and savings for your DC charging station
         </p>
       </div>
       <div className="p-6 space-y-6">
