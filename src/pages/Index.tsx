@@ -7,7 +7,6 @@ import ResultsTable from '@/components/ResultsTable';
 import InformationSection from '@/components/InformationSection';
 import { ChargerType, acChargerTypes, dcChargerTypes, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChevronDown } from 'lucide-react';
 
 const Index = () => {
   const [calculationResults, setCalculationResults] = useState<CalculationResult | null>(null);
@@ -64,13 +63,13 @@ const Index = () => {
           <div className="container mx-auto px-4 text-center relative z-10 pt-20 pb-32">
             {/* Main Hero Content */}
             <div className="max-w-5xl mx-auto">
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 text-gray-900 font-poppins animate-fade-in leading-tight">
-                <span className="bg-clip-text text-transparent bg-premium-gradient">Thunder Track</span>
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-extralight mb-8 text-gray-900 font-poppins animate-fade-in leading-tight tracking-tight">
+                <span className="bg-clip-text text-transparent bg-premium-gradient font-normal">Thunder Track</span>
                 <br />
-                <span className="text-4xl md:text-5xl lg:text-6xl text-gray-800">ROI Calculator</span>
+                <span className="text-5xl md:text-6xl lg:text-7xl text-gray-800 font-light">ROI Calculator</span>
               </h1>
               
-              <p className="text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto text-gray-600 font-montserrat mb-12 animate-fade-in leading-relaxed" style={{animationDelay: '0.2s'}}>
+              <p className="text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto text-gray-600 font-montserrat mb-12 animate-fade-in leading-relaxed font-light" style={{animationDelay: '0.2s'}}>
                 Calculate your return on investment by installing our DC EV chargers.
               </p>
               
@@ -78,20 +77,11 @@ const Index = () => {
               <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
                 <button 
                   onClick={scrollToCalculator}
-                  className="inline-flex items-center gap-3 text-white bg-premium-gradient hover:opacity-90 px-8 py-4 rounded-full text-lg font-semibold transition-all hover:scale-105 hover:shadow-2xl group border border-green-600/30 hover:border-green-600/50 font-montserrat shadow-lg"
+                  className="inline-flex items-center gap-3 text-white bg-premium-gradient hover:opacity-90 px-10 py-5 rounded-full text-lg font-medium transition-all hover:scale-105 hover:shadow-2xl group border border-green-600/30 hover:border-green-600/50 font-montserrat shadow-lg tracking-wide"
                 >
                   Calculate Your ROI
-                  <ChevronDown className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
                 </button>
               </div>
-            </div>
-          </div>
-          
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in" style={{animationDelay: '0.6s'}}>
-            <div className="flex flex-col items-center text-gray-400">
-              <span className="text-sm font-medium mb-2 font-montserrat">Scroll to explore</span>
-              <ChevronDown className="w-6 h-6 animate-scroll-down" />
             </div>
           </div>
         </section>

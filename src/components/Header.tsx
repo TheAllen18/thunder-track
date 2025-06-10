@@ -27,19 +27,19 @@ const Header: React.FC = () => {
           </a>
         </div>
         
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden md:flex items-center space-x-8">
           <a 
             href="https://www.thunderplus.io/" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="text-zinc-700 hover:text-thunder font-montserrat transition-colors font-medium text-sm"
+            className="text-zinc-700 hover:text-thunder font-montserrat transition-colors font-medium text-base"
           >
             Home
           </a>
-          <Link to="/quote" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors font-medium text-sm">Get Quote</Link>
+          <Link to="/quote" className="text-zinc-700 hover:text-thunder font-montserrat transition-colors font-medium text-base">Get Quote</Link>
           <a 
             href="#contact" 
-            className="text-zinc-700 hover:text-thunder font-montserrat transition-colors font-medium text-sm"
+            className="text-zinc-700 hover:text-thunder font-montserrat transition-colors font-medium text-base"
             onClick={scrollToContact}
           >
             Contact
