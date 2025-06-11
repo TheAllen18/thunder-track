@@ -91,7 +91,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
   // Calculate metrics for key cards
   const monthlySavings = isAC ? results.monthlySavings || 0 : results.netRevenue[0] || 0;
   const yearlySavings = isAC ? results.yearlySavings || 0 : (results.yearlyNetRevenue || 0);
-  const breakEvenTimeDisplayValue = breakEvenMonths === Infinity ? '∞' : `${formatNumber(breakEvenMonths)} months`;
+  
+  // Convert break-even time to years and format appropriately
+  const breakEvenYears = breakEvenMonths / 12;
+  const breakEvenTimeDisplayValue = breakEvenMonths === Infinity ? '∞' : `${formatNumber(breakEvenYears)} years`;
 
   // Check for public charging comparison
   const hasPublicChargingData = isAC && 
@@ -160,7 +163,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Monthly Savings</p>
+                    <p className="text-sm font-medium text-gray-500">Monthly Revenue</p>
                     <h3 className="text-2xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">{formatCurrency(monthlySavings)}</h3>
                   </div>
                   <div className="bg-green-100 p-3 rounded-full group-hover:bg-green-200 transition-colors">
@@ -174,7 +177,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Yearly Savings</p>
+                    <p className="text-sm font-medium text-gray-500">Yearly Revenue</p>
                     <h3 className="text-2xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">{formatCurrency(yearlySavings)}</h3>
                   </div>
                   <div className="bg-blue-100 p-3 rounded-full group-hover:bg-blue-200 transition-colors">
