@@ -29,7 +29,7 @@ import {
   Label
 } from 'recharts';
 import html2pdf from 'html2pdf.js';
-import { Download, TrendingUp, Clock, IndianRupee, ZoomIn, ArrowDownCircle } from 'lucide-react';
+import { Download, TrendingUp, Clock, IndianRupee, ZoomIn, ArrowDownCircle, Minimize2 } from 'lucide-react';
 
 interface ResultsTableProps {
   results: CalculationResult | null;
@@ -49,6 +49,15 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
   // Format large numbers with commas
   const formatLargeNumber = (value: number) => {
     return new Intl.NumberFormat('en-IN').format(value);
+  };
+  
+  // Advanced Y-axis formatter to prevent overlapping
+  const formatYAxis = (value: number) => {
+    if (value === 0) return '0';
+    if (Math.abs(value) >= 10000000) return `₹${(value / 10000000).toFixed(1)}Cr`;
+    if (Math.abs(value) >= 100000) return `₹${(value / 100000).toFixed(1)}L`;
+    if (Math.abs(value) >= 1000) return `₹${(value / 1000).toFixed(1)}k`;
+    return `₹${value}`;
   };
   
   // PDF export function
@@ -128,7 +137,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
   
   const chartData = prepareChartData() || [];
 
-  // Prepare pie chart data for DC revenue vs cost
+  // Prepare pie chart data for DC revenue vs cost with better positioning
   const costBreakdownData = [
     { name: 'Revenue', value: monthlyRevenue },
     { name: 'Electricity', value: results.expenditure[0] || 0 },
@@ -138,6 +147,29 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
   
   const handleChartZoom = (chartType: 'profit' | 'cost') => {
     setZoomedChart(chartType === zoomedChart ? null : chartType);
+  };
+
+  // Custom label renderer for pie chart
+  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }: any) => {
+    if (percent < 0.05) return null; // Don't render labels for very small slices
+    
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 1.4;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text 
+        x={x} 
+        y={y} 
+        fill="#374151" 
+        textAnchor={x > cx ? 'start' : 'end'} 
+        dominantBaseline="central"
+        className="text-sm font-medium"
+      >
+        {`${name}: ${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
   };
 
   return (
@@ -227,10 +259,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
             </CardContent>
           </Card>
 
-          {/* Charts Section - Now placed immediately after Charger & Investment Details */}
+          {/* Charts Section - Enhanced with smooth zoom animations */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Savings/Profit Projection Chart */}
-            <Card className="shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all">
+            <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 ${
+              zoomedChart === 'profit' ? 'md:col-span-2 transform scale-105' : ''
+            }`}>
               <CardHeader className="bg-gray-50 pb-2 flex flex-row justify-between items-center">
                 <h3 className="text-lg font-semibold font-poppins text-gray-800">
                   {isAC ? 'Savings Projection' : 'Profit Projection'}
@@ -239,13 +273,19 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                   variant="ghost" 
                   size="sm" 
                   onClick={() => handleChartZoom('profit')} 
-                  className="h-8 w-8 p-0"
+                  className="h-8 w-8 p-0 hover:bg-gray-200/50 transition-all duration-200"
                 >
-                  <ZoomIn className="h-4 w-4" />
+                  {zoomedChart === 'profit' ? (
+                    <Minimize2 className="h-4 w-4" />
+                  ) : (
+                    <ZoomIn className="h-4 w-4" />
+                  )}
                 </Button>
               </CardHeader>
               <CardContent className="p-4">
-                <div className={`${zoomedChart === 'profit' ? 'h-[500px]' : 'h-80'}`}>
+                <div className={`transition-all duration-700 ease-in-out ${
+                  zoomedChart === 'profit' ? 'h-[500px]' : 'h-80'
+                }`}>
                   <ChartContainer config={{
                     profit: { label: 'Profit', color: colors.profit },
                     revenue: { label: 'Revenue', color: colors.revenue },
@@ -255,7 +295,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                     {isAC ? (
                       <AreaChart 
                         data={chartData} 
-                        margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+                        margin={{ top: 20, right: 30, left: 70, bottom: 30 }}
                       >
                         <defs>
                           <linearGradient id="colorSavings" x1="0" y1="0" x2="0" y2="1">
@@ -273,10 +313,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                           <Label value="Months" position="insideBottom" offset={-10} />
                         </XAxis>
                         <YAxis 
-                          tick={{ fontSize: 12 }}
-                          tickFormatter={(value) => `₹${value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}`}
+                          tick={{ fontSize: 11 }}
+                          tickFormatter={formatYAxis}
+                          width={60}
+                          interval={0}
+                          tickCount={6}
                         >
-                          <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={-15} style={{ textAnchor: 'middle' }} />
+                          <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={5} style={{ textAnchor: 'middle' }} />
                         </YAxis>
                         <Tooltip content={<ChartTooltipContent />} />
                         <Legend content={<ChartLegendContent />} />
@@ -291,13 +334,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                           fill="url(#colorSavings)"
                           activeDot={{ r: 6, stroke: 'white', strokeWidth: 2, fill: colors.savings }}
                           isAnimationActive={true}
-                          animationDuration={1000}
+                          animationDuration={1500}
                         />
                       </AreaChart>
                     ) : (
                       <AreaChart 
                         data={chartData} 
-                        margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+                        margin={{ top: 20, right: 30, left: 70, bottom: 30 }}
                       >
                         <defs>
                           <linearGradient id="colorCumulativeProfit" x1="0" y1="0" x2="0" y2="1">
@@ -315,10 +358,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                           <Label value="Months" position="insideBottom" offset={-10} />
                         </XAxis>
                         <YAxis 
-                          tick={{ fontSize: 12 }}
-                          tickFormatter={(value) => `₹${value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}`}
+                          tick={{ fontSize: 11 }}
+                          tickFormatter={formatYAxis}
+                          width={60}
+                          interval={0}
+                          tickCount={6}
                         >
-                          <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={-15} style={{ textAnchor: 'middle' }} />
+                          <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={5} style={{ textAnchor: 'middle' }} />
                         </YAxis>
                         <Tooltip content={<ChartTooltipContent />} />
                         <Legend content={<ChartLegendContent />} />
@@ -333,29 +379,19 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                           fill="url(#colorCumulativeProfit)"
                           activeDot={{ r: 6, stroke: 'white', strokeWidth: 2, fill: "#22C55E" }}
                           isAnimationActive={true}
-                          animationDuration={1000}
+                          animationDuration={1500}
                         />
                       </AreaChart>
                     )}
                   </ChartContainer>
-                  
-                  {zoomedChart === 'profit' && (
-                    <div className="flex justify-center mt-4">
-                      <button
-                        className="flex items-center text-gray-500 hover:text-gray-800 transition-colors"
-                        onClick={() => setZoomedChart(null)}
-                      >
-                        <ArrowDownCircle className="h-4 w-4 mr-1" />
-                        Minimize Chart
-                      </button>
-                    </div>
-                  )}
                 </div>
               </CardContent>
             </Card>
 
             {/* Cost Comparison / Revenue vs Cost Breakdown Chart */}
-            <Card className="shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all">
+            <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 ${
+              zoomedChart === 'cost' ? 'md:col-span-2 transform scale-105' : ''
+            }`}>
               <CardHeader className="bg-gray-50 pb-2 flex flex-row justify-between items-center">
                 <h3 className="text-lg font-semibold font-poppins text-gray-800">
                   {isAC ? 'Cost Comparison' : 'Revenue vs. Cost Breakdown'}
@@ -364,16 +400,22 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                   variant="ghost" 
                   size="sm" 
                   onClick={() => handleChartZoom('cost')} 
-                  className="h-8 w-8 p-0"
+                  className="h-8 w-8 p-0 hover:bg-gray-200/50 transition-all duration-200"
                 >
-                  <ZoomIn className="h-4 w-4" />
+                  {zoomedChart === 'cost' ? (
+                    <Minimize2 className="h-4 w-4" />
+                  ) : (
+                    <ZoomIn className="h-4 w-4" />
+                  )}
                 </Button>
               </CardHeader>
               <CardContent className="p-4">
-                <div className={`${zoomedChart === 'cost' ? 'h-[500px]' : 'h-80'}`}>
+                <div className={`transition-all duration-700 ease-in-out ${
+                  zoomedChart === 'cost' ? 'h-[500px]' : 'h-80'
+                }`}>
                   {isAC ? (
                     <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
+                      <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                         <Pie
                           data={[
                             { name: 'Home Charging', value: results.monthlyChargingCost || 0 },
@@ -383,13 +425,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                           ]}
                           cx="50%"
                           cy="50%"
-                          labelLine={true}
+                          labelLine={false}
                           outerRadius={zoomedChart === 'cost' ? 160 : 100}
                           fill="#8884d8"
                           dataKey="value"
                           nameKey="name"
-                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                          animationDuration={1000}
+                          label={renderCustomLabel}
+                          animationDuration={1200}
                           animationBegin={200}
                           animationEasing="ease-out"
                         >
@@ -397,23 +439,28 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                           <Cell fill={hasPublicChargingData ? colors.publicCharging : colors.fuel} />
                         </Pie>
                         <Tooltip formatter={(value) => [`₹${formatLargeNumber(Number(value))}`, undefined]} />
-                        <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+                        <Legend 
+                          layout="horizontal" 
+                          verticalAlign="bottom" 
+                          align="center"
+                          wrapperStyle={{ paddingTop: '20px' }}
+                        />
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
                     <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
+                      <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                         <Pie
                           data={costBreakdownData}
                           cx="50%"
                           cy="50%"
-                          labelLine={true}
+                          labelLine={false}
                           outerRadius={zoomedChart === 'cost' ? 160 : 100}
                           fill="#8884d8"
                           dataKey="value"
                           nameKey="name"
-                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                          animationDuration={1000}
+                          label={renderCustomLabel}
+                          animationDuration={1200}
                           animationBegin={200}
                           animationEasing="ease-out"
                         >
@@ -430,21 +477,14 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                           })}
                         </Pie>
                         <Tooltip formatter={(value) => [`₹${formatLargeNumber(Number(value))}`, undefined]} />
-                        <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+                        <Legend 
+                          layout="horizontal" 
+                          verticalAlign="bottom" 
+                          align="center"
+                          wrapperStyle={{ paddingTop: '20px' }}
+                        />
                       </PieChart>
                     </ResponsiveContainer>
-                  )}
-                  
-                  {zoomedChart === 'cost' && (
-                    <div className="flex justify-center mt-4">
-                      <button
-                        className="flex items-center text-gray-500 hover:text-gray-800 transition-colors"
-                        onClick={() => setZoomedChart(null)}
-                      >
-                        <ArrowDownCircle className="h-4 w-4 mr-1" />
-                        Minimize Chart
-                      </button>
-                    </div>
                   )}
                 </div>
               </CardContent>
