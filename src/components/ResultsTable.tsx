@@ -51,13 +51,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
     return new Intl.NumberFormat('en-IN').format(value);
   };
   
-  // Advanced Y-axis formatter to prevent overlapping
+  // Advanced Y-axis formatter to prevent overlapping with better spacing
   const formatYAxis = (value: number) => {
     if (value === 0) return '0';
     if (Math.abs(value) >= 10000000) return `₹${(value / 10000000).toFixed(1)}Cr`;
     if (Math.abs(value) >= 100000) return `₹${(value / 100000).toFixed(1)}L`;
-    if (Math.abs(value) >= 1000) return `₹${(value / 1000).toFixed(1)}k`;
-    return `₹${value}`;
+    if (Math.abs(value) >= 1000) return `₹${(value / 1000).toFixed(0)}k`;
+    return `₹${Math.round(value)}`;
   };
   
   // PDF export function
@@ -149,12 +149,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
     setZoomedChart(chartType === zoomedChart ? null : chartType);
   };
 
-  // Custom label renderer for pie chart
+  // Enhanced custom label renderer for pie chart with better positioning
   const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }: any) => {
-    if (percent < 0.05) return null; // Don't render labels for very small slices
+    if (percent < 0.03) return null; // Don't render labels for very small slices
     
     const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 1.4;
+    const radius = innerRadius + (outerRadius - innerRadius) * 1.6; // Increased distance
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -165,7 +165,8 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
         fill="#374151" 
         textAnchor={x > cx ? 'start' : 'end'} 
         dominantBaseline="central"
-        className="text-sm font-medium"
+        className="text-xs font-medium"
+        fontSize="12"
       >
         {`${name}: ${(percent * 100).toFixed(0)}%`}
       </text>
@@ -259,7 +260,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
             </CardContent>
           </Card>
 
-          {/* Charts Section - Enhanced with smooth zoom animations */}
+          {/* Charts Section - Enhanced with smooth zoom animations and better alignment */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Savings/Profit Projection Chart */}
             <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 ${
@@ -287,15 +288,15 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                   zoomedChart === 'profit' ? 'h-[500px]' : 'h-80'
                 }`}>
                   <ChartContainer config={{
-                    profit: { label: 'Profit', color: colors.profit },
+                    profit: { label: 'Cumulative Profit', color: colors.profit },
                     revenue: { label: 'Revenue', color: colors.revenue },
                     cost: { label: 'Cost', color: colors.cost },
-                    savings: { label: 'Savings', color: colors.savings },
+                    savings: { label: 'Cumulative Savings', color: colors.savings },
                   }}>
                     {isAC ? (
                       <AreaChart 
                         data={chartData} 
-                        margin={{ top: 20, right: 30, left: 70, bottom: 30 }}
+                        margin={{ top: 20, right: 20, left: 80, bottom: 60 }}
                       >
                         <defs>
                           <linearGradient id="colorSavings" x1="0" y1="0" x2="0" y2="1">
@@ -315,14 +316,17 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                         <YAxis 
                           tick={{ fontSize: 11 }}
                           tickFormatter={formatYAxis}
-                          width={60}
+                          width={70}
                           interval={0}
-                          tickCount={6}
+                          tickCount={5}
                         >
                           <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={5} style={{ textAnchor: 'middle' }} />
                         </YAxis>
                         <Tooltip content={<ChartTooltipContent />} />
-                        <Legend content={<ChartLegendContent />} />
+                        <Legend 
+                          content={<ChartLegendContent />}
+                          wrapperStyle={{ paddingTop: '15px' }}
+                        />
                         <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} />
                         
                         <Area
@@ -340,7 +344,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                     ) : (
                       <AreaChart 
                         data={chartData} 
-                        margin={{ top: 20, right: 30, left: 70, bottom: 30 }}
+                        margin={{ top: 20, right: 20, left: 80, bottom: 60 }}
                       >
                         <defs>
                           <linearGradient id="colorCumulativeProfit" x1="0" y1="0" x2="0" y2="1">
@@ -360,14 +364,17 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                         <YAxis 
                           tick={{ fontSize: 11 }}
                           tickFormatter={formatYAxis}
-                          width={60}
+                          width={70}
                           interval={0}
-                          tickCount={6}
+                          tickCount={5}
                         >
                           <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={5} style={{ textAnchor: 'middle' }} />
                         </YAxis>
                         <Tooltip content={<ChartTooltipContent />} />
-                        <Legend content={<ChartLegendContent />} />
+                        <Legend 
+                          content={<ChartLegendContent />}
+                          wrapperStyle={{ paddingTop: '15px' }}
+                        />
                         <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} />
                         
                         <Area
@@ -415,7 +422,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                 }`}>
                   {isAC ? (
                     <ResponsiveContainer width="100%" height="100%">
-                      <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                      <PieChart margin={{ top: 20, right: 30, bottom: 60, left: 30 }}>
                         <Pie
                           data={[
                             { name: 'Home Charging', value: results.monthlyChargingCost || 0 },
@@ -424,9 +431,9 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                               : { name: 'Fuel', value: results.monthlyFuelCost || 0 }
                           ]}
                           cx="50%"
-                          cy="50%"
+                          cy="45%"
                           labelLine={false}
-                          outerRadius={zoomedChart === 'cost' ? 160 : 100}
+                          outerRadius={zoomedChart === 'cost' ? 160 : 90}
                           fill="#8884d8"
                           dataKey="value"
                           nameKey="name"
@@ -443,19 +450,19 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                           layout="horizontal" 
                           verticalAlign="bottom" 
                           align="center"
-                          wrapperStyle={{ paddingTop: '20px' }}
+                          wrapperStyle={{ paddingTop: '30px' }}
                         />
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
                     <ResponsiveContainer width="100%" height="100%">
-                      <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                      <PieChart margin={{ top: 20, right: 40, bottom: 80, left: 40 }}>
                         <Pie
                           data={costBreakdownData}
                           cx="50%"
-                          cy="50%"
+                          cy="40%"
                           labelLine={false}
-                          outerRadius={zoomedChart === 'cost' ? 160 : 100}
+                          outerRadius={zoomedChart === 'cost' ? 140 : 80}
                           fill="#8884d8"
                           dataKey="value"
                           nameKey="name"
@@ -481,7 +488,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, charger, chargerCo
                           layout="horizontal" 
                           verticalAlign="bottom" 
                           align="center"
-                          wrapperStyle={{ paddingTop: '20px' }}
+                          wrapperStyle={{ 
+                            paddingTop: '40px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            flexWrap: 'wrap',
+                            gap: '15px'
+                          }}
                         />
                       </PieChart>
                     </ResponsiveContainer>
