@@ -240,19 +240,17 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
   const monthsInYear = 12;
   const totalInvestment = charger.price * chargerCount + civilWorkCost;
   
-  // DC Charger ROI Calculation
+  // DC Charger ROI Calculation - FIXED
   if (charger.type === 'DC') {
     const dailyOperatingHours = input.dailyOperatingHours || 3; // Default 3 hours
-    // Use provided costs or default to 1
     const operationalCostPerUnitValue = operationalCostPerUnit || 1;
     const miscellaneousCostPerUnitValue = miscellaneousCostPerUnit || 1;
     
-    // Calculate daily consumption - Use default customers per day if not provided
-    const customersPerDay = averageCustomersPerDay || 10; // Default to 10 if not specified
-    const dailyConsumption = charger.power * dailyOperatingHours * customersPerDay;
+    // FIXED: Calculate daily consumption correctly - charger power × operating hours (not × customers)
+    const dailyConsumption = charger.power * dailyOperatingHours;
     const monthlyConsumption = dailyConsumption * daysPerMonth;
     
-    // Calculate revenue and costs
+    // Calculate revenue and costs using the correct monthly consumption
     const revenue = monthlyConsumption * revenuePerUnit;
     const expenditure = monthlyConsumption * electricityCost;
     const operationalCost = monthlyConsumption * operationalCostPerUnitValue;
@@ -266,7 +264,7 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     const breakEvenMonths = monthlyNetRevenue > 0 ? totalInvestment / monthlyNetRevenue : Infinity;
     const roiYears = breakEvenMonths / 12;
     
-    // Calculate profit for years 1-7 (extended from 5)
+    // Calculate profit for years 1-7
     const profitYears = Array.from({ length: 7 }, (_, i) => yearlyNetRevenue * (i + 1));
     
     // Generate comparison data for charts based on actual timeHorizon
@@ -310,7 +308,7 @@ export const calculateEnhancedROI = (input: CalculationInput): CalculationResult
     };
   }
   
-  // AC Charger ROI Calculation (updated)
+  // AC Charger ROI Calculation (unchanged)
   else {
     // Calculate daily energy requirement based on battery size and daily kilometers
     const dailyEnergyRequirement = Math.min(dailyKilometers ? dailyKilometers / 5 : batterySize * 0.8, batterySize); // kWh, limit to max 80% of battery
