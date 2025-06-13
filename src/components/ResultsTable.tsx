@@ -365,21 +365,21 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
               <CardContent className="p-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
-                    <p className="text-gray-600 text-sm">Selected Charger</p>
-                    <p className="font-semibold text-gray-900">{charger.name}</p>
-                    <p className="text-xs text-gray-500">{charger.power}kW {charger.type}</p>
+                    <p className="text-gray-600 text-sm py-px font-medium">Selected Charger</p>
+                    <p className="font-semibold text-gray-900 py-px">{charger.name}</p>
+                    <p className="text-xs text-gray-500 font-semibold">{charger.power}kW {charger.type}</p>
                   </div>
                   
                   <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
-                    <p className="text-gray-600 text-sm">Quantity & Investment</p>
-                    <p className="font-semibold text-gray-900">{chargerCount} unit{chargerCount > 1 ? 's' : ''}</p>
-                    <p className="text-xs text-gray-500">{formatCurrency(totalInvestment)} total</p>
+                    <p className="text-gray-600 text-sm py-px font-medium">Quantity &amp; Investment</p>
+                    <p className="font-semibold text-gray-900 py-px">{chargerCount} unit{chargerCount > 1 ? 's' : ''}</p>
+                    <p className="text-xs text-gray-500 font-semibold">{formatCurrency(totalInvestment)} total</p>
                   </div>
                   
                   <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
-                    <p className="text-gray-600 text-sm">Payback Period</p>
-                    <p className="font-semibold text-gray-900">{breakEvenTimeDisplayValue}</p>
-                    <p className="text-xs text-gray-500">to recover investment</p>
+                    <p className="text-gray-600 text-sm py-px font-medium">Payback Period</p>
+                    <p className="font-semibold text-gray-900 py-px">{breakEvenTimeDisplayValue}</p>
+                    <p className="text-xs text-gray-500 font-semibold">to recover investment</p>
                   </div>
                 </div>
               </CardContent>
