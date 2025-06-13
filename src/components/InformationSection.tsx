@@ -129,7 +129,8 @@ const InformationSection: React.FC<InformationSectionProps> = ({
               <Card className="overflow-hidden hover:shadow-lg transition-all">
                 <div className="h-2 bg-premium-gradient"></div>
                 <CardHeader>
-                  <CardTitle>Thunder Hulk 120 kW DC</CardTitle>
+                  <CardTitle>Thunder
+Hulk 120 kW DC</CardTitle>
                   <CardDescription>High-Power Fast Charging</CardDescription>
                 </CardHeader>
                 <CardContent>
