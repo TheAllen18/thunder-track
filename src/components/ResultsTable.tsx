@@ -6,12 +6,14 @@ import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartToo
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Legend, Area, AreaChart, Label } from 'recharts';
 import html2pdf from 'html2pdf.js';
 import { Download, TrendingUp, Clock, IndianRupee, ZoomIn, ArrowDownCircle, Minimize2 } from 'lucide-react';
+
 interface ResultsTableProps {
   results: CalculationResult | null;
   charger: ChargerType | null;
   chargerCount: number;
   civilWorkCost: number;
 }
+
 const ResultsTable: React.FC<ResultsTableProps> = ({
   results,
   charger,
@@ -19,7 +21,9 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
   civilWorkCost
 }) => {
   const [zoomedChart, setZoomedChart] = useState<'profit' | 'cost' | null>(null);
+  
   if (!results || !charger) return null;
+
   const totalInvestment = charger.price * chargerCount + civilWorkCost;
   const isAC = charger.type === 'AC';
 
@@ -134,11 +138,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     name: 'Miscellaneous',
     value: results.miscellaneousCost[0] || 0
   }];
+
   const handleChartZoom = (chartType: 'profit' | 'cost') => {
     setZoomedChart(chartType === zoomedChart ? null : chartType);
   };
 
-  // Enhanced custom label renderer for pie chart with proper positioning to avoid overlaps
+  // Improved custom label renderer for pie chart with better positioning
   const renderCustomLabel = ({
     cx,
     cy,
@@ -148,17 +153,30 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     percent,
     name
   }: any) => {
-    if (percent < 0.02) return null; // Don't render labels for very small slices
+    if (percent < 0.05) return null; // Don't render labels for very small slices
 
     const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 1.8; // Increased distance further
+    const radius = innerRadius + (outerRadius - innerRadius) * 1.4;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
-    return <text x={x} y={y} fill="#374151" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" className="text-xs font-medium" fontSize="11">
-        {`${name}: ${(percent * 100).toFixed(0)}%`}
-      </text>;
+    
+    return (
+      <text 
+        x={x} 
+        y={y} 
+        fill="#374151" 
+        textAnchor={x > cx ? 'start' : 'end'} 
+        dominantBaseline="central" 
+        className="text-xs font-medium"
+        fontSize="10"
+      >
+        {`${name}`}
+      </text>
+    );
   };
-  return <div className="mt-8" id="results-for-pdf">
+
+  return (
+    <div className="mt-8" id="results-for-pdf">
       <Card className="bg-white shadow-lg border border-gray-200 rounded-xl">
         <CardHeader className="bg-premium-gradient text-white flex flex-row justify-between items-center rounded-t-xl">
           <CardTitle className="font-poppins">
@@ -240,177 +258,309 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
             </CardContent>
           </Card>
 
-          {/* Charts Section - Enhanced with smooth zoom animations and perfect alignment */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Savings/Profit Projection Chart */}
-            <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 ${zoomedChart === 'profit' ? 'md:col-span-2 transform scale-105' : ''}`}>
-              <CardHeader className="bg-gray-50 pb-2 flex flex-row justify-between items-center">
-                <h3 className="text-lg font-semibold font-poppins text-gray-800">
-                  {isAC ? 'Savings Projection' : 'Profit Projection'}
-                </h3>
-                <Button variant="ghost" size="sm" onClick={() => handleChartZoom('profit')} className="h-8 w-8 p-0 hover:bg-gray-200/50 transition-all duration-200">
-                  {zoomedChart === 'profit' ? <Minimize2 className="h-4 w-4" /> : <ZoomIn className="h-4 w-4" />}
-                </Button>
-              </CardHeader>
-              <CardContent className="p-4 my-0 mx-0 px-0 py-0">
-                <div className={`transition-all duration-700 ease-in-out ${zoomedChart === 'profit' ? 'h-[500px]' : 'h-80'}`}>
-                  <ChartContainer config={{
-                  CumulativeProfit: {
-                    label: 'Cumulative Profit',
-                    color: colors.profit
-                  },
-                  CumulativeSavings: {
-                    label: 'Cumulative Savings',
-                    color: colors.savings
-                  }
-                }}>
-                    {isAC ? <AreaChart data={chartData} margin={{
-                    top: 20,
-                    right: 30,
-                    left: 60,
-                    bottom: 60
-                  }}>
-                        <defs>
-                          <linearGradient id="colorSavings" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#22C55E" stopOpacity={0.8} />
-                            <stop offset="95%" stopColor="#22C55E" stopOpacity={0.1} />
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                        <XAxis dataKey="month" tick={{
-                      fontSize: 12
-                    }} tickFormatter={value => value.replace('Month ', '')} interval={Math.floor(chartData.length / 6)}>
-                          <Label value="Months" position="insideBottom" offset={-10} />
-                        </XAxis>
-                        <YAxis tick={{
-                      fontSize: 11
-                    }} tickFormatter={formatYAxis} width={50} interval={0} tickCount={6}>
-                          <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={5} style={{
-                        textAnchor: 'middle'
-                      }} />
-                        </YAxis>
-                        <Tooltip content={<ChartTooltipContent />} />
-                        <Legend content={<ChartLegendContent />} wrapperStyle={{
-                      paddingTop: '15px'
-                    }} />
-                        <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} />
-                        
-                        <Area type="monotone" name="CumulativeSavings" dataKey="CumulativeSavings" stroke={colors.savings} strokeWidth={2} fill="url(#colorSavings)" activeDot={{
-                      r: 6,
-                      stroke: 'white',
-                      strokeWidth: 2,
-                      fill: colors.savings
-                    }} isAnimationActive={true} animationDuration={1500} />
-                      </AreaChart> : <AreaChart data={chartData} margin={{
-                    top: 20,
-                    right: 30,
-                    left: 60,
-                    bottom: 60
-                  }}>
-                        <defs>
-                          <linearGradient id="colorCumulativeProfit" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#22C55E" stopOpacity={0.8} />
-                            <stop offset="95%" stopColor="#22C55E" stopOpacity={0.1} />
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                        <XAxis dataKey="month" tick={{
-                      fontSize: 12
-                    }} tickFormatter={value => value.replace('Month ', '')} interval={Math.floor(chartData.length / 6)}>
-                          <Label value="Months" position="insideBottom" offset={-10} />
-                        </XAxis>
-                        <YAxis tick={{
-                      fontSize: 11
-                    }} tickFormatter={formatYAxis} width={50} interval={0} tickCount={6}>
-                          <Label value="Amount (₹)" position="insideLeft" angle={-90} offset={5} style={{
-                        textAnchor: 'middle'
-                      }} />
-                        </YAxis>
-                        <Tooltip content={<ChartTooltipContent />} />
-                        <Legend content={<ChartLegendContent />} wrapperStyle={{
-                      paddingTop: '15px'
-                    }} />
-                        <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} />
-                        
-                        <Area type="monotone" name="CumulativeProfit" dataKey="CumulativeProfit" stroke="#22C55E" strokeWidth={2} fill="url(#colorCumulativeProfit)" activeDot={{
-                      r: 6,
-                      stroke: 'white',
-                      strokeWidth: 2,
-                      fill: "#22C55E"
-                    }} isAnimationActive={true} animationDuration={1500} />
-                      </AreaChart>}
-                  </ChartContainer>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Enhanced Charts Section with Perfect Alignment */}
+          <div className="space-y-6">
+            {/* Charts Grid - Responsive Layout */}
+            <div className={`grid gap-6 transition-all duration-500 ${zoomedChart ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
+              
+              {/* Savings/Profit Projection Chart */}
+              <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 ${zoomedChart === 'profit' ? 'lg:col-span-2 transform scale-[1.02]' : ''}`}>
+                <CardHeader className="bg-gray-50 pb-3 flex flex-row justify-between items-center">
+                  <h3 className="text-lg font-semibold font-poppins text-gray-800">
+                    {isAC ? 'Savings Projection' : 'Profit Projection'}
+                  </h3>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => handleChartZoom('profit')} 
+                    className="h-8 w-8 p-0 hover:bg-gray-200/50 transition-all duration-200"
+                  >
+                    {zoomedChart === 'profit' ? <Minimize2 className="h-4 w-4" /> : <ZoomIn className="h-4 w-4" />}
+                  </Button>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className={`transition-all duration-700 ease-in-out ${zoomedChart === 'profit' ? 'h-[600px]' : 'h-[400px]'}`}>
+                    <ChartContainer 
+                      config={{
+                        CumulativeProfit: {
+                          label: 'Cumulative Profit',
+                          color: colors.profit
+                        },
+                        CumulativeSavings: {
+                          label: 'Cumulative Savings',
+                          color: colors.savings
+                        }
+                      }}
+                      className="w-full h-full"
+                    >
+                      {isAC ? (
+                        <AreaChart 
+                          data={chartData} 
+                          margin={{
+                            top: 30,
+                            right: 30,
+                            left: 80,
+                            bottom: 80
+                          }}
+                        >
+                          <defs>
+                            <linearGradient id="colorSavings" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#22C55E" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#22C55E" stopOpacity={0.1} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                          <XAxis 
+                            dataKey="month" 
+                            tick={{ fontSize: 11 }} 
+                            tickFormatter={value => value.replace('Month ', '')} 
+                            interval={Math.max(0, Math.floor(chartData.length / 8))}
+                            height={60}
+                          >
+                            <Label value="Months" position="insideBottom" offset={-20} />
+                          </XAxis>
+                          <YAxis 
+                            tick={{ fontSize: 10 }} 
+                            tickFormatter={formatYAxis} 
+                            width={70} 
+                            interval={0} 
+                            tickCount={6}
+                          >
+                            <Label 
+                              value="Amount (₹)" 
+                              position="insideLeft" 
+                              angle={-90} 
+                              offset={10} 
+                              style={{ textAnchor: 'middle' }} 
+                            />
+                          </YAxis>
+                          <Tooltip content={<ChartTooltipContent />} />
+                          <Legend 
+                            content={<ChartLegendContent />} 
+                            wrapperStyle={{ paddingTop: '20px', paddingBottom: '10px' }} 
+                          />
+                          <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} strokeDasharray="5 5" />
+                          
+                          <Area 
+                            type="monotone" 
+                            name="CumulativeSavings" 
+                            dataKey="CumulativeSavings" 
+                            stroke={colors.savings} 
+                            strokeWidth={3} 
+                            fill="url(#colorSavings)" 
+                            activeDot={{ r: 6, stroke: 'white', strokeWidth: 2, fill: colors.savings }} 
+                            isAnimationActive={true} 
+                            animationDuration={1500} 
+                          />
+                        </AreaChart>
+                      ) : (
+                        <AreaChart 
+                          data={chartData} 
+                          margin={{
+                            top: 30,
+                            right: 30,
+                            left: 80,
+                            bottom: 80
+                          }}
+                        >
+                          <defs>
+                            <linearGradient id="colorCumulativeProfit" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#22C55E" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#22C55E" stopOpacity={0.1} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                          <XAxis 
+                            dataKey="month" 
+                            tick={{ fontSize: 11 }} 
+                            tickFormatter={value => value.replace('Month ', '')} 
+                            interval={Math.max(0, Math.floor(chartData.length / 8))}
+                            height={60}
+                          >
+                            <Label value="Months" position="insideBottom" offset={-20} />
+                          </XAxis>
+                          <YAxis 
+                            tick={{ fontSize: 10 }} 
+                            tickFormatter={formatYAxis} 
+                            width={70} 
+                            interval={0} 
+                            tickCount={6}
+                          >
+                            <Label 
+                              value="Amount (₹)" 
+                              position="insideLeft" 
+                              angle={-90} 
+                              offset={10} 
+                              style={{ textAnchor: 'middle' }} 
+                            />
+                          </YAxis>
+                          <Tooltip content={<ChartTooltipContent />} />
+                          <Legend 
+                            content={<ChartLegendContent />} 
+                            wrapperStyle={{ paddingTop: '20px', paddingBottom: '10px' }} 
+                          />
+                          <ReferenceLine y={0} stroke={colors.breakEven} strokeWidth={1} strokeDasharray="5 5" />
+                          
+                          <Area 
+                            type="monotone" 
+                            name="CumulativeProfit" 
+                            dataKey="CumulativeProfit" 
+                            stroke="#22C55E" 
+                            strokeWidth={3} 
+                            fill="url(#colorCumulativeProfit)" 
+                            activeDot={{ r: 6, stroke: 'white', strokeWidth: 2, fill: "#22C55E" }} 
+                            isAnimationActive={true} 
+                            animationDuration={1500} 
+                          />
+                        </AreaChart>
+                      )}
+                    </ChartContainer>
+                  </div>
+                </CardContent>
+              </Card>
 
-            {/* Cost Comparison / Revenue vs Cost Breakdown Chart */}
-            <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 ${zoomedChart === 'cost' ? 'md:col-span-2 transform scale-105' : ''}`}>
-              <CardHeader className="bg-gray-50 pb-2 flex flex-row justify-between items-center">
-                <h3 className="text-lg font-semibold font-poppins text-gray-800">
-                  {isAC ? 'Cost Comparison' : 'Revenue vs. Cost Breakdown'}
-                </h3>
-                <Button variant="ghost" size="sm" onClick={() => handleChartZoom('cost')} className="h-8 w-8 p-0 hover:bg-gray-200/50 transition-all duration-200">
-                  {zoomedChart === 'cost' ? <Minimize2 className="h-4 w-4" /> : <ZoomIn className="h-4 w-4" />}
-                </Button>
-              </CardHeader>
-              <CardContent className="p-4">
-                <div className={`transition-all duration-700 ease-in-out ${zoomedChart === 'cost' ? 'h-[500px]' : 'h-80'}`}>
-                  {isAC ? <ResponsiveContainer width="100%" height="100%">
-                      <PieChart margin={{
-                    top: 20,
-                    right: 30,
-                    bottom: 60,
-                    left: 30
-                  }}>
-                        <Pie data={[{
-                      name: 'Home Charging',
-                      value: results.monthlyChargingCost || 0
-                    }, hasPublicChargingData ? {
-                      name: 'Public Charging',
-                      value: results.publicChargingMonthlyCost || 0
-                    } : {
-                      name: 'Fuel',
-                      value: results.monthlyFuelCost || 0
-                    }]} cx="50%" cy="45%" labelLine={false} outerRadius={zoomedChart === 'cost' ? 160 : 90} fill="#8884d8" dataKey="value" nameKey="name" label={renderCustomLabel} animationDuration={1200} animationBegin={200} animationEasing="ease-out">
-                          <Cell fill={colors.charging} />
-                          <Cell fill={hasPublicChargingData ? colors.publicCharging : colors.fuel} />
-                        </Pie>
-                        <Tooltip formatter={value => [`₹${formatLargeNumber(Number(value))}`, undefined]} />
-                        <Legend layout="horizontal" verticalAlign="bottom" align="center" wrapperStyle={{
-                      paddingTop: '20px'
-                    }} />
-                      </PieChart>
-                    </ResponsiveContainer> : <ResponsiveContainer width="100%" height="100%">
-                      <PieChart margin={{
-                    top: 10,
-                    right: 60,
-                    bottom: 100,
-                    left: 60
-                  }}>
-                        <Pie data={costBreakdownData} cx="50%" cy="35%" labelLine={false} outerRadius={zoomedChart === 'cost' ? 120 : 70} fill="#8884d8" dataKey="value" nameKey="name" label={renderCustomLabel} animationDuration={1200} animationBegin={200} animationEasing="ease-out">
-                          {costBreakdownData.map((entry, index) => {
-                        const pieColors = ['#22C55E', '#EF4444', '#FB923C', '#8B5CF6'];
-                        return <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} stroke="#fff" strokeWidth={1} />;
-                      })}
-                        </Pie>
-                        <Tooltip formatter={value => [`₹${formatLargeNumber(Number(value))}`, undefined]} />
-                        <Legend layout="horizontal" verticalAlign="bottom" align="center" wrapperStyle={{
-                      paddingTop: '60px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      flexWrap: 'wrap',
-                      gap: '8px'
-                    }} iconType="rect" />
-                      </PieChart>
-                    </ResponsiveContainer>}
-                </div>
-              </CardContent>
-            </Card>
+              {/* Cost Comparison / Revenue vs Cost Breakdown Chart */}
+              <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 ${zoomedChart === 'cost' ? 'lg:col-span-2 transform scale-[1.02]' : ''}`}>
+                <CardHeader className="bg-gray-50 pb-3 flex flex-row justify-between items-center">
+                  <h3 className="text-lg font-semibold font-poppins text-gray-800">
+                    {isAC ? 'Cost Comparison' : 'Revenue vs. Cost Breakdown'}
+                  </h3>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => handleChartZoom('cost')} 
+                    className="h-8 w-8 p-0 hover:bg-gray-200/50 transition-all duration-200"
+                  >
+                    {zoomedChart === 'cost' ? <Minimize2 className="h-4 w-4" /> : <ZoomIn className="h-4 w-4" />}
+                  </Button>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className={`transition-all duration-700 ease-in-out ${zoomedChart === 'cost' ? 'h-[600px]' : 'h-[400px]'}`}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      {isAC ? (
+                        <PieChart 
+                          margin={{
+                            top: 40,
+                            right: 40,
+                            bottom: 120,
+                            left: 40
+                          }}
+                        >
+                          <Pie 
+                            data={[
+                              {
+                                name: 'Home Charging',
+                                value: results.monthlyChargingCost || 0
+                              }, 
+                              hasPublicChargingData ? {
+                                name: 'Public Charging',
+                                value: results.publicChargingMonthlyCost || 0
+                              } : {
+                                name: 'Fuel',
+                                value: results.monthlyFuelCost || 0
+                              }
+                            ]} 
+                            cx="50%" 
+                            cy="40%" 
+                            labelLine={false} 
+                            outerRadius={zoomedChart === 'cost' ? '45%' : '35%'} 
+                            fill="#8884d8" 
+                            dataKey="value" 
+                            nameKey="name" 
+                            label={renderCustomLabel} 
+                            animationDuration={1200} 
+                            animationBegin={200} 
+                            animationEasing="ease-out"
+                          >
+                            <Cell fill={colors.charging} stroke="#fff" strokeWidth={2} />
+                            <Cell fill={hasPublicChargingData ? colors.publicCharging : colors.fuel} stroke="#fff" strokeWidth={2} />
+                          </Pie>
+                          <Tooltip 
+                            formatter={value => [`₹${formatLargeNumber(Number(value))}`, undefined]} 
+                            contentStyle={{ 
+                              backgroundColor: '#fff', 
+                              border: '1px solid #e5e7eb', 
+                              borderRadius: '8px',
+                              fontSize: '12px'
+                            }}
+                          />
+                          <Legend 
+                            layout="horizontal" 
+                            verticalAlign="bottom" 
+                            align="center" 
+                            wrapperStyle={{
+                              paddingTop: '30px',
+                              fontSize: '12px'
+                            }} 
+                            iconType="rect"
+                          />
+                        </PieChart>
+                      ) : (
+                        <PieChart 
+                          margin={{
+                            top: 40,
+                            right: 40,
+                            bottom: 120,
+                            left: 40
+                          }}
+                        >
+                          <Pie 
+                            data={costBreakdownData} 
+                            cx="50%" 
+                            cy="40%" 
+                            labelLine={false} 
+                            outerRadius={zoomedChart === 'cost' ? '45%' : '35%'} 
+                            fill="#8884d8" 
+                            dataKey="value" 
+                            nameKey="name" 
+                            label={renderCustomLabel} 
+                            animationDuration={1200} 
+                            animationBegin={200} 
+                            animationEasing="ease-out"
+                          >
+                            {costBreakdownData.map((entry, index) => {
+                              const pieColors = ['#22C55E', '#EF4444', '#FB923C', '#8B5CF6'];
+                              return (
+                                <Cell 
+                                  key={`cell-${index}`} 
+                                  fill={pieColors[index % pieColors.length]} 
+                                  stroke="#fff" 
+                                  strokeWidth={2} 
+                                />
+                              );
+                            })}
+                          </Pie>
+                          <Tooltip 
+                            formatter={value => [`₹${formatLargeNumber(Number(value))}`, undefined]} 
+                            contentStyle={{ 
+                              backgroundColor: '#fff', 
+                              border: '1px solid #e5e7eb', 
+                              borderRadius: '8px',
+                              fontSize: '12px'
+                            }}
+                          />
+                          <Legend 
+                            layout="horizontal" 
+                            verticalAlign="bottom" 
+                            align="center" 
+                            wrapperStyle={{
+                              paddingTop: '30px',
+                              fontSize: '12px'
+                            }} 
+                            iconType="rect"
+                          />
+                        </PieChart>
+                      )}
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           {/* AC Charger Results */}
-          {isAC && <div className="space-y-6">
+          {isAC && (
+            <div className="space-y-6">
               <Card className="shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-all">
                 <CardHeader className="bg-gray-50 pb-2">
                   <h3 className="text-lg font-semibold font-poppins text-gray-800">Energy & Charging Details</h3>
@@ -451,13 +601,17 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                       <p className="font-semibold text-gray-900">{formatCurrency(results.monthlyChargingCost || 0)}</p>
                     </div>
                     
-                    {hasPublicChargingData ? <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500 hover:bg-gray-100 transition-colors">
+                    {hasPublicChargingData ? (
+                      <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500 hover:bg-gray-100 transition-colors">
                         <p className="text-gray-600">Public Charging Cost</p>
                         <p className="font-semibold text-gray-900">{formatCurrency(results.publicChargingMonthlyCost || 0)}</p>
-                      </div> : <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-red-500 hover:bg-gray-100 transition-colors">
+                      </div>
+                    ) : (
+                      <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-red-500 hover:bg-gray-100 transition-colors">
                         <p className="text-gray-600">Fuel Cost</p>
                         <p className="font-semibold text-gray-900">{formatCurrency(results.monthlyFuelCost || 0)}</p>
-                      </div>}
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -485,10 +639,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                   </div>
                 </CardContent>
               </Card>
-            </div>}
+            </div>
+          )}
           
           {/* DC Charger Results */}
-          {!isAC && <div className="space-y-6">
+          {!isAC && (
+            <div className="space-y-6">
               <Card className="shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-all">
                 <CardHeader className="bg-gray-50 pb-2">
                   <h3 className="text-lg font-semibold font-poppins text-gray-800">Monthly Performance Metrics</h3>
@@ -523,29 +679,36 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                       <thead className="bg-gray-50">
                         <tr>
                           <th className="px-4 py-2 text-left text-gray-700 font-medium">Year</th>
-                          {results.profitYears?.map((_, index) => <th key={index} className="px-4 py-2 text-left text-gray-700 font-medium">Year {index + 1}</th>)}
+                          {results.profitYears?.map((_, index) => (
+                            <th key={index} className="px-4 py-2 text-left text-gray-700 font-medium">Year {index + 1}</th>
+                          ))}
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td className="px-4 py-2 border-t text-gray-900">Profit</td>
-                          {results.profitYears?.map((profit, index) => <td key={index} className="px-4 py-2 border-t text-gray-900">{formatCurrency(profit)}</td>)}
+                          {results.profitYears?.map((profit, index) => (
+                            <td key={index} className="px-4 py-2 border-t text-gray-900">{formatCurrency(profit)}</td>
+                          ))}
                         </tr>
                         <tr>
                           <td className="px-4 py-2 border-t text-gray-900">Cumulative</td>
                           {results.profitYears?.map((_, index) => {
-                        const cumulativeProfit = results.profitYears?.slice(0, index + 1).reduce((sum, profit) => sum + profit, 0) || 0;
-                        return <td key={index} className="px-4 py-2 border-t text-gray-900">{formatCurrency(cumulativeProfit)}</td>;
-                      })}
+                            const cumulativeProfit = results.profitYears?.slice(0, index + 1).reduce((sum, profit) => sum + profit, 0) || 0;
+                            return <td key={index} className="px-4 py-2 border-t text-gray-900">{formatCurrency(cumulativeProfit)}</td>;
+                          })}
                         </tr>
                       </tbody>
                     </table>
                   </div>
                 </CardContent>
               </Card>
-            </div>}
+            </div>
+          )}
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
+
 export default ResultsTable;
