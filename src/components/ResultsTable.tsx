@@ -276,7 +276,8 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs sm:text-sm font-medium text-gray-500">Monthly Revenue</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-500">Monthly Profits
+                    </p>
                       <h3 className="text-lg sm:text-2xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">{formatCurrency(monthlySavings)}</h3>
                     </div>
                     <div className="bg-green-100 p-2 sm:p-3 rounded-full group-hover:bg-green-200 transition-colors">
