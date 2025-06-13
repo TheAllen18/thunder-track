@@ -44,37 +44,70 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     return `₹${Math.round(value)}`;
   };
 
-  // Enhanced PDF export function with executive summary
+  // Enhanced PDF export function with better page formatting
   const exportToPDF = async () => {
     setIsLoading(true);
     const element = document.getElementById('results-for-pdf');
     if (!element) return;
     
-    // Add executive summary to PDF
+    // Add executive summary and improve styling for PDF
     const executiveSummary = document.createElement('div');
     executiveSummary.innerHTML = `
-      <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-        <h2 style="margin: 0 0 10px 0; color: #333;">Executive Summary</h2>
-        <p><strong>Investment:</strong> ${formatCurrency(totalInvestment)}</p>
-        <p><strong>Monthly ${isAC ? 'Savings' : 'Revenue'}:</strong> ${formatCurrency(isAC ? results.monthlySavings || 0 : results.netRevenue[0] || 0)}</p>
-        <p><strong>Break-even Time:</strong> ${(results.breakEvenMonths || results.roiMonths[0]) === Infinity ? '∞' : `${formatNumber((results.breakEvenMonths || results.roiMonths[0]) / 12)} years`}</p>
-        <p><strong>ROI:</strong> ${formatNumber(results.annualizedROIPercentage || 0, 1)}% per annum</p>
+      <div style="margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; page-break-inside: avoid;">
+        <h2 style="margin: 0 0 15px 0; color: #333; font-size: 18px; font-weight: bold;">Executive Summary</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 14px;">
+          <div><strong>Investment:</strong> ${formatCurrency(totalInvestment)}</div>
+          <div><strong>Monthly ${isAC ? 'Savings' : 'Revenue'}:</strong> ${formatCurrency(isAC ? results.monthlySavings || 0 : results.netRevenue[0] || 0)}</div>
+          <div><strong>Break-even Time:</strong> ${(results.breakEvenMonths || results.roiMonths[0]) === Infinity ? '∞' : `${formatNumber((results.breakEvenMonths || results.roiMonths[0]) / 12)} years`}</div>
+          <div><strong>ROI:</strong> ${formatNumber(results.annualizedROIPercentage || 0, 1)}% per annum</div>
+        </div>
       </div>
     `;
+    
+    // Add PDF-specific styling
+    const pdfStyles = document.createElement('style');
+    pdfStyles.innerHTML = `
+      @media print {
+        .chart-container { page-break-inside: avoid; margin-bottom: 20px; }
+        .metrics-grid { page-break-inside: avoid; }
+        .summary-table { page-break-inside: avoid; }
+        h3 { page-break-after: avoid; }
+        .space-y-6 > * { margin-bottom: 20px !important; }
+        .grid { page-break-inside: avoid; }
+      }
+    `;
+    document.head.appendChild(pdfStyles);
     element.insertBefore(executiveSummary, element.firstChild);
 
     const opt = {
-      margin: 10,
+      margin: [15, 15, 15, 15],
       filename: `${charger.name}_${isAC ? 'Savings' : 'ROI'}_Analysis.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true,
+        letterRendering: true,
+        allowTaint: false
+      },
+      jsPDF: { 
+        unit: 'mm', 
+        format: 'a4', 
+        orientation: 'portrait',
+        compress: true
+      },
+      pagebreak: { 
+        mode: ['avoid-all', 'css', 'legacy'],
+        before: '.page-break-before',
+        after: '.page-break-after',
+        avoid: '.page-break-avoid'
+      }
     };
     
     try {
       await html2pdf().set(opt).from(element).save();
     } finally {
       element.removeChild(executiveSummary);
+      document.head.removeChild(pdfStyles);
       setIsLoading(false);
     }
   };
@@ -175,10 +208,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
   const renderCustomLabel = ({
     cx, cy, midAngle, innerRadius, outerRadius, percent, name, value
   }: any) => {
-    if (percent < 0.02) return null; // Lower threshold to show more labels
+    if (percent < 0.01) return null; // Lower threshold to show more labels
 
     const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 1.5;
+    const radius = innerRadius + (outerRadius - innerRadius) * 1.4;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     
@@ -234,8 +267,8 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
           </CardHeader>
           
           <CardContent className="p-6 space-y-8">
-            {/* Enhanced Key Metrics Dashboard Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Enhanced Key Metrics Dashboard Cards - Removed ROI card */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 metrics-grid">
               <Card className="shadow-md border-l-4 border-l-green-500 hover:shadow-lg transition-all group hover:translate-y-[-2px] duration-200">
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center justify-between">
@@ -273,20 +306,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                     </div>
                     <div className="bg-purple-100 p-2 sm:p-3 rounded-full group-hover:bg-purple-200 transition-colors">
                       <Clock className="h-4 w-4 sm:h-6 sm:w-6 text-purple-600" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-md border-l-4 border-l-orange-500 hover:shadow-lg transition-all group hover:translate-y-[-2px] duration-200">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs sm:text-sm font-medium text-gray-500">ROI (Annual)</p>
-                      <h3 className="text-lg sm:text-2xl font-bold text-gray-800 group-hover:text-orange-600 transition-colors">{formatNumber(roiPercentage, 1)}%</h3>
-                    </div>
-                    <div className="bg-orange-100 p-2 sm:p-3 rounded-full group-hover:bg-orange-200 transition-colors">
-                      <BarChart3 className="h-4 w-4 sm:h-6 sm:w-6 text-orange-600" />
                     </div>
                   </div>
                 </CardContent>
@@ -344,7 +363,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                 <h3 className="text-lg font-semibold font-poppins text-gray-800">Investment Overview</h3>
               </CardHeader>
               <CardContent className="p-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
                     <p className="text-gray-600 text-sm">Selected Charger</p>
                     <p className="font-semibold text-gray-900">{charger.name}</p>
@@ -371,7 +390,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
               <div className={`grid gap-6 transition-all duration-500 ${zoomedChart ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
                 
                 {/* Savings/Profit Projection Chart */}
-                <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 ${zoomedChart === 'profit' ? 'lg:col-span-2 transform scale-[1.02]' : ''}`}>
+                <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 chart-container ${zoomedChart === 'profit' ? 'lg:col-span-2 transform scale-[1.02]' : ''}`}>
                   <CardHeader className="bg-gray-50 pb-3 flex flex-row justify-between items-center">
                     <h3 className="text-lg font-semibold font-poppins text-gray-800">
                       {isAC ? 'Savings Projection' : 'Profit Projection'}
@@ -520,8 +539,8 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                   </CardContent>
                 </Card>
 
-                {/* Enhanced Cost Comparison / Revenue vs Cost Breakdown Chart */}
-                <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 ${zoomedChart === 'cost' ? 'lg:col-span-2 transform scale-[1.02]' : ''}`}>
+                {/* Enhanced Cost Comparison / Revenue vs Cost Breakdown Chart - Increased size */}
+                <Card className={`shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-all duration-500 chart-container ${zoomedChart === 'cost' ? 'lg:col-span-2 transform scale-[1.02]' : ''}`}>
                   <CardHeader className="bg-gray-50 pb-3 flex flex-row justify-between items-center">
                     <h3 className="text-lg font-semibold font-poppins text-gray-800">
                       {isAC ? 'Cost Comparison' : 'Revenue vs. Cost Breakdown'}
@@ -542,16 +561,16 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                           margin={{
                             top: 20,
                             right: 20,
-                            bottom: 80,
+                            bottom: 100,
                             left: 20
                           }}
                         >
                           <Pie 
                             data={pieData} 
                             cx="50%" 
-                            cy="35%" 
+                            cy="40%" 
                             labelLine={false} 
-                            outerRadius={zoomedChart === 'cost' ? '60%' : '50%'} 
+                            outerRadius={zoomedChart === 'cost' ? '65%' : '55%'} 
                             fill="#8884d8" 
                             dataKey="value" 
                             nameKey="name" 
@@ -581,7 +600,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                             verticalAlign="bottom" 
                             align="center" 
                             wrapperStyle={{
-                              paddingTop: '20px',
+                              paddingTop: '30px',
                               fontSize: window.innerWidth < 640 ? '10px' : '12px'
                             }} 
                             iconType="rect"
@@ -595,7 +614,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
             </div>
 
             {/* Summary Table with Exact Values */}
-            <Card className="shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-all">
+            <Card className="shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-all summary-table">
               <CardHeader className="bg-gray-50 pb-2">
                 <div className="flex items-center gap-2">
                   <h3 className="text-lg font-semibold font-poppins text-gray-800">Financial Summary</h3>
@@ -666,6 +685,20 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                       )}
                     </tbody>
                   </table>
+                  
+                  {/* ROI Summary Row */}
+                  <div className="mt-4 p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div className="flex items-center gap-2">
+                        <BarChart3 className="h-5 w-5 text-orange-600" />
+                        <span className="font-medium text-orange-800">Return on Investment (ROI)</span>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-orange-700">{formatNumber(roiPercentage, 1)}% per annum</p>
+                        <p className="text-xs text-orange-600">on ₹{formatLargeNumber(totalInvestment)} investment</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -752,8 +785,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                   </CardContent>
                 </Card>
               </div>
-            )
-            }
+            )}
             
             {/* DC Charger Results */}
             {!isAC && (
