@@ -9,7 +9,7 @@ const InformationSection: React.FC<InformationSectionProps> = ({
   return <div className="mt-16 space-y-8" id="about">
       {/* Understanding the Calculator */}
       <div>
-        <h2 className="text-2xl font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block">
+        <h2 className="font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block text-4xl">
           Understanding the {chargerType} ROI Calculator
         </h2>
         <Card className="mt-4">
@@ -48,7 +48,7 @@ const InformationSection: React.FC<InformationSectionProps> = ({
 
       {/* Our Charger Lineup */}
       <div className="py-[10px]">
-        <h2 className="text-2xl font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block">
+        <h2 className="font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block text-4xl">
           Our {chargerType} Charger Lineup
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
@@ -163,7 +163,7 @@ const InformationSection: React.FC<InformationSectionProps> = ({
 
       {/* Important Notes */}
       <div className="mt-8">
-        <h2 className="text-2xl font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block">
+        <h2 className="font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block text-4xl">
           Important Notes
         </h2>
         <Card className="mt-4">
