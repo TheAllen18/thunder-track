@@ -105,7 +105,7 @@ const Index = () => {
         </section>
         
         {/* Results Section */}
-        <section className="bg-gray-50 py-12" id="results">
+        <section id="results" className="bg-gray-50 py-[35px]">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <ResultsTable results={calculationResults} charger={selectedCharger} chargerCount={chargerCount} civilWorkCost={civilWorkCost} />
