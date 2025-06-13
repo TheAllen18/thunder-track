@@ -1,14 +1,12 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-
 interface InformationSectionProps {
   chargerType: 'AC' | 'DC';
 }
-
-const InformationSection: React.FC<InformationSectionProps> = ({ chargerType }) => {
-  return (
-    <div className="mt-16 space-y-8" id="about">
+const InformationSection: React.FC<InformationSectionProps> = ({
+  chargerType
+}) => {
+  return <div className="mt-16 space-y-8" id="about">
       {/* Understanding the Calculator */}
       <div>
         <h2 className="text-2xl font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block">
@@ -16,8 +14,7 @@ const InformationSection: React.FC<InformationSectionProps> = ({ chargerType }) 
         </h2>
         <Card className="mt-4">
           <CardContent className="pt-6">
-            {chargerType === 'AC' ? (
-              <div className="space-y-4 text-gray-700">
+            {chargerType === 'AC' ? <div className="space-y-4 text-gray-700">
                 <p>
                   The AC ROI calculator helps you determine how much you can save by charging your electric vehicle at home 
                   compared to refueling a petrol/diesel vehicle or using public charging stations.
@@ -30,9 +27,7 @@ const InformationSection: React.FC<InformationSectionProps> = ({ chargerType }) 
                   The calculator takes into account the initial investment cost, your usage patterns, and compares the ongoing 
                   operational costs to give you a clear picture of the financial benefits.
                 </p>
-              </div>
-            ) : (
-              <div className="space-y-4 text-gray-700">
+              </div> : <div className="space-y-4 text-gray-700">
                 <p>
                   Our DC ROI calculator is designed for businesses looking to invest in DC fast charging infrastructure 
                   for electric vehicles. It helps you understand the potential return on your investment based on several key factors.
@@ -46,20 +41,18 @@ const InformationSection: React.FC<InformationSectionProps> = ({ chargerType }) 
                   This tool is invaluable for businesses planning to deploy DC fast charging stations as part of their 
                   service offerings or as an amenity for customers and employees.
                 </p>
-              </div>
-            )}
+              </div>}
           </CardContent>
         </Card>
       </div>
 
       {/* Our Charger Lineup */}
-      <div>
+      <div className="py-[10px]">
         <h2 className="text-2xl font-bold font-poppins mb-2 bg-premium-gradient bg-clip-text text-transparent inline-block">
           Our {chargerType} Charger Lineup
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
-          {chargerType === 'AC' ? (
-            <>
+          {chargerType === 'AC' ? <>
               <Card className="overflow-hidden hover:shadow-lg transition-all">
                 <div className="h-2 bg-premium-gradient"></div>
                 <CardHeader>
@@ -104,9 +97,7 @@ const InformationSection: React.FC<InformationSectionProps> = ({ chargerType }) 
                   </p>
                 </CardContent>
               </Card>
-            </>
-          ) : (
-            <>
+            </> : <>
               <Card className="overflow-hidden hover:shadow-lg transition-all">
                 <div className="h-2 bg-premium-gradient"></div>
                 <CardHeader>
@@ -166,8 +157,7 @@ const InformationSection: React.FC<InformationSectionProps> = ({ chargerType }) 
                   </p>
                 </CardContent>
               </Card>
-            </>
-          )}
+            </>}
         </div>
       </div>
 
@@ -187,8 +177,6 @@ const InformationSection: React.FC<InformationSectionProps> = ({ chargerType }) 
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default InformationSection;
