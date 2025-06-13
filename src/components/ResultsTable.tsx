@@ -538,7 +538,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                   <h3 className="text-lg font-semibold font-poppins text-gray-800">Financial Summary</h3>
                   <Tooltip>
                     <TooltipTrigger>
-                      <Info className="h-4 w-4 text-gray-500" />
+                      
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Detailed breakdown of all costs and savings</p>
