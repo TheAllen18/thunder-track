@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -7,7 +6,6 @@ import ResultsTable from '@/components/ResultsTable';
 import InformationSection from '@/components/InformationSection';
 import { ChargerType, acChargerTypes, dcChargerTypes, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 const Index = () => {
   const [calculationResults, setCalculationResults] = useState<CalculationResult | null>(null);
   const [selectedCharger, setSelectedCharger] = useState<ChargerType | null>(null);
@@ -17,10 +15,8 @@ const Index = () => {
 
   // AC_CHARGERS_HIDDEN: Set this to true to show AC chargers again
   const AC_CHARGERS_HIDDEN = true;
-
   const handleCalculate = (input: CalculationInput) => {
     const results = calculateEnhancedROI(input);
-
     setCalculationResults(results);
     setSelectedCharger(input.charger);
     setChargerCount(input.chargerCount);
@@ -30,26 +26,26 @@ const Index = () => {
     setTimeout(() => {
       const resultsElement = document.getElementById('results');
       if (resultsElement) {
-        resultsElement.scrollIntoView({ behavior: 'smooth' });
+        resultsElement.scrollIntoView({
+          behavior: 'smooth'
+        });
       }
     }, 100);
   };
-
   const handleChargerTypeChange = (type: 'AC' | 'DC') => {
     setChargerType(type);
     setCalculationResults(null);
   };
-
   const scrollToCalculator = (e: React.MouseEvent) => {
     e.preventDefault();
     const calculatorElement = document.getElementById('calculator');
     if (calculatorElement) {
-      calculatorElement.scrollIntoView({ behavior: 'smooth' });
+      calculatorElement.scrollIntoView({
+        behavior: 'smooth'
+      });
     }
   };
-
-  return (
-    <div className="flex flex-col min-h-screen bg-white text-gray-800">
+  return <div className="flex flex-col min-h-screen bg-white text-gray-800">
       <Header />
       
       <main className="flex-1">
@@ -69,16 +65,17 @@ const Index = () => {
                 <span className="text-5xl md:text-6xl lg:text-7xl text-gray-800 font-light">ROI Calculator</span>
               </h1>
               
-              <p className="text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto text-gray-600 font-montserrat mb-12 animate-fade-in leading-relaxed font-light" style={{animationDelay: '0.2s'}}>
+              <p className="text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto text-gray-600 font-montserrat mb-12 animate-fade-in leading-relaxed font-light" style={{
+              animationDelay: '0.2s'
+            }}>
                 Calculate your return on investment by installing our DC EV chargers.
               </p>
               
               {/* CTA Button */}
-              <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
-                <button 
-                  onClick={scrollToCalculator}
-                  className="inline-flex items-center gap-3 text-white bg-premium-gradient hover:opacity-90 px-10 py-5 rounded-full text-lg font-medium transition-all hover:scale-105 hover:shadow-2xl group border border-green-600/30 hover:border-green-600/50 font-montserrat shadow-lg tracking-wide"
-                >
+              <div className="animate-fade-in" style={{
+              animationDelay: '0.4s'
+            }}>
+                <button onClick={scrollToCalculator} className="inline-flex items-center gap-3 text-white bg-premium-gradient hover:opacity-90 px-10 py-5 rounded-full text-lg font-medium transition-all hover:scale-105 hover:shadow-2xl group border border-green-600/30 hover:border-green-600/50 font-montserrat shadow-lg tracking-wide">
                   Calculate Your ROI
                 </button>
               </div>
@@ -101,13 +98,7 @@ const Index = () => {
               </div>
               
               <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <CalculatorForm 
-                  onCalculate={handleCalculate} 
-                  chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType}
-                  acChargers={acChargerTypes}
-                  dcChargers={dcChargerTypes}
-                  hideACChargers={AC_CHARGERS_HIDDEN}
-                />
+                <CalculatorForm onCalculate={handleCalculate} chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} acChargers={acChargerTypes} dcChargers={dcChargerTypes} hideACChargers={AC_CHARGERS_HIDDEN} />
               </div>
             </div>
           </div>
@@ -117,18 +108,13 @@ const Index = () => {
         <section className="bg-gray-50 py-12" id="results">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <ResultsTable 
-                results={calculationResults} 
-                charger={selectedCharger} 
-                chargerCount={chargerCount}
-                civilWorkCost={civilWorkCost}
-              />
+              <ResultsTable results={calculationResults} charger={selectedCharger} chargerCount={chargerCount} civilWorkCost={civilWorkCost} />
             </div>
           </div>
         </section>
         
         {/* Information Section */}
-        <section className="bg-white py-12">
+        <section className="bg-white my-0 py-[5px]">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <InformationSection chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} />
@@ -138,8 +124,6 @@ const Index = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
