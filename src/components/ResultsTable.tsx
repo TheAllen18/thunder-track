@@ -6,7 +6,8 @@ import { ChargerType, CalculationResult, formatCurrency, formatNumber } from '@/
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine, Legend, Area, AreaChart, Label } from 'recharts';
 import html2pdf from 'html2pdf.js';
-import { Download, TrendingUp, Clock, IndianRupee, ZoomIn, ArrowDownCircle, Minimize2, HelpCircle, Leaf, BarChart3, Info } from 'lucide-react';
+import { Download, TrendingUp, Clock, IndianRupee, ZoomIn, ArrowDownCircle, Minimize2, HelpCircle, Leaf, BarChart3, Info, TreePine, Car } from 'lucide-react';
+
 interface ResultsTableProps {
   results: CalculationResult | null;
   charger: ChargerType | null;
@@ -40,13 +41,25 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     return `₹${Math.round(value)}`;
   };
 
-  // Enhanced PDF export function with better page formatting
+  // Calculate carbon footprint metrics
+  const monthlyUsage = isAC ? results.monthlyUnitsConsumed || 0 : results.monthlyConsumption[0] || 0;
+  const annualEnergyKwh = monthlyUsage * 12;
+  
+  // Carbon footprint calculations (using India grid emission factor)
+  const carbonEmissionFactorKgPerKwh = 0.82; // kg CO₂/kWh for Indian electricity grid
+  const annualCO2SavedKg = annualEnergyKwh * carbonEmissionFactorKgPerKwh;
+  
+  // Equivalent calculations
+  const treesEquivalent = Math.round(annualCO2SavedKg / 21.7); // 1 tree absorbs ~21.7 kg CO₂/year
+  const vehiclesOffset = Math.round(annualCO2SavedKg / 4600); // Average car emits ~4.6 tons CO₂/year
+
+  // Enhanced PDF export function with carbon footprint data
   const exportToPDF = async () => {
     setIsLoading(true);
     const element = document.getElementById('results-for-pdf');
     if (!element) return;
 
-    // Add executive summary and improve styling for PDF
+    // Add executive summary with carbon footprint
     const executiveSummary = document.createElement('div');
     executiveSummary.innerHTML = `
       <div style="margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; page-break-inside: avoid;">
@@ -55,7 +68,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
           <div><strong>Investment:</strong> ${formatCurrency(totalInvestment)}</div>
           <div><strong>Monthly ${isAC ? 'Savings' : 'Revenue'}:</strong> ${formatCurrency(isAC ? results.monthlySavings || 0 : results.netRevenue[0] || 0)}</div>
           <div><strong>Break-even Time:</strong> ${(results.breakEvenMonths || results.roiMonths[0]) === Infinity ? '∞' : `${formatNumber((results.breakEvenMonths || results.roiMonths[0]) / 12)} years`}</div>
-          <div><strong>ROI:</strong> ${formatNumber(results.annualizedROIPercentage || 0, 1)}% per annum</div>
+          <div><strong>Annual CO₂ Saved:</strong> ${formatNumber(annualCO2SavedKg)} kg</div>
         </div>
       </div>
     `;
@@ -126,8 +139,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
   };
 
   // Get the first usage level (for AC) or first value (for DC)
-  const monthlyUsage = isAC ? results.monthlyUnitsConsumed || 0 : results.monthlyConsumption[0] || 0;
-  const breakEvenMonths = isAC ? results.breakEvenMonths || 0 : results.roiMonths[0] || 0;
   const monthlyRevenue = isAC ? 0 : results.revenue[0] || 0;
   const monthlyCost = isAC ? 0 : results.expenditure[0] + results.operationalCost[0] + results.miscellaneousCost[0] || 0;
   const monthlyProfit = isAC ? 0 : results.netRevenue[0] || 0;
@@ -138,21 +149,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
 
   // Calculate ROI percentage
   const roiPercentage = results.annualizedROIPercentage || 0;
-
-  // Calculate carbon footprint savings (approximate)
-  const carbonSavingsKg = isAC ? monthlyUsage * 0.82 * 12 : 0; // 0.82 kg CO2/kWh average grid emission
-
-  // Convert break-even time to years and format appropriately
-  const breakEvenYears = breakEvenMonths / 12;
-  const breakEvenTimeDisplayValue = breakEvenMonths === Infinity ? '∞' : `${formatNumber(breakEvenYears)} years`;
-
-  // Check for public charging comparison
-  const hasPublicChargingData = isAC && results.publicChargingMonthlyCost !== undefined && results.publicChargingMonthlyCost > 0;
-
-  // Calculate comparison metrics
-  const comparisonCost = hasPublicChargingData ? results.publicChargingMonthlyCost || 0 : results.monthlyFuelCost || 0;
-  const homeChargingCost = results.monthlyChargingCost || 0;
-  const savingsPercentage = comparisonCost > 0 ? (comparisonCost - homeChargingCost) / comparisonCost * 100 : 0;
 
   // Prepare chart data
   const prepareChartData = () => {
@@ -270,32 +266,17 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
           </CardHeader>
           
           <CardContent className="p-6 space-y-8">
-            {/* Enhanced Key Metrics Dashboard Cards - Removed ROI card */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 metrics-grid">
+            {/* Enhanced Key Metrics Dashboard Cards - 2 cards only */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 metrics-grid">
               <Card className="shadow-md border-l-4 border-l-green-500 hover:shadow-lg transition-all group hover:translate-y-[-2px] duration-200">
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs sm:text-sm font-medium text-gray-500">Monthly Profits
-                    </p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-500">Monthly Profits</p>
                       <h3 className="text-lg sm:text-2xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">{formatCurrency(monthlySavings)}</h3>
                     </div>
                     <div className="bg-green-100 p-2 sm:p-3 rounded-full group-hover:bg-green-200 transition-colors">
                       <IndianRupee className="h-4 w-4 sm:h-6 sm:w-6 text-green-600" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="shadow-md border-l-4 border-l-blue-500 hover:shadow-lg transition-all group hover:translate-y-[-2px] duration-200">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs sm:text-sm font-medium text-gray-500">Yearly Profits</p>
-                      <h3 className="text-lg sm:text-2xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">{formatCurrency(yearlySavings)}</h3>
-                    </div>
-                    <div className="bg-blue-100 p-2 sm:p-3 rounded-full group-hover:bg-blue-200 transition-colors">
-                      <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-blue-600" />
                     </div>
                   </div>
                 </CardContent>
@@ -316,8 +297,54 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
               </Card>
             </div>
 
+            {/* Carbon Footprint Card - Minimal and Futuristic */}
+            <Card className="shadow-md border border-emerald-200 hover:shadow-lg transition-all group hover:translate-y-[-1px] duration-200 bg-gradient-to-br from-emerald-50 to-green-50">
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-3">
+                  <div className="bg-emerald-500 p-2 rounded-full group-hover:bg-emerald-600 transition-colors">
+                    <Leaf className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold font-poppins text-gray-800">Environmental Impact</h3>
+                    <p className="text-xs text-gray-600 font-montserrat">Annual carbon footprint reduction</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-white/70 p-4 rounded-lg hover:bg-white/90 transition-all">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                      <p className="text-xs font-medium text-gray-600">CO₂ Reduced</p>
+                    </div>
+                    <p className="font-bold text-emerald-700 text-xl">{formatNumber(annualCO2SavedKg)} kg</p>
+                    <p className="text-xs text-gray-500">per year</p>
+                  </div>
+                  
+                  <div className="bg-white/70 p-4 rounded-lg hover:bg-white/90 transition-all">
+                    <div className="flex items-center gap-2 mb-1">
+                      <TreePine className="h-3 w-3 text-green-600" />
+                      <p className="text-xs font-medium text-gray-600">Trees Equivalent</p>
+                    </div>
+                    <p className="font-bold text-green-700 text-xl">{treesEquivalent}</p>
+                    <p className="text-xs text-gray-500">trees planted</p>
+                  </div>
+
+                  <div className="bg-white/70 p-4 rounded-lg hover:bg-white/90 transition-all">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Car className="h-3 w-3 text-blue-600" />
+                      <p className="text-xs font-medium text-gray-600">Vehicles Offset</p>
+                    </div>
+                    <p className="font-bold text-blue-700 text-xl">{vehiclesOffset || '<1'}</p>
+                    <p className="text-xs text-gray-500">cars off road</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Comparison Metrics Summary */}
-            {isAC && <Card className="shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-all">
+            {isAC && (
+              <Card className="shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-all">
                 <CardHeader className="bg-gray-50 pb-2">
                   <div className="flex items-center gap-2">
                     <h3 className="text-lg font-semibold font-poppins text-gray-800">Cost Comparison Summary</h3>
@@ -332,7 +359,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                   </div>
                 </CardHeader>
                 <CardContent className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
                       <p className="text-gray-600 text-sm">You save</p>
                       <p className="font-bold text-green-700 text-xl">{formatNumber(savingsPercentage, 1)}%</p>
@@ -344,18 +371,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                       <p className="font-bold text-blue-700 text-xl">{formatCurrency(comparisonCost - homeChargingCost)}</p>
                       <p className="text-xs text-gray-500">in your pocket</p>
                     </div>
-
-                    {carbonSavingsKg > 0 && <div className="bg-emerald-50 p-4 rounded-lg border-l-4 border-emerald-500">
-                        <div className="flex items-center gap-2">
-                          <Leaf className="h-4 w-4 text-emerald-600" />
-                          <p className="text-gray-600 text-sm">CO₂ saved/year</p>
-                        </div>
-                        <p className="font-bold text-emerald-700 text-xl">{formatNumber(carbonSavingsKg)} kg</p>
-                        <p className="text-xs text-gray-500">environmental impact</p>
-                      </div>}
                   </div>
                 </CardContent>
-              </Card>}
+              </Card>
+            )}
 
             {/* Charger & Investment Details */}
             <Card className="shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-all">
