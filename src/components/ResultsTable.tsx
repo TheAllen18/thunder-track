@@ -56,17 +56,44 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     return `₹${Math.round(value)}`;
   };
 
-  // Calculate carbon footprint metrics
+  // CORRECTED: More accurate carbon footprint calculations
   const monthlyUsage = isAC ? results.monthlyUnitsConsumed || 0 : results.monthlyConsumption[0] || 0;
   const annualEnergyKwh = monthlyUsage * 12;
   
-  // Carbon footprint calculations (using India grid emission factor)
-  const carbonEmissionFactorKgPerKwh = 0.82; // kg CO₂/kWh for Indian electricity grid
-  const annualCO2SavedKg = annualEnergyKwh * carbonEmissionFactorKgPerKwh;
+  // Updated carbon footprint calculations with more accurate factors
+  const carbonEmissionFactorKgPerKwh = 0.708; // Updated: Current Indian grid emission factor (kg CO₂/kWh)
   
-  // Equivalent calculations
-  const treesEquivalent = Math.round(annualCO2SavedKg / 21.7); // 1 tree absorbs ~21.7 kg CO₂/year
-  const vehiclesOffset = Math.round(annualCO2SavedKg / 4600); // Average car emits ~4.6 tons CO₂/year
+  // For EVs vs fuel vehicles comparison
+  let annualCO2SavedKg = 0;
+  
+  if (isAC) {
+    // For AC chargers: Compare EV charging emissions vs conventional vehicle emissions
+    const vehicleEfficiencyKmPerL = 15; // Average fuel efficiency
+    const fuelEmissionFactorKgPerL = 2.31; // kg CO₂ per liter of petrol
+    const dailyKm = 50; // Assumed average daily driving
+    const annualKm = dailyKm * 365;
+    
+    // EV emissions from grid electricity
+    const evAnnualEmissions = annualEnergyKwh * carbonEmissionFactorKgPerKwh;
+    
+    // Conventional vehicle emissions
+    const annualFuelConsumptionL = annualKm / vehicleEfficiencyKmPerL;
+    const conventionalVehicleEmissions = annualFuelConsumptionL * fuelEmissionFactorKgPerL;
+    
+    // Net CO₂ savings (conventional vehicle emissions - EV emissions)
+    annualCO2SavedKg = conventionalVehicleEmissions - evAnnualEmissions;
+  } else {
+    // For DC chargers: Assume replacing diesel generators or grid electricity for public charging
+    const replacedEmissionFactor = 0.85; // Higher emission factor for diesel generators
+    annualCO2SavedKg = annualEnergyKwh * (replacedEmissionFactor - carbonEmissionFactorKgPerKwh);
+  }
+  
+  // Ensure positive values
+  annualCO2SavedKg = Math.max(0, annualCO2SavedKg);
+  
+  // More accurate equivalent calculations
+  const treesEquivalent = Math.round(annualCO2SavedKg / 22); // Updated: 1 mature tree absorbs ~22 kg CO₂/year
+  const vehiclesOffset = Math.round(annualCO2SavedKg / 4600); // 1 average car emits ~4.6 tons CO₂/year
 
   // Enhanced PDF export function with carbon footprint data
   const exportToPDF = async () => {
@@ -306,8 +333,8 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
           </CardHeader>
           
           <CardContent className="p-6 space-y-8">
-            {/* Enhanced Key Metrics Dashboard Cards - 2 cards only */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 metrics-grid">
+            {/* Enhanced Key Metrics Dashboard Cards - Restored 3 cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 metrics-grid">
               <Card className="shadow-md border-l-4 border-l-green-500 hover:shadow-lg transition-all group hover:translate-y-[-2px] duration-200">
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center justify-between">
@@ -317,6 +344,20 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                     </div>
                     <div className="bg-green-100 p-2 sm:p-3 rounded-full group-hover:bg-green-200 transition-colors">
                       <IndianRupee className="h-4 w-4 sm:h-6 sm:w-6 text-green-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="shadow-md border-l-4 border-l-blue-500 hover:shadow-lg transition-all group hover:translate-y-[-2px] duration-200">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs sm:text-sm font-medium text-gray-500">Yearly Profits</p>
+                      <h3 className="text-lg sm:text-2xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">{formatCurrency(yearlySavings)}</h3>
+                    </div>
+                    <div className="bg-blue-100 p-2 sm:p-3 rounded-full group-hover:bg-blue-200 transition-colors">
+                      <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-blue-600" />
                     </div>
                   </div>
                 </CardContent>
@@ -337,7 +378,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
               </Card>
             </div>
 
-            {/* Carbon Footprint Card - Minimal and Futuristic */}
+            {/* Carbon Footprint Card - Minimal and Futuristic with Corrected Calculations */}
             <Card className="shadow-md border border-emerald-200 hover:shadow-lg transition-all group hover:translate-y-[-1px] duration-200 bg-gradient-to-br from-emerald-50 to-green-50">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
@@ -346,7 +387,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold font-poppins text-gray-800">Environmental Impact</h3>
-                    <p className="text-xs text-gray-600 font-montserrat">Annual carbon footprint reduction</p>
+                    <p className="text-xs text-gray-600 font-montserrat">Annual carbon footprint reduction vs conventional alternatives</p>
                   </div>
                 </div>
               </CardHeader>
