@@ -15,18 +15,28 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({
   charger,
   isAC
 }) => {
+  // Calculate annual revenue/savings
+  const annualValue = isAC 
+    ? (results.yearlySavings || (results.monthlySavings || 0) * 12)
+    : (results.yearlyNetRevenue || (results.monthlyNetRevenue || 0) * 12);
+
   // Generate data for revenue projection
   const revenueData = Array.from({ length: 10 }, (_, index) => ({
     year: index + 1,
-    revenue: results.annualRevenue * (index + 1),
-    cumulative: results.annualRevenue * (index + 1) * (index + 1) * 0.5
+    revenue: annualValue * (index + 1),
+    cumulative: annualValue * (index + 1) * (index + 1) * 0.5
   }));
+
+  // Calculate monthly revenue for first year
+  const monthlyValue = isAC 
+    ? (results.monthlySavings || 0)
+    : (results.monthlyRevenue || results.monthlyNetRevenue || 0);
 
   // Generate monthly data for first year
   const monthlyData = Array.from({ length: 12 }, (_, index) => ({
     month: `Month ${index + 1}`,
-    revenue: results.monthlyRevenue,
-    expenses: results.monthlyRevenue * 0.2 // Estimated expenses
+    revenue: monthlyValue,
+    expenses: monthlyValue * 0.2 // Estimated expenses
   }));
 
   return (

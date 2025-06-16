@@ -16,25 +16,31 @@ const ScenarioComparison: React.FC<ScenarioComparisonProps> = ({
   chargerCount,
   civilWorkCost
 }) => {
+  // Calculate base annual value
+  const isAC = charger.type === 'AC';
+  const annualValue = isAC 
+    ? (results.yearlySavings || (results.monthlySavings || 0) * 12)
+    : (results.yearlyNetRevenue || (results.monthlyNetRevenue || 0) * 12);
+
   // Generate comparison scenarios
   const scenarios = [
     {
       name: 'Single Charger',
       chargers: 1,
       investment: charger.price + civilWorkCost,
-      revenue: results.annualRevenue / chargerCount
+      revenue: annualValue / chargerCount
     },
     {
       name: 'Current Setup',
       chargers: chargerCount,
       investment: charger.price * chargerCount + civilWorkCost,
-      revenue: results.annualRevenue
+      revenue: annualValue
     },
     {
       name: 'Double Setup',
       chargers: chargerCount * 2,
       investment: charger.price * chargerCount * 2 + civilWorkCost,
-      revenue: results.annualRevenue * 2
+      revenue: annualValue * 2
     }
   ];
 
@@ -60,7 +66,7 @@ const ScenarioComparison: React.FC<ScenarioComparisonProps> = ({
               </thead>
               <tbody>
                 {scenarios.map((scenario, index) => {
-                  const roi = (scenario.revenue / scenario.investment) * 100;
+                  const roi = scenario.investment > 0 ? (scenario.revenue / scenario.investment) * 100 : 0;
                   return (
                     <tr key={index} className="border-b hover:bg-gray-50">
                       <td className="p-3 font-medium">{scenario.name}</td>

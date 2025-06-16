@@ -14,8 +14,13 @@ const EnvironmentalImpact: React.FC<EnvironmentalImpactProps> = ({
   charger,
   isAC
 }) => {
+  // Calculate the annual revenue/savings for environmental impact
+  const annualValue = isAC 
+    ? (results.yearlySavings || (results.monthlySavings || 0) * 12)
+    : (results.yearlyNetRevenue || (results.monthlyNetRevenue || 0) * 12);
+
   // Calculate environmental impact (simplified calculation)
-  const annualCO2Reduction = (results.annualRevenue / 10) * 0.5; // Rough estimate
+  const annualCO2Reduction = (annualValue / 10) * 0.5; // Rough estimate
   const treesEquivalent = Math.round(annualCO2Reduction / 21); // 1 tree absorbs ~21kg CO2/year
 
   return (

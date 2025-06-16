@@ -16,6 +16,15 @@ const SensitivityAnalysis: React.FC<SensitivityAnalysisProps> = ({
   chargerCount,
   civilWorkCost
 }) => {
+  // Calculate base values
+  const isAC = charger.type === 'AC';
+  const annualValue = isAC 
+    ? (results.yearlySavings || (results.monthlySavings || 0) * 12)
+    : (results.yearlyNetRevenue || (results.monthlyNetRevenue || 0) * 12);
+  
+  const totalInvestment = charger.price * chargerCount + civilWorkCost;
+  const baseROI = totalInvestment > 0 ? (annualValue / totalInvestment) * 100 : 0;
+
   // Calculate sensitivity scenarios
   const scenarios = [
     { name: 'Optimistic (+20% usage)', multiplier: 1.2, color: 'text-green-600' },
@@ -35,8 +44,8 @@ const SensitivityAnalysis: React.FC<SensitivityAnalysisProps> = ({
         <CardContent>
           <div className="space-y-4">
             {scenarios.map((scenario, index) => {
-              const adjustedRevenue = results.annualRevenue * scenario.multiplier;
-              const adjustedROI = results.roiPercentage * scenario.multiplier;
+              const adjustedRevenue = annualValue * scenario.multiplier;
+              const adjustedROI = baseROI * scenario.multiplier;
               
               return (
                 <div key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
