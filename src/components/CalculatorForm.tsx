@@ -22,7 +22,7 @@ const CalculatorForm = ({ onCalculate, chargerType, acChargers, dcChargers, hide
   const [selectedCharger, setSelectedCharger] = useState<ChargerType | null>(null);
   const [chargerCount, setChargerCount] = useState(1);
   const [utilizationRate, setUtilizationRate] = useState(30);
-  const [electricityRate, setElectricityRate] = useState(0.12);
+  const [electricityRate, setElectricityRate] = useState(8);
 
   const watchedChargerType = chargerType;
   const currentChargers = watchedChargerType === 'AC' ? acChargers : dcChargers;
@@ -42,6 +42,13 @@ const CalculatorForm = ({ onCalculate, chargerType, acChargers, dcChargers, hide
       utilizationRate: utilizationRate,
       electricityRate: electricityRate,
       civilWorkCost: data.civilWorkCost || 0,
+      // Required properties with defaults
+      batterySize: 50, // Default battery size
+      electricityCost: electricityRate,
+      timeHorizon: 5, // Default 5 years
+      revenuePerUnit: 18, // Default revenue per unit
+      operationalCostPerUnit: 1, // Default operational cost
+      miscellaneousCostPerUnit: 1, // Default miscellaneous cost
     };
 
     onCalculate(input);
@@ -94,7 +101,7 @@ const CalculatorForm = ({ onCalculate, chargerType, acChargers, dcChargers, hide
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="electricityRate">Electricity Rate ($/kWh)</Label>
+          <Label htmlFor="electricityRate">Electricity Rate (₹/kWh)</Label>
           <Input
             id="electricityRate"
             type="number"
@@ -106,7 +113,7 @@ const CalculatorForm = ({ onCalculate, chargerType, acChargers, dcChargers, hide
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="civilWorkCost">Civil Work Cost ($)</Label>
+          <Label htmlFor="civilWorkCost">Civil Work Cost (₹)</Label>
           <Input
             id="civilWorkCost"
             type="number"
