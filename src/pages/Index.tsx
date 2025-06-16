@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useMemo } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -63,8 +62,7 @@ const Index = () => {
     setCalculationResults(null);
   }, []);
 
-  const scrollToCalculator = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
+  const scrollToCalculator = useCallback(() => {
     const calculatorElement = document.getElementById('calculator');
     if (calculatorElement) {
       calculatorElement.scrollIntoView({
