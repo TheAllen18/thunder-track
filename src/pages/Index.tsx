@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useMemo } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -143,7 +142,6 @@ const Index = () => {
                   acChargers={acChargerTypes} 
                   dcChargers={dcChargerTypes} 
                   hideACChargers={AC_CHARGERS_HIDDEN}
-                  isLoading={isCalculating}
                 />
               </div>
             </div>
