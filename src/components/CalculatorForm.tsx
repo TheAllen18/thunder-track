@@ -21,8 +21,9 @@ const CalculatorForm = ({ onCalculate, chargerType, acChargers, dcChargers, hide
   
   const [selectedCharger, setSelectedCharger] = useState<ChargerType | null>(null);
   const [chargerCount, setChargerCount] = useState(1);
-  const [utilizationRate, setUtilizationRate] = useState(30);
-  const [electricityRate, setElectricityRate] = useState(0.12);
+  const [dailyOperatingHours, setDailyOperatingHours] = useState(8);
+  const [electricityRate, setElectricityRate] = useState(8);
+  const [revenuePerUnit, setRevenuePerUnit] = useState(18);
 
   const watchedChargerType = chargerType;
   const currentChargers = watchedChargerType === 'AC' ? acChargers : dcChargers;
@@ -39,9 +40,14 @@ const CalculatorForm = ({ onCalculate, chargerType, acChargers, dcChargers, hide
     const input: CalculationInput = {
       charger: selectedCharger,
       chargerCount: chargerCount,
-      utilizationRate: utilizationRate,
-      electricityRate: electricityRate,
+      electricityCost: electricityRate,
       civilWorkCost: data.civilWorkCost || 0,
+      batterySize: 50, // Default battery size
+      timeHorizon: 5, // Default 5 years
+      dailyOperatingHours: dailyOperatingHours,
+      revenuePerUnit: revenuePerUnit,
+      operationalCostPerUnit: 1,
+      miscellaneousCostPerUnit: 1,
     };
 
     onCalculate(input);
@@ -82,11 +88,11 @@ const CalculatorForm = ({ onCalculate, chargerType, acChargers, dcChargers, hide
         </div>
 
         <div className="space-y-2">
-          <Label>Utilization Rate: {utilizationRate}%</Label>
+          <Label>Daily Operating Hours: {dailyOperatingHours} hours</Label>
           <Slider
-            value={[utilizationRate]}
-            onValueChange={(value) => setUtilizationRate(value[0])}
-            max={100}
+            value={[dailyOperatingHours]}
+            onValueChange={(value) => setDailyOperatingHours(value[0])}
+            max={24}
             min={1}
             step={1}
             className="w-full"
@@ -94,7 +100,7 @@ const CalculatorForm = ({ onCalculate, chargerType, acChargers, dcChargers, hide
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="electricityRate">Electricity Rate ($/kWh)</Label>
+          <Label htmlFor="electricityRate">Electricity Cost (₹/kWh)</Label>
           <Input
             id="electricityRate"
             type="number"
@@ -106,7 +112,19 @@ const CalculatorForm = ({ onCalculate, chargerType, acChargers, dcChargers, hide
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="civilWorkCost">Civil Work Cost ($)</Label>
+          <Label htmlFor="revenuePerUnit">Revenue per Unit (₹/kWh)</Label>
+          <Input
+            id="revenuePerUnit"
+            type="number"
+            step="0.01"
+            min="0"
+            value={revenuePerUnit}
+            onChange={(e) => setRevenuePerUnit(Number(e.target.value))}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="civilWorkCost">Civil Work Cost (₹)</Label>
           <Input
             id="civilWorkCost"
             type="number"
