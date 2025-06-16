@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
-import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ChargerType, CalculationInput } from '@/utils/calculatorUtils';
-import { ArrowRight } from 'lucide-react';
-import { useForm } from "react-hook-form";
+import { Zap, Settings, TrendingUp, Cpu } from 'lucide-react';
+import HolographicButton from './HolographicButton';
+
 interface CalculatorFormProps {
   onCalculate: (input: CalculationInput) => void;
   chargerType: 'AC' | 'DC';
@@ -242,69 +239,137 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
         </div>
       </div>
     </>;
-  return <div className="bg-white shadow-lg border border-gray-200 rounded-xl">
-      <div className="bg-premium-gradient text-white p-6 rounded-t-xl">
-        <h2 className="flex items-center gap-2 font-poppins font-medium text-2xl">
-          Thunder Track DC ROI Calculator
-        </h2>
-        <p className="text-gray-100 text-sm mt-1">Calculate the return on investment of your DC charging station</p>
+  return (
+    <div className="quantum-card">
+      {/* Futuristic Header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 opacity-90"></div>
+        <div className="relative z-10 p-8 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+              <Zap className="w-8 h-8 text-white" />
+            </div>
+          </div>
+          <h2 className="text-3xl font-bold text-white font-orbitron mb-2">
+            THUNDER TRACK QUANTUM CALCULATOR
+          </h2>
+          <p className="text-emerald-100">Advanced ROI computation matrix for DC charging stations</p>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
+        </div>
       </div>
-      <div className="p-6 space-y-6">
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-medium text-lg mb-3 font-poppins text-gray-800">Choose Your Charger</h3>
-            
+
+      <div className="p-8 space-y-8">
+        {/* Charger Selection */}
+        <div className="glass-card p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <Settings className="w-6 h-6 text-emerald-400" />
+            <h3 className="text-xl font-bold text-white font-orbitron">CHARGER CONFIGURATION</h3>
+          </div>
+          
+          <div className="space-y-6">
             <div>
-              <Label htmlFor="charger-type" className="text-gray-700">
-                Charger Type
-              </Label>
+              <Label className="text-emerald-300 font-medium mb-2 block">Charger Type</Label>
               <Select value={selectedChargerId} onValueChange={setSelectedChargerId}>
-                <SelectTrigger className="w-full border border-gray-300 bg-white text-gray-800 rounded-md mt-1">
+                <SelectTrigger className="quantum-input">
                   <SelectValue placeholder="Select a charger type" />
                 </SelectTrigger>
-                <SelectContent className="bg-white border-gray-300 text-gray-800">
-                  {chargers.map(charger => <SelectItem key={charger.id} value={charger.id} className="text-gray-800 hover:bg-gray-100">
+                <SelectContent className="bg-slate-900 border-emerald-500/30 text-white">
+                  {chargers.map(charger => (
+                    <SelectItem key={charger.id} value={charger.id} className="text-white hover:bg-emerald-500/20">
                       {charger.name}
-                    </SelectItem>)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="mt-4">
-              <Label htmlFor="charger-count" className="text-gray-700">Number of Chargers</Label>
-              <div className="flex items-center gap-4 mt-1">
-                <Input type="number" id="charger-count" className="bg-white border-gray-300 text-gray-800 rounded-md flex-1" min={1} max={10} value={chargerCount} onChange={e => setChargerCount(Number(e.target.value))} onClick={e => (e.target as HTMLInputElement).select()} />
-                <div className="flex items-center gap-1">
-                  <Button variant="outline" size="icon" onClick={() => setChargerCount(Math.max(1, chargerCount - 1))} className="border-gray-300 bg-white text-gray-800 hover:bg-gray-100">
+            <div>
+              <Label className="text-emerald-300 font-medium mb-2 block">Number of Chargers</Label>
+              <div className="flex items-center gap-4">
+                <Input
+                  type="number"
+                  className="quantum-input flex-1"
+                  min={1}
+                  max={10}
+                  value={chargerCount}
+                  onChange={e => setChargerCount(Number(e.target.value))}
+                />
+                <div className="flex items-center gap-2">
+                  <HolographicButton
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setChargerCount(Math.max(1, chargerCount - 1))}
+                  >
                     -
-                  </Button>
-                  <Button variant="outline" size="icon" onClick={() => setChargerCount(chargerCount + 1)} className="border-gray-300 bg-white text-gray-800 hover:bg-gray-100">
+                  </HolographicButton>
+                  <HolographicButton
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setChargerCount(chargerCount + 1)}
+                  >
                     +
-                  </Button>
+                  </HolographicButton>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {!hideACChargers && chargerType === 'AC' ? renderACFields() : renderDCFields()}
-
-          <div>
-            <Label htmlFor="time-horizon" className="text-gray-700">Time Horizon for ROI Analysis</Label>
-            <div className="mt-2">
-              <Slider id="time-horizon" min={1} max={7} step={1} value={[timeHorizon]} onValueChange={values => setTimeHorizon(values[0])} className="mt-2" />
-              <div className="flex justify-between mt-1 text-sm text-gray-600">
-                <span>1 year</span>
-                <span>{timeHorizon} years</span>
-                <span>7 years</span>
-              </div>
+        {/* Dynamic Fields based on charger type */}
+        {!hideACChargers && chargerType === 'AC' ? (
+          <div className="glass-card p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Cpu className="w-6 h-6 text-purple-400" />
+              <h3 className="text-xl font-bold text-white font-orbitron">USAGE PARAMETERS</h3>
             </div>
+            {/* AC fields would go here - keeping existing logic */}
+            {renderACFields()}
           </div>
+        ) : (
+          <div className="glass-card p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <TrendingUp className="w-6 h-6 text-blue-400" />
+              <h3 className="text-xl font-bold text-white font-orbitron">REVENUE MATRIX</h3>
+            </div>
+            {renderDCFields()}
+          </div>
+        )}
 
-          <Button onClick={handleCalculate} className="w-full bg-premium-gradient hover:opacity-90 text-white flex items-center justify-center text-lg">
-            Calculate ROI
-          </Button>
+        {/* Time Horizon */}
+        <div className="glass-card p-6">
+          <Label className="text-emerald-300 font-medium mb-4 block">Analysis Time Horizon</Label>
+          <Slider
+            min={1}
+            max={7}
+            step={1}
+            value={[timeHorizon]}
+            onValueChange={values => setTimeHorizon(values[0])}
+            className="quantum-slider"
+          />
+          <div className="flex justify-between mt-2 text-sm text-gray-400">
+            <span>1 year</span>
+            <span className="text-emerald-400 font-bold">{timeHorizon} years</span>
+            <span>7 years</span>
+          </div>
+        </div>
+
+        {/* Enhanced Calculate Button */}
+        <div className="text-center pt-4">
+          <HolographicButton
+            onClick={handleCalculate}
+            size="lg"
+            className="w-full group"
+          >
+            <span className="flex items-center justify-center gap-3">
+              <Zap className="w-6 h-6 group-hover:animate-pulse" />
+              EXECUTE ROI CALCULATION
+              <Zap className="w-6 h-6 group-hover:animate-pulse" />
+            </span>
+          </HolographicButton>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default CalculatorForm;

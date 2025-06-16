@@ -1,11 +1,17 @@
+
 import React, { useState, useCallback, useMemo } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CalculatorForm from '@/components/CalculatorForm';
 import ResultsTable from '@/components/ResultsTable';
 import InformationSection from '@/components/InformationSection';
+import ParticleBackground from '@/components/ParticleBackground';
+import MatrixRain from '@/components/MatrixRain';
+import HolographicButton from '@/components/HolographicButton';
 import { ChargerType, acChargerTypes, dcChargerTypes, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
 import { toast } from 'sonner';
+import { ChevronDown, Zap, TrendingUp, Cpu } from 'lucide-react';
+
 const Index = () => {
   const [calculationResults, setCalculationResults] = useState<CalculationResult | null>(null);
   const [selectedCharger, setSelectedCharger] = useState<ChargerType | null>(null);
@@ -14,15 +20,12 @@ const Index = () => {
   const [chargerType, setChargerType] = useState<'AC' | 'DC'>('DC');
   const [isCalculating, setIsCalculating] = useState(false);
 
-  // AC_CHARGERS_HIDDEN: Set this to true to show AC chargers again
   const AC_CHARGERS_HIDDEN = true;
 
-  // Optimized calculation handler with better error handling
   const handleCalculate = useCallback(async (input: CalculationInput) => {
     setIsCalculating(true);
     try {
-      // Add small delay to show loading state for better UX
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 800));
       const results = calculateEnhancedROI(input);
       if (!results) {
         throw new Error('Failed to calculate results');
@@ -32,10 +35,10 @@ const Index = () => {
       setChargerCount(input.chargerCount);
       setCivilWorkCost(input.civilWorkCost || 0);
 
-      // Show success message
-      toast.success('Calculation completed successfully!');
+      toast.success('🚀 Calculation completed successfully!', {
+        description: 'Your ROI analysis is ready to blow your mind!'
+      });
 
-      // Smooth scroll to results with better timing
       setTimeout(() => {
         const resultsElement = document.getElementById('results');
         if (resultsElement) {
@@ -47,15 +50,19 @@ const Index = () => {
       }, 100);
     } catch (error) {
       console.error('Calculation error:', error);
-      toast.error('Failed to calculate results. Please check your inputs and try again.');
+      toast.error('⚡ Calculation failed!', {
+        description: 'Please check your inputs and try again.'
+      });
     } finally {
       setIsCalculating(false);
     }
   }, []);
+
   const handleChargerTypeChange = useCallback((type: 'AC' | 'DC') => {
     setChargerType(type);
     setCalculationResults(null);
   }, []);
+
   const scrollToCalculator = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     const calculatorElement = document.getElementById('calculator');
@@ -66,82 +73,143 @@ const Index = () => {
     }
   }, []);
 
-  // Memoize heavy components to prevent unnecessary re-renders
-  const memoizedResultsTable = useMemo(() => calculationResults ? <ResultsTable results={calculationResults} charger={selectedCharger} chargerCount={chargerCount} civilWorkCost={civilWorkCost} /> : null, [calculationResults, selectedCharger, chargerCount, civilWorkCost]);
-  return <div className="flex flex-col min-h-screen bg-white text-gray-800">
-      <Header />
+  const memoizedResultsTable = useMemo(() => 
+    calculationResults ? (
+      <ResultsTable 
+        results={calculationResults} 
+        charger={selectedCharger} 
+        chargerCount={chargerCount} 
+        civilWorkCost={civilWorkCost} 
+      />
+    ) : null, 
+    [calculationResults, selectedCharger, chargerCount, civilWorkCost]
+  );
+
+  return (
+    <div className="flex flex-col min-h-screen bg-slate-950 text-white relative overflow-hidden">
+      <ParticleBackground />
+      <MatrixRain />
       
-      <main className="flex-1">
-        {/* Enhanced Hero Section with better mobile optimization */}
-        <section className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-green-50">
-          {/* Optimized background patterns */}
-          <div className="absolute inset-0 bg-futuristic-grid bg-[length:40px_40px] opacity-3"></div>
-          <div className="absolute top-20 right-20 w-96 h-96 bg-green-500/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 left-20 w-80 h-80 bg-emerald-500/8 rounded-full blur-3xl"></div>
+      <div className="relative z-10">
+        <Header />
+        
+        <main className="flex-1">
+          {/* Epic Hero Section */}
+          <section className="min-h-screen flex flex-col justify-center items-center relative cyber-grid">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 via-slate-900/50 to-purple-900/20"></div>
+            
+            {/* Floating Elements */}
+            <div className="absolute top-20 right-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-20 left-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+            
+            <div className="container mx-auto px-4 text-center relative z-10 pt-20 pb-32">
+              <div className="max-w-6xl mx-auto">
+                {/* Holographic Icons */}
+                <div className="flex justify-center gap-8 mb-8 animate-fade-in">
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-full flex items-center justify-center glow-pulse">
+                    <Zap className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-600 rounded-full flex items-center justify-center glow-pulse" style={{ animationDelay: '0.5s' }}>
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-600 rounded-full flex items-center justify-center glow-pulse" style={{ animationDelay: '1s' }}>
+                    <Cpu className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+
+                <h1 className="hero-title mb-8 animate-fade-in leading-tight">
+                  <span className="block">THUNDER</span>
+                  <span className="block text-4xl md:text-6xl lg:text-7xl font-light">TRACK</span>
+                  <span className="block text-3xl md:text-5xl lg:text-6xl font-light text-emerald-400">ROI MATRIX</span>
+                </h1>
+                
+                <div className="relative">
+                  <p className="text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto text-gray-300 mb-12 animate-fade-in font-light leading-relaxed" style={{ animationDelay: '0.4s' }}>
+                    Experience the <span className="neon-text font-bold">future of investment calculations</span> with our quantum-powered DC EV charger ROI analyzer
+                  </p>
+                  
+                  <div className="data-stream w-full max-w-2xl mx-auto h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent mb-12"></div>
+                </div>
+                
+                <div className="animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                  <HolographicButton 
+                    onClick={scrollToCalculator}
+                    size="lg"
+                    className="group"
+                  >
+                    <span className="flex items-center gap-3">
+                      INITIATE ROI SCAN
+                      <Zap className="w-6 h-6 group-hover:animate-pulse" />
+                    </span>
+                  </HolographicButton>
+                </div>
+
+                <div className="scroll-indicator">
+                  <ChevronDown className="w-8 h-8" />
+                </div>
+              </div>
+            </div>
+          </section>
           
-          <div className="container mx-auto px-4 text-center relative z-10 pt-20 pb-32">
-            <div className="max-w-5xl mx-auto">
-              <h1 className="text-4xl md:text-6xl lg:text-8xl xl:text-9xl font-extralight mb-6 md:mb-8 text-gray-900 font-poppins animate-fade-in leading-tight tracking-tight">
-                <span className="bg-clip-text text-transparent bg-premium-gradient font-normal">Thunder Track</span>
-                <br />
-                <span className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl text-gray-800 font-light">ROI Calculator</span>
-              </h1>
-              
-              <p className="text-lg md:text-xl lg:text-2xl xl:text-3xl max-w-4xl mx-auto text-gray-600 font-montserrat mb-8 md:mb-12 animate-fade-in leading-relaxed font-light" style={{
-              animationDelay: '0.2s'
-            }}>Calculate your return on investment by installing our DC EV chargers with advanced analytics.</p>
-              
-              <div className="animate-fade-in" style={{
-              animationDelay: '0.4s'
-            }}>
-                <button onClick={scrollToCalculator} className="inline-flex items-center gap-3 text-white bg-premium-gradient hover:opacity-90 px-8 md:px-10 py-4 md:py-5 rounded-full text-base md:text-lg font-medium transition-all hover:scale-105 hover:shadow-2xl group border border-green-600/30 hover:border-green-600/50 font-montserrat shadow-lg tracking-wide">Calculate Your ROI</button>
+          {/* Enhanced Calculator Section */}
+          <section className="bg-slate-900/50 py-16 relative" id="calculator">
+            <div className="container mx-auto px-4">
+              <div className="max-w-5xl mx-auto">
+                <div className="text-center mb-12">
+                  <h2 className="text-4xl md:text-5xl font-bold neon-text mb-6 font-orbitron">
+                    QUANTUM CALCULATOR
+                  </h2>
+                  <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Enter the matrix of financial analysis with our advanced ROI computation engine
+                  </p>
+                </div>
+                
+                <div className="quantum-card neon-border">
+                  <CalculatorForm 
+                    onCalculate={handleCalculate} 
+                    chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} 
+                    acChargers={acChargerTypes} 
+                    dcChargers={dcChargerTypes} 
+                    hideACChargers={AC_CHARGERS_HIDDEN} 
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-        
-        {/* Enhanced Calculator Section */}
-        <section className="bg-white py-12 md:py-16 relative" id="calculator">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-8 md:mb-12">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 font-poppins mb-4">Start Your ROI Calculation</h2>
-                <p className="text-base md:text-lg text-gray-600 font-montserrat max-w-2xl mx-auto">
-                  Enter your details below to get a comprehensive analysis with sensitivity testing and scenario comparisons
-                </p>
+          </section>
+          
+          {/* Enhanced Results Section */}
+          <section id="results" className="bg-slate-950 py-16">
+            <div className="container mx-auto px-4">
+              <div className="max-w-6xl mx-auto">
+                {isCalculating && (
+                  <div className="flex flex-col items-center justify-center py-20">
+                    <div className="relative">
+                      <div className="quantum-loader"></div>
+                      <div className="pulse-ring"></div>
+                      <div className="pulse-ring" style={{ animationDelay: '0.5s' }}></div>
+                    </div>
+                    <span className="mt-6 text-xl text-emerald-400 font-orbitron">PROCESSING QUANTUM DATA...</span>
+                  </div>
+                )}
+                {memoizedResultsTable}
               </div>
-              
-              <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <CalculatorForm onCalculate={handleCalculate} chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} acChargers={acChargerTypes} dcChargers={dcChargerTypes} hideACChargers={AC_CHARGERS_HIDDEN} />
+            </div>
+          </section>
+          
+          {/* Enhanced Information Section */}
+          <section className="bg-slate-900/30 py-16">
+            <div className="container mx-auto px-4">
+              <div className="max-w-5xl mx-auto">
+                <InformationSection chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} />
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </main>
         
-        {/* Enhanced Results Section */}
-        <section id="results" className="bg-gray-50 py-8 md:py-[35px]">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              {isCalculating && <div className="flex justify-center items-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-                  <span className="ml-4 text-gray-600">Calculating your enhanced ROI...</span>
-                </div>}
-              {memoizedResultsTable}
-            </div>
-          </div>
-        </section>
-        
-        {/* Information Section */}
-        <section className="bg-white my-0 py-[5px]">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <InformationSection chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} />
-            </div>
-          </div>
-        </section>
-      </main>
-      
-      <Footer />
-    </div>;
+        <Footer />
+      </div>
+    </div>
+  );
 };
+
 export default Index;

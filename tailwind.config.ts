@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -22,6 +23,7 @@ export default {
 				'barlow': ['"Barlow Condensed"', 'sans-serif'],
 				'montserrat': ['Montserrat', 'sans-serif'],
 				'poppins': ['Poppins', 'sans-serif'],
+				'orbitron': ['Orbitron', 'monospace'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -90,61 +92,68 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
 				},
-				'float': {
-					'0%, 100%': { transform: 'translateY(0)' },
-					'50%': { transform: 'translateY(-5px)' },
-				},
-				'pulse-glow': {
-					'0%, 100%': { 
-						opacity: '1',
-						filter: 'brightness(1)'
-					},
-					'50%': { 
-						opacity: '0.8',
-						filter: 'brightness(1.2)'
-					},
-				},
-				'scroll-down': {
+				'fade-in': {
 					'0%': { 
-						transform: 'translateY(0)',
-						opacity: '0'
-					},
-					'50%': { 
-						opacity: '1'
+						opacity: '0',
+						transform: 'translateY(30px) scale(0.95)'
 					},
 					'100%': { 
-						transform: 'translateY(10px)',
-						opacity: '0'
+						opacity: '1',
+						transform: 'translateY(0) scale(1)'
+					}
+				},
+				'holographic-shift': {
+					'0%, 100%': { backgroundPosition: '0% 50%' },
+					'50%': { backgroundPosition: '100% 50%' }
+				},
+				'glow-pulse': {
+					'0%, 100%': { 
+						boxShadow: '0 0 20px rgba(16, 185, 129, 0.3)',
+						transform: 'scale(1)'
 					},
+					'50%': { 
+						boxShadow: '0 0 40px rgba(16, 185, 129, 0.6)',
+						transform: 'scale(1.05)'
+					}
+				},
+				'data-flow': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' }
+				},
+				'matrix-fall': {
+					'0%': { transform: 'translateY(-100vh)', opacity: '0' },
+					'10%': { opacity: '1' },
+					'90%': { opacity: '1' },
+					'100%': { transform: 'translateY(100vh)', opacity: '0' }
+				},
+				'float-particle': {
+					'0%': { transform: 'translateY(100vh) rotate(0deg)', opacity: '0' },
+					'10%': { opacity: '1' },
+					'90%': { opacity: '1' },
+					'100%': { transform: 'translateY(-10vh) rotate(360deg)', opacity: '0' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'float': 'float 3s ease-in-out infinite',
-				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
-				'scroll-down': 'scroll-down 1.5s ease-in-out infinite',
+				'fade-in': 'fade-in 0.8s ease-out forwards',
+				'holographic-shift': 'holographic-shift 4s ease-in-out infinite',
+				'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
+				'data-flow': 'data-flow 2s linear infinite',
+				'matrix-fall': 'matrix-fall 10s linear infinite',
+				'float-particle': 'float-particle 20s linear infinite'
 			},
 			backgroundImage: {
-				'premium-gradient': 'linear-gradient(135deg, #22C55E 0%, #10B981 100%)',
-				'premium-dark': 'linear-gradient(to bottom, #121212 0%, #1a1a1a 100%)',
-				'futuristic-grid': 'radial-gradient(circle, rgba(34, 197, 94, 0.15) 1px, transparent 1px)',
-				'hero-pattern': 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%2322C55E\' fill-opacity=\'0.1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+				'quantum-gradient': 'linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%)',
+				'holographic': 'linear-gradient(45deg, #10b981 0%, #06d6a0 25%, #0ea5e9 50%, #8b5cf6 75%, #10b981 100%)',
+				'cyber-grid': 'linear-gradient(rgba(16, 185, 129, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.1) 1px, transparent 1px)'
 			}
 		}
 	},
