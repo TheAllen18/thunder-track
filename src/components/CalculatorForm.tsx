@@ -247,7 +247,9 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
         <h2 className="flex items-center gap-2 font-poppins font-medium text-2xl">
           Thunder Track DC ROI Calculator
         </h2>
-        <p className="text-gray-100 text-sm mt-1">Calculate the return on investment of your DC charging station</p>
+        <p className="text-gray-100 text-sm mt-1">
+          Calculate the return on investment and savings for your DC charging station
+        </p>
       </div>
       <div className="p-6 space-y-6">
         <div className="space-y-6">
