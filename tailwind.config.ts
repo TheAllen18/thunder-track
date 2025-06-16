@@ -98,62 +98,11 @@ export default {
 				'accordion-up': {
 					from: { height: 'var(--radix-accordion-content-height)' },
 					to: { height: '0' }
-				},
-				'fade-in': {
-					'0%': { 
-						opacity: '0',
-						transform: 'translateY(30px) scale(0.95)'
-					},
-					'100%': { 
-						opacity: '1',
-						transform: 'translateY(0) scale(1)'
-					}
-				},
-				'holographic-shift': {
-					'0%, 100%': { backgroundPosition: '0% 50%' },
-					'50%': { backgroundPosition: '100% 50%' }
-				},
-				'glow-pulse': {
-					'0%, 100%': { 
-						boxShadow: '0 0 20px rgba(16, 185, 129, 0.3)',
-						transform: 'scale(1)'
-					},
-					'50%': { 
-						boxShadow: '0 0 40px rgba(16, 185, 129, 0.6)',
-						transform: 'scale(1.05)'
-					}
-				},
-				'data-flow': {
-					'0%': { transform: 'translateX(-100%)' },
-					'100%': { transform: 'translateX(100%)' }
-				},
-				'matrix-fall': {
-					'0%': { transform: 'translateY(-100vh)', opacity: '0' },
-					'10%': { opacity: '1' },
-					'90%': { opacity: '1' },
-					'100%': { transform: 'translateY(100vh)', opacity: '0' }
-				},
-				'float-particle': {
-					'0%': { transform: 'translateY(100vh) rotate(0deg)', opacity: '0' },
-					'10%': { opacity: '1' },
-					'90%': { opacity: '1' },
-					'100%': { transform: 'translateY(-10vh) rotate(360deg)', opacity: '0' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.8s ease-out forwards',
-				'holographic-shift': 'holographic-shift 4s ease-in-out infinite',
-				'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
-				'data-flow': 'data-flow 2s linear infinite',
-				'matrix-fall': 'matrix-fall 10s linear infinite',
-				'float-particle': 'float-particle 20s linear infinite'
-			},
-			backgroundImage: {
-				'quantum-gradient': 'linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%)',
-				'holographic': 'linear-gradient(45deg, #10b981 0%, #06d6a0 25%, #0ea5e9 50%, #8b5cf6 75%, #10b981 100%)',
-				'cyber-grid': 'linear-gradient(rgba(16, 185, 129, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.1) 1px, transparent 1px)'
+				'accordion-up': 'accordion-up 0.2s ease-out'
 			}
 		}
 	},
