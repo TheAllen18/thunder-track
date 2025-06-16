@@ -1,3 +1,4 @@
+
 export type ChargerType = {
   id: string;
   name: string;
@@ -85,6 +86,8 @@ export type CalculationInput = {
   batterySize: number;
   chargingFrequency?: number;
   electricityCost: number;
+  utilizationRate: number; // Added missing property
+  electricityRate: number; // Added missing property
   isCommercialProperty?: boolean;
   fuelCost?: number;
   fuelEfficiency?: number;
