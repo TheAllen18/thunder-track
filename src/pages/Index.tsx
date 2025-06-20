@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -7,6 +8,7 @@ import InformationSection from '@/components/InformationSection';
 import Interactive3DCharger from '@/components/Interactive3DCharger';
 import AIVoiceAssistant from '@/components/AIVoiceAssistant';
 import HolographicDataProjector from '@/components/HolographicDataProjector';
+import CrazyFeaturesGrid from '@/components/CrazyFeaturesGrid';
 import { ChargerType, acChargerTypes, dcChargerTypes, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
