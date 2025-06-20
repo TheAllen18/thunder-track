@@ -16,27 +16,30 @@ const AIVoiceAssistant = () => {
   const [messages, setMessages] = useState<Message[]>([
     { type: 'ai', content: 'Hello! I\'m your AI EV Charger consultant. Ask me anything about ROI calculations, charger types, or installation tips!', timestamp: new Date() }
   ]);
-  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+  const [recognition, setRecognition] = useState<any>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
-      const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognitionInstance = new SpeechRecognitionClass();
-      recognitionInstance.continuous = false;
-      recognitionInstance.interimResults = false;
-      recognitionInstance.lang = 'en-US';
+    if (typeof window !== 'undefined') {
+      const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       
-      recognitionInstance.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        handleUserMessage(transcript);
-      };
-      
-      recognitionInstance.onend = () => {
-        setIsListening(false);
-      };
-      
-      setRecognition(recognitionInstance);
+      if (SpeechRecognitionAPI) {
+        const recognitionInstance = new SpeechRecognitionAPI();
+        recognitionInstance.continuous = false;
+        recognitionInstance.interimResults = false;
+        recognitionInstance.lang = 'en-US';
+        
+        recognitionInstance.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript;
+          handleUserMessage(transcript);
+        };
+        
+        recognitionInstance.onend = () => {
+          setIsListening(false);
+        };
+        
+        setRecognition(recognitionInstance);
+      }
     }
     
     if (typeof window !== 'undefined') {
