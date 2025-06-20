@@ -6,6 +6,7 @@ import ResultsTable from '@/components/ResultsTable';
 import InformationSection from '@/components/InformationSection';
 import { ChargerType, acChargerTypes, dcChargerTypes, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 const Index = () => {
   const [calculationResults, setCalculationResults] = useState<CalculationResult | null>(null);
   const [selectedCharger, setSelectedCharger] = useState<ChargerType | null>(null);
@@ -45,85 +46,92 @@ const Index = () => {
       });
     }
   };
-  return <div className="flex flex-col min-h-screen bg-white text-gray-800">
-      <Header />
+  return <div className="flex flex-col min-h-screen relative">
+      {/* Translucent light green gradient background overlay */}
+      <div className="fixed inset-0 bg-gradient-to-br from-green-50/30 via-emerald-50/20 to-green-100/25 pointer-events-none z-0"></div>
       
-      <main className="flex-1">
-        {/* Full-Screen Hero Section */}
-        <section className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-green-50">
-          {/* Subtle background patterns */}
-          <div className="absolute inset-0 bg-futuristic-grid bg-[length:40px_40px] opacity-3"></div>
-          <div className="absolute top-20 right-20 w-96 h-96 bg-green-500/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 left-20 w-80 h-80 bg-emerald-500/8 rounded-full blur-3xl"></div>
-          
-          <div className="container mx-auto px-4 text-center relative z-10 pt-20 pb-32">
-            {/* Main Hero Content */}
-            <div className="max-w-5xl mx-auto">
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-extralight mb-8 text-gray-900 font-poppins animate-fade-in leading-tight tracking-tight">
-                <span className="bg-clip-text text-transparent bg-premium-gradient font-normal">Thunder Track</span>
-                <br />
-                <span className="text-5xl md:text-6xl lg:text-7xl text-gray-800 font-light">ROI Calculator</span>
-              </h1>
-              
-              <p className="text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto text-gray-600 font-montserrat mb-12 animate-fade-in leading-relaxed font-light" style={{
-              animationDelay: '0.2s'
-            }}>
-                Calculate your return on investment by installing our DC EV chargers.
-              </p>
-              
-              {/* CTA Button */}
-              <div className="animate-fade-in" style={{
-              animationDelay: '0.4s'
-            }}>
-                <button onClick={scrollToCalculator} className="inline-flex items-center gap-3 text-white bg-premium-gradient hover:opacity-90 px-10 py-5 rounded-full text-lg font-medium transition-all hover:scale-105 hover:shadow-2xl group border border-green-600/30 hover:border-green-600/50 font-montserrat shadow-lg tracking-wide">
-                  Calculate Your ROI
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
+      {/* Main content with higher z-index to stay above background */}
+      <div className="relative z-10 flex flex-col min-h-screen bg-white/40 text-gray-800">
+        <Header />
         
-        {/* Calculator Section */}
-        <section className="bg-white py-16 relative" id="calculator">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              {/* Section Header */}
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-poppins mb-4">
-                  Start Your ROI Calculation
-                </h2>
-                <p className="text-lg text-gray-600 font-montserrat max-w-2xl mx-auto">
-                  Enter your details below to get a detailed analysis of your potential returns
+        <main className="flex-1">
+          {/* Full-Screen Hero Section */}
+          <section className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-white/60 via-gray-50/50 to-green-50/40">
+            {/* Subtle background patterns */}
+            <div className="absolute inset-0 bg-futuristic-grid bg-[length:40px_40px] opacity-3"></div>
+            <div className="absolute top-20 right-20 w-96 h-96 bg-green-500/5 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 left-20 w-80 h-80 bg-emerald-500/8 rounded-full blur-3xl"></div>
+            
+            <div className="container mx-auto px-4 text-center relative z-10 pt-20 pb-32">
+              {/* Main Hero Content */}
+              <div className="max-w-5xl mx-auto">
+                <h1 className="text-6xl md:text-8xl lg:text-9xl font-extralight mb-8 text-gray-900 font-poppins animate-fade-in leading-tight tracking-tight">
+                  <span className="bg-clip-text text-transparent bg-premium-gradient font-normal">Thunder Track</span>
+                  <br />
+                  <span className="text-5xl md:text-6xl lg:text-7xl text-gray-800 font-light">ROI Calculator</span>
+                </h1>
+                
+                <p className="text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto text-gray-700 font-montserrat mb-12 animate-fade-in leading-relaxed font-light" style={{
+                animationDelay: '0.2s'
+              }}>
+                  Calculate your return on investment by installing our DC EV chargers.
                 </p>
+                
+                {/* CTA Button */}
+                <div className="animate-fade-in" style={{
+                animationDelay: '0.4s'
+              }}>
+                  <button onClick={scrollToCalculator} className="inline-flex items-center gap-3 text-white bg-premium-gradient hover:opacity-90 px-10 py-5 rounded-full text-lg font-medium transition-all hover:scale-105 hover:shadow-2xl group border border-green-600/30 hover:border-green-600/50 font-montserrat shadow-lg tracking-wide">
+                    Calculate Your ROI
+                  </button>
+                </div>
               </div>
-              
-              <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <CalculatorForm onCalculate={handleCalculate} chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} acChargers={acChargerTypes} dcChargers={dcChargerTypes} hideACChargers={AC_CHARGERS_HIDDEN} />
+            </div>
+          </section>
+          
+          {/* Calculator Section */}
+          <section className="bg-white/60 py-16 relative" id="calculator">
+            <div className="container mx-auto px-4">
+              <div className="max-w-4xl mx-auto">
+                {/* Section Header */}
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-poppins mb-4">
+                    Start Your ROI Calculation
+                  </h2>
+                  <p className="text-lg text-gray-700 font-montserrat max-w-2xl mx-auto">
+                    Enter your details below to get a detailed analysis of your potential returns
+                  </p>
+                </div>
+                
+                <div className="bg-white/80 rounded-2xl shadow-xl border border-gray-100 overflow-hidden backdrop-blur-sm">
+                  <CalculatorForm onCalculate={handleCalculate} chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} acChargers={acChargerTypes} dcChargers={dcChargerTypes} hideACChargers={AC_CHARGERS_HIDDEN} />
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-        
-        {/* Results Section */}
-        <section id="results" className="bg-gray-50 py-[35px]">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <ResultsTable results={calculationResults} charger={selectedCharger} chargerCount={chargerCount} civilWorkCost={civilWorkCost} />
+          </section>
+          
+          {/* Results Section */}
+          <section id="results" className="bg-gray-50/60 py-[35px]">
+            <div className="container mx-auto px-4">
+              <div className="max-w-4xl mx-auto">
+                <ResultsTable results={calculationResults} charger={selectedCharger} chargerCount={chargerCount} civilWorkCost={civilWorkCost} />
+              </div>
             </div>
-          </div>
-        </section>
-        
-        {/* Information Section */}
-        <section className="bg-white my-0 py-[5px]">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <InformationSection chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} />
+          </section>
+          
+          {/* Information Section */}
+          <section className="bg-white/60 my-0 py-[5px]">
+            <div className="container mx-auto px-4">
+              <div className="max-w-4xl mx-auto">
+                <InformationSection chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} />
+              </div>
             </div>
-          </div>
-        </section>
-      </main>
-      
-      <Footer />
+          </section>
+        </main>
+        
+        <Footer />
+      </div>
     </div>;
 };
+
 export default Index;
