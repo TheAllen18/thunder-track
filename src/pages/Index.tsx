@@ -4,6 +4,9 @@ import Footer from '@/components/Footer';
 import CalculatorForm from '@/components/CalculatorForm';
 import ResultsTable from '@/components/ResultsTable';
 import InformationSection from '@/components/InformationSection';
+import Interactive3DCharger from '@/components/Interactive3DCharger';
+import AIVoiceAssistant from '@/components/AIVoiceAssistant';
+import HolographicDataProjector from '@/components/HolographicDataProjector';
 import { ChargerType, acChargerTypes, dcChargerTypes, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -84,6 +87,55 @@ const Index = () => {
                   <button onClick={scrollToCalculator} className="inline-flex items-center gap-3 text-white bg-premium-gradient hover:opacity-90 px-10 py-5 rounded-full text-lg font-medium transition-all hover:scale-105 hover:shadow-2xl group border border-green-600/30 hover:border-green-600/50 font-montserrat shadow-lg tracking-wide">
                     Calculate Your ROI
                   </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 🚀 CRAZY FEATURES SECTION */}
+          <section className="bg-black/5 py-16 relative">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 font-poppins mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
+                  🌟 INSANE AI-POWERED FEATURES 🌟
+                </h2>
+                <p className="text-xl text-gray-700 font-montserrat">
+                  Experience the future of EV charger calculations!
+                </p>
+              </div>
+
+              <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                {/* 3D Interactive Charger */}
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-center text-purple-700 font-poppins">
+                    🎮 Interactive 3D Charger
+                  </h3>
+                  <Interactive3DCharger isActive={!!calculationResults} />
+                  <p className="text-sm text-gray-600 text-center">
+                    Drag to rotate • Scroll to zoom • Watch it charge when you calculate!
+                  </p>
+                </div>
+
+                {/* AI Voice Assistant */}
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-center text-blue-700 font-poppins">
+                    🧠 AI Voice Consultant
+                  </h3>
+                  <AIVoiceAssistant />
+                  <p className="text-sm text-gray-600 text-center">
+                    Ask questions • Get expert advice • Voice-powered AI!
+                  </p>
+                </div>
+
+                {/* Holographic Data Projector */}
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-center text-cyan-700 font-poppins">
+                    🌟 Holographic Data Projector
+                  </h3>
+                  <HolographicDataProjector calculationResults={calculationResults} />
+                  <p className="text-sm text-gray-600 text-center">
+                    Real-time data particles • Sci-fi visualization • Future tech!
+                  </p>
                 </div>
               </div>
             </div>
