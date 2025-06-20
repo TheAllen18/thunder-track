@@ -1,14 +1,9 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CalculatorForm from '@/components/CalculatorForm';
 import ResultsTable from '@/components/ResultsTable';
 import InformationSection from '@/components/InformationSection';
-import Interactive3DCharger from '@/components/Interactive3DCharger';
-import AIVoiceAssistant from '@/components/AIVoiceAssistant';
-import HolographicDataProjector from '@/components/HolographicDataProjector';
-import CrazyFeaturesGrid from '@/components/CrazyFeaturesGrid';
 import { ChargerType, acChargerTypes, dcChargerTypes, calculateEnhancedROI, CalculationResult, CalculationInput } from '@/utils/calculatorUtils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -21,7 +16,6 @@ const Index = () => {
 
   // AC_CHARGERS_HIDDEN: Set this to true to show AC chargers again
   const AC_CHARGERS_HIDDEN = true;
-  
   const handleCalculate = (input: CalculationInput) => {
     const results = calculateEnhancedROI(input);
     setCalculationResults(results);
@@ -39,12 +33,10 @@ const Index = () => {
       }
     }, 100);
   };
-  
   const handleChargerTypeChange = (type: 'AC' | 'DC') => {
     setChargerType(type);
     setCalculationResults(null);
   };
-  
   const scrollToCalculator = (e: React.MouseEvent) => {
     e.preventDefault();
     const calculatorElement = document.getElementById('calculator');
@@ -54,7 +46,6 @@ const Index = () => {
       });
     }
   };
-  
   return <div className="flex flex-col min-h-screen relative">
       {/* More visible translucent light green gradient background overlay */}
       <div className="fixed inset-0 bg-gradient-to-br from-green-50/60 via-emerald-50/45 to-green-100/55 pointer-events-none z-0"></div>
@@ -95,71 +86,6 @@ const Index = () => {
                   </button>
                 </div>
               </div>
-            </div>
-          </section>
-
-          {/* 🚀 CRAZY FEATURES SECTION */}
-          <section className="bg-black/5 py-16 relative">
-            <div className="container mx-auto px-4">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 font-poppins mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
-                  🌟 INSANE AI-POWERED FEATURES 🌟
-                </h2>
-                <p className="text-xl text-gray-700 font-montserrat">
-                  Experience the future of EV charger calculations!
-                </p>
-              </div>
-
-              <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                {/* 3D Interactive Charger */}
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-center text-purple-700 font-poppins">
-                    🎮 Interactive 3D Charger
-                  </h3>
-                  <Interactive3DCharger isActive={!!calculationResults} />
-                  <p className="text-sm text-gray-600 text-center">
-                    Drag to rotate • Scroll to zoom • Watch it charge when you calculate!
-                  </p>
-                </div>
-
-                {/* AI Voice Assistant */}
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-center text-blue-700 font-poppins">
-                    🧠 AI Voice Consultant
-                  </h3>
-                  <AIVoiceAssistant />
-                  <p className="text-sm text-gray-600 text-center">
-                    Ask questions • Get expert advice • Voice-powered AI!
-                  </p>
-                </div>
-
-                {/* Holographic Data Projector */}
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-center text-cyan-700 font-poppins">
-                    🌟 Holographic Data Projector
-                  </h3>
-                  <HolographicDataProjector calculationResults={calculationResults} />
-                  <p className="text-sm text-gray-600 text-center">
-                    Real-time data particles • Sci-fi visualization • Future tech!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 🎯 NEW INSANE FEATURES SECTION */}
-          <section className="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-16 relative">
-            <div className="container mx-auto px-4">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-6xl font-bold text-white font-poppins mb-4 animate-pulse">
-                  🔥 ABSOLUTELY INSANE NEW FEATURES 🔥
-                </h2>
-                <p className="text-xl text-purple-200 font-montserrat">
-                  Features so crazy, they shouldn't even exist... but they do! 🤯
-                </p>
-              </div>
-
-              <CrazyFeaturesGrid calculationResults={calculationResults} />
             </div>
           </section>
           
