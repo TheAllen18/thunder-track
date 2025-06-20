@@ -20,9 +20,9 @@ const AIVoiceAssistant = () => {
   const synthRef = useRef<SpeechSynthesis | null>(null);
 
   useEffect(() => {
-    if ('speechRecognition' in window || 'webkitSpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognitionInstance = new SpeechRecognition();
+    if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+      const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognitionInstance = new SpeechRecognitionClass();
       recognitionInstance.continuous = false;
       recognitionInstance.interimResults = false;
       recognitionInstance.lang = 'en-US';
@@ -39,7 +39,9 @@ const AIVoiceAssistant = () => {
       setRecognition(recognitionInstance);
     }
     
-    synthRef.current = window.speechSynthesis;
+    if (typeof window !== 'undefined') {
+      synthRef.current = window.speechSynthesis;
+    }
   }, []);
 
   const handleUserMessage = (message: string) => {
