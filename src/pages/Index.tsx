@@ -47,16 +47,16 @@ const Index = () => {
     }
   };
   return <div className="flex flex-col min-h-screen relative">
-      {/* Translucent light green gradient background overlay */}
-      <div className="fixed inset-0 bg-gradient-to-br from-green-50/30 via-emerald-50/20 to-green-100/25 pointer-events-none z-0"></div>
+      {/* More visible translucent light green gradient background overlay */}
+      <div className="fixed inset-0 bg-gradient-to-br from-green-50/60 via-emerald-50/45 to-green-100/55 pointer-events-none z-0"></div>
       
       {/* Main content with higher z-index to stay above background */}
-      <div className="relative z-10 flex flex-col min-h-screen bg-white/40 text-gray-800">
+      <div className="relative z-10 flex flex-col min-h-screen bg-white/25 text-gray-800">
         <Header />
         
         <main className="flex-1">
           {/* Full-Screen Hero Section */}
-          <section className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-white/60 via-gray-50/50 to-green-50/40">
+          <section className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-white/40 via-gray-50/30 to-green-50/25">
             {/* Subtle background patterns */}
             <div className="absolute inset-0 bg-futuristic-grid bg-[length:40px_40px] opacity-3"></div>
             <div className="absolute top-20 right-20 w-96 h-96 bg-green-500/5 rounded-full blur-3xl"></div>
@@ -90,7 +90,7 @@ const Index = () => {
           </section>
           
           {/* Calculator Section */}
-          <section className="bg-white/60 py-16 relative" id="calculator">
+          <section className="bg-white/40 py-16 relative" id="calculator">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto">
                 {/* Section Header */}
@@ -111,7 +111,7 @@ const Index = () => {
           </section>
           
           {/* Results Section */}
-          <section id="results" className="bg-gray-50/60 py-[35px]">
+          <section id="results" className="bg-gray-50/40 py-[35px]">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto">
                 <ResultsTable results={calculationResults} charger={selectedCharger} chargerCount={chargerCount} civilWorkCost={civilWorkCost} />
@@ -120,7 +120,7 @@ const Index = () => {
           </section>
           
           {/* Information Section */}
-          <section className="bg-white/60 my-0 py-[5px]">
+          <section className="bg-white/40 my-0 py-[5px]">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto">
                 <InformationSection chargerType={AC_CHARGERS_HIDDEN ? 'DC' : chargerType} />
