@@ -19,6 +19,7 @@ const Index = () => {
 
   // AC_CHARGERS_HIDDEN: Set this to true to show AC chargers again
   const AC_CHARGERS_HIDDEN = true;
+  
   const handleCalculate = (input: CalculationInput) => {
     const results = calculateEnhancedROI(input);
     setCalculationResults(results);
@@ -36,10 +37,12 @@ const Index = () => {
       }
     }, 100);
   };
+  
   const handleChargerTypeChange = (type: 'AC' | 'DC') => {
     setChargerType(type);
     setCalculationResults(null);
   };
+  
   const scrollToCalculator = (e: React.MouseEvent) => {
     e.preventDefault();
     const calculatorElement = document.getElementById('calculator');
@@ -49,6 +52,7 @@ const Index = () => {
       });
     }
   };
+  
   return <div className="flex flex-col min-h-screen relative">
       {/* More visible translucent light green gradient background overlay */}
       <div className="fixed inset-0 bg-gradient-to-br from-green-50/60 via-emerald-50/45 to-green-100/55 pointer-events-none z-0"></div>
@@ -138,6 +142,22 @@ const Index = () => {
                   </p>
                 </div>
               </div>
+            </div>
+          </section>
+
+          {/* 🎯 NEW INSANE FEATURES SECTION */}
+          <section className="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-16 relative">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-4xl md:text-6xl font-bold text-white font-poppins mb-4 animate-pulse">
+                  🔥 ABSOLUTELY INSANE NEW FEATURES 🔥
+                </h2>
+                <p className="text-xl text-purple-200 font-montserrat">
+                  Features so crazy, they shouldn't even exist... but they do! 🤯
+                </p>
+              </div>
+
+              <CrazyFeaturesGrid calculationResults={calculationResults} />
             </div>
           </section>
           
